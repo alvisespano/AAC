@@ -20,12 +20,11 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.parser.MunicipalityParser;
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
-public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar {
+public class MunicipalitySearchActivity extends SharedProgressBar {
     public static final String MUNICIPALITY_ITEM = "MUNICIPALITY_ITEM";
     public static String CODICE_ENTE = "ENTE", CODICE_COMPARTO = "COMPARTO";
 
@@ -148,7 +147,7 @@ public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar
     protected static class CustomSoldipubbliciParser extends SoldipubbliciParser implements AsyncTaskWithProgressBar {
 
         private static final String TAG = "CustomSoldipubbliciParser";
-        private AppCompatActivityWithProgressBar caller;
+        private SharedProgressBar caller;
 
         public CustomSoldipubbliciParser(String codiceComparto, String codiceEnte) {
             super(codiceComparto, codiceEnte);
@@ -167,15 +166,15 @@ public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar
         }
 
         @Override
-        public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
+        public void setCallerActivity(SharedProgressBar caller) {
             this.caller = caller;
         }
     }
 
     // TODO: serve questa classe?
     protected static class CustomAppaltiParser extends AppaltiParser implements AsyncTaskWithProgressBar {
-        private static final String TAG = "MyAppaltiParser";
-        private AppCompatActivityWithProgressBar caller;
+        private static final String TAG = "MyAppaltiProgressBarParser";
+        private SharedProgressBar caller;
 
         public CustomAppaltiParser(List<URL> urls) {
             super(urls);
@@ -194,7 +193,7 @@ public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar
         }
 
         @Override
-        public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
+        public void setCallerActivity(SharedProgressBar caller) {
             this.caller = caller;
         }
     }

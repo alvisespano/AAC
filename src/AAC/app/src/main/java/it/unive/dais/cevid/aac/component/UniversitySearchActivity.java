@@ -3,11 +3,9 @@ package it.unive.dais.cevid.aac.component;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.annotation.NonNull;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
@@ -25,9 +23,8 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
-import it.unive.dais.cevid.aac.parser.ParticipantParser;
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.parser.SharedProgressBarParser;
+import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
@@ -35,93 +32,56 @@ import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 import it.unive.dais.cevid.datadroid.lib.util.Function;
 import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 
-public class UniversitySearchActivity extends AppCompatActivityWithProgressBar {
+public class UniversitySearchActivity extends AppCompatActivity {
     private static final String TAG = "UniSearchActivity";
 
     public static final String UNIVERSITY_ITEM = "UNI";
     private static final String BUNDLE_LIST = "LIST";
 
     private UniversityItem university;
-    private SoldipubbliciParser soldiPubbliciParser;
-    private AppaltiParser appaltiParser;
+    private MySoldipubbliciProgressBarParser soldiPubbliciParser;
+    private MyAppaltiProgressBarParser appaltiParser;
     private LinearLayout mainView;
     private String soldiPubbliciText = " ";
     private String appaltiText = " ";
-
-    @Override
-    public void setProgressBar() {
-        this.progressBar = (ProgressBar) findViewById(R.id.progress_bar1);
-    }
-
-    public class MyActivity extends AppCompatActivityWithProgressBar {
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setProgressBar();
-        }
-
-        @Override
-        public void setProgressBar() {
-            this.progressBar = (ProgressBar) findViewById(R.id.progress_bar1);
-        }
-    }
+    private SharedProgressBar sharedProgressBar;
 
 
-    // simple progress management for both parsers
+    // wrappers for Datadroid parsers
     //
 
-    protected class MyAppaltiParser extends AppaltiParser implements AsyncTaskWithProgressBar {
-        private static final String TAG = "MyAppaltiParser";
-        private AppCompatActivityWithProgressBar caller;
+//    protected class MyAppaltiProgressBarParser extends AppaltiParser {
+//        private static final String TAG = "MyAppaltiProgressBarParser";
+//
+//        @Nullable
+//        private Shared<ProgressBar>.Handle handle;
+//
+//        public MyAppaltiProgressBarParser(List<URL> urls) {
+//            super(urls);
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            handle = sharedProgressBar.acquire();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(@NonNull List<AppaltiParser.Data> r) {
+//            if (handle != null) handle.release();
+//        }
+//    }
 
-        public MyAppaltiParser(List<URL> urls) {
-            super(urls);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            caller.requestProgressBar(this);
-        }
-
-        @Override
-        protected void onPostExecute(@NonNull List<AppaltiParser.Data> r) {
-            super.onPostExecute(r);
-            caller.releaseProgressBar(this);
-        }
-
-        @Override
-        public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-            this.caller = caller;
-        }
-    }
-
-    protected class MySoldipubbliciParser extends SoldipubbliciParser implements AsyncTaskWithProgressBar {
-        private static final String TAG = "MySoldipubbliciParser";
-        private AppCompatActivityWithProgressBar caller;
-        public MySoldipubbliciParser(String a, String b) {
-            super(a, b);
-        }
-
-        @Override
-        public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-            this.caller = caller;
-        }
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            caller.requestProgressBar(this);
-        }
-
-        @Override
-        protected void onPostExecute(@NonNull List<SoldipubbliciParser.Data> r) {
-            super.onPostExecute(r);
-            caller.releaseProgressBar(this);
+    protected class MySoldipubbliciProgressBarParser extends SharedProgressBarParser<SoldipubbliciParser.Data, ProgressStepper, SoldipubbliciParser> {
+        public MySoldipubbliciProgressBarParser(String codiceComparto, String id) {
+            super(new SoldipubbliciParser(codiceComparto, id), sharedProgressBar);
         }
     }
 
-
+    protected class MyAppaltiProgressBarParser extends SharedProgressBarParser<AppaltiParser.Data, ProgressStepper, AppaltiParser> {
+        public MyAppaltiProgressBarParser(List<URL> urls) {
+            super(new AppaltiParser(urls), sharedProgressBar);
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -131,7 +91,7 @@ public class UniversitySearchActivity extends AppCompatActivityWithProgressBar {
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    // TODO: finire questo
+    // TODO: finire di implementare il salvataggio di stato dell'activity e dei parser
     private <T> void saveParserState(Bundle savedInstanceState, AsyncParser<T, ?> parser) {
         try {
             AsyncTask<Void, ?, List<T>> p = parser.getAsyncTask();
@@ -139,7 +99,7 @@ public class UniversitySearchActivity extends AppCompatActivityWithProgressBar {
                 case FINISHED:
                     savedInstanceState.putSerializable(BUNDLE_LIST, new ArrayList<T>(p.get()));
                     break;
-                default:soldiPubbliciParser:
+                default:
                     break;
             }
         } catch (InterruptedException | ExecutionException e) {
@@ -153,7 +113,7 @@ public class UniversitySearchActivity extends AppCompatActivityWithProgressBar {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
-        setProgressBar();
+        sharedProgressBar = new SharedProgressBar((ProgressBar) findViewById(R.id.shared_progress_bar));
 
         if (savedInstanceState == null) {
             // crea l'activity da zero
@@ -166,10 +126,8 @@ public class UniversitySearchActivity extends AppCompatActivityWithProgressBar {
         title.setText(university.getTitle());
 
         // TODO: salvare lo stato dei parser con un proxy serializzabile
-        soldiPubbliciParser = new MySoldipubbliciParser(university.getCodiceComparto(), university.getId());
-        appaltiParser = new MyAppaltiParser(university.getUrls());
-        ((MySoldipubbliciParser)soldiPubbliciParser).setCallerActivity(this);
-        ((MyAppaltiParser)appaltiParser).setCallerActivity(this);
+        soldiPubbliciParser = new MySoldipubbliciProgressBarParser(university.getCodiceComparto(), university.getId());
+        appaltiParser = new MyAppaltiProgressBarParser(university.getUrls());
         soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -224,7 +182,9 @@ public class UniversitySearchActivity extends AppCompatActivityWithProgressBar {
 
     private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
     }
 
     private <T> boolean processQuery(AsyncParser<T, ?> parser, String text, Intent intent, String label,
@@ -277,32 +237,12 @@ public class UniversitySearchActivity extends AppCompatActivityWithProgressBar {
     //
     //
 
-    private static final Function<AppaltiParser.Data, String> Appalti_getText = new Function<AppaltiParser.Data, String>() {
-        @Override
-        public String apply(AppaltiParser.Data x) {
-            return x.oggetto;
-        }
-    };
+    private static final Function<AppaltiParser.Data, String> Appalti_getText = x -> x.oggetto;
 
-    private static final Function<AppaltiParser.Data, Integer> Appalti_getCode = new Function<AppaltiParser.Data, Integer>() {
-        @Override
-        public Integer apply(AppaltiParser.Data x) {
-            return Integer.parseInt(x.cig);
-        }
-    };
+    private static final Function<AppaltiParser.Data, Integer> Appalti_getCode = x -> Integer.parseInt(x.cig);
 
-    private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = new Function<SoldipubbliciParser.Data, String>() {
-        @Override
-        public String apply(SoldipubbliciParser.Data x) {
-            return x.descrizione_codice;
-        }
-    };
+    private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = x -> x.descrizione_codice;
 
-    private static final Function<SoldipubbliciParser.Data, Integer> Soldipubblici_getCode = new Function<SoldipubbliciParser.Data, Integer>() {
-        @Override
-        public Integer apply(SoldipubbliciParser.Data x) {
-            return Integer.parseInt(x.codice_siope);
-        }
-    };
+    private static final Function<SoldipubbliciParser.Data, Integer> Soldipubblici_getCode = x -> Integer.parseInt(x.codice_siope);
 
 }

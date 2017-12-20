@@ -2,7 +2,6 @@ package it.unive.dais.cevid.aac.component;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,10 +18,10 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.parser.TenderParser;
 import it.unive.dais.cevid.aac.adapter.TenderAdapter;
 import it.unive.dais.cevid.aac.parser.ParticipantParser;
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
 import it.unive.dais.cevid.aac.util.RecyclerItemClickListener;
 
-public class SupplierResultActivity extends AppCompatActivityWithProgressBar {
+public class SupplierResultActivity extends SharedProgressBar {
     public static final String TAG = "SupplierResultActivity";
     protected static final String BUNDLE_PARTECIPATIONS = "PARTS";
     private List<ParticipantParser.Data> tenders;

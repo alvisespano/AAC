@@ -11,11 +11,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -37,16 +37,13 @@ import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
-import it.unive.dais.cevid.datadroid.lib.parser.EntitiesParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
+import it.unive.dais.cevid.datadroid.lib.parser.EntitiesParser;
 import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
-public class MainActivity extends AppCompatActivityWithProgressBar implements
-        GoogleApiClient.ConnectionCallbacks,
+public class MainActivity extends AppCompatActivity
+        implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -68,12 +65,6 @@ public class MainActivity extends AppCompatActivityWithProgressBar implements
         SUPPLIER
     }
 
-    @Override
-    public void setProgressBar() {
-        this.progressBar = (ProgressBar) findViewById(R.id.progress_bar_main);
-    }
-
-
     @NonNull
     private final Collection<UniversityItem> universityItems = new ConcurrentLinkedQueue<>();
     @NonNull
@@ -85,7 +76,6 @@ public class MainActivity extends AppCompatActivityWithProgressBar implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setProgressBar();
         setContentFragment(R.id.content_frame, activeFragment);
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -130,7 +120,6 @@ public class MainActivity extends AppCompatActivityWithProgressBar implements
                 supplierItems.add(new SupplierItem(MainActivity.this, x));
             }
         };
-        supplierParser.setCallerActivity(this);
         supplierParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -188,7 +177,6 @@ public class MainActivity extends AppCompatActivityWithProgressBar implements
             Log.e(TAG, String.format("exception caught during parser %s", entitiesParser.getName()));
             e.printStackTrace();
         }
-
 
 
         //municipalityItems.add(new MunicipalityItem("Venezia", 45.4375466, 12.3289983, "Comune di Venezia", "000066862"));
@@ -257,7 +245,7 @@ public class MainActivity extends AppCompatActivityWithProgressBar implements
             urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/File_xml_gare_2016.xml"));
             urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d28-2016.xml"));
             urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d30-2016.xml"));
-            municipalityItems.add(new MunicipalityItem(roma.codice_ente, "Roma", roma.descrizione_ente, roma.numero_abitanti ,41.9102411, 12.3955688, urls));
+            municipalityItems.add(new MunicipalityItem(roma.codice_ente, "Roma", roma.descrizione_ente, roma.numero_abitanti, 41.9102411, 12.3955688, urls));
         } catch (MalformedURLException e) {
             Log.w(TAG, "malformed url");
             e.printStackTrace();

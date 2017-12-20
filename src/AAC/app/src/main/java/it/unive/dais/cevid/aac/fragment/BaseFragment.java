@@ -82,7 +82,7 @@ public abstract  class BaseFragment extends Fragment {
                         try {
                             status.startResolutionForResult(getActivity(), REQUEST_CHECK_SETTINGS);
                         } catch (IntentSender.SendIntentException e) {
-                            Log.i(TAG, "PendingIntent unable to execute request.");
+                            Log.i(TAG, "PendingIntent unable to execute acquire.");
                         }
                         break;
                     case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
