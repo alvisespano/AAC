@@ -81,10 +81,6 @@ public class SupplierParser extends SharedProgressBarParser<SupplierParser.Data,
         return r;
     }
 
-
-    /**
-     * Created by fbusolin on 30/11/17.
-     */
     public static class Data implements Serializable {
         public String n_abilitazioni,
                 n_aggiudicati,

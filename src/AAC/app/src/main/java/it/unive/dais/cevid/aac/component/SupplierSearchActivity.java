@@ -43,9 +43,8 @@ public class SupplierSearchActivity extends AppCompatActivity {
 
 
         this.mainView = findViewById(R.id.supply_info_activity);
-        setProgressBar();
-        parser = new ParticipantParser(supplier.getPiva());
-        parser.setCallerActivity(this);
+        SharedProgressBar sharedProgressBar = new SharedProgressBar((ProgressBar) findViewById(R.id.progress_bar_supplier_search));
+        parser = new ParticipantParser(supplier.getPiva(), sharedProgressBar);
         parser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         TextView titleView = (TextView) findViewById(R.id.supply_title);
@@ -60,24 +59,20 @@ public class SupplierSearchActivity extends AppCompatActivity {
         TextView typeView = (TextView) findViewById(R.id.supply_type);
         typeView.setText(supplier.getType());
         Button button = (Button) findViewById(R.id.button_supply_expand);
-        button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                try {
-                    List<ParticipantParser.Data> data = parser.getAsyncTask().get();
-                    if (data.size() > 0) {
-                        Intent intent = new Intent(SupplierSearchActivity.this, SupplierResultActivity.class);
-                        intent.putExtra(SupplierResultActivity.BUNDLE_PARTECIPATIONS, new ArrayList<>(data));
-                        startActivity(intent);
-                    } else {
-                        alert(String.format("Trovati %d bandi attivati nel 2016 per %s", data.size(), supplier.getTitle()));
-                    }
-                } catch (InterruptedException | ExecutionException e) {
-                    alert(String.format("Errore inatteso: %s. Riprovare.", e.getMessage()));
-                    Log.e(TAG, String.format("exception caught during parser %s", parser.getName()));
-                    e.printStackTrace();
+        button.setOnClickListener(v -> {
+            try {
+                List<ParticipantParser.Data> data = parser.getAsyncTask().get();
+                if (data.size() > 0) {
+                    Intent intent = new Intent(SupplierSearchActivity.this, SupplierResultActivity.class);
+                    intent.putExtra(SupplierResultActivity.BUNDLE_PARTECIPATIONS, new ArrayList<>(data));
+                    startActivity(intent);
+                } else {
+                    alert(String.format("Trovati %d bandi attivati nel 2016 per %s", data.size(), supplier.getTitle()));
                 }
+            } catch (InterruptedException | ExecutionException e) {
+                alert(String.format("Errore inatteso: %s. Riprovare.", e.getMessage()));
+                Log.e(TAG, String.format("exception caught during parser %s", parser.getName()));
+                e.printStackTrace();
             }
         });
     }
@@ -86,8 +81,4 @@ public class SupplierSearchActivity extends AppCompatActivity {
         Snackbar.make(mainView, msg, Snackbar.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void setProgressBar() {
-        this.progressBar = (ProgressBar) findViewById(R.id.progress_bar_supplier_search);
-    }
 }
