@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -20,11 +21,11 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.parser.MunicipalityParser;
-import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
-public class MunicipalitySearchActivity extends SharedProgressBar {
+public class MunicipalitySearchActivity extends AppCompatActivity {
     public static final String MUNICIPALITY_ITEM = "MUNICIPALITY_ITEM";
     public static String CODICE_ENTE = "ENTE", CODICE_COMPARTO = "COMPARTO";
 
@@ -147,7 +148,7 @@ public class MunicipalitySearchActivity extends SharedProgressBar {
     protected static class CustomSoldipubbliciParser extends SoldipubbliciParser implements AsyncTaskWithProgressBar {
 
         private static final String TAG = "CustomSoldipubbliciParser";
-        private SharedProgressBar caller;
+        private RefCountedProgressBar caller;
 
         public CustomSoldipubbliciParser(String codiceComparto, String codiceEnte) {
             super(codiceComparto, codiceEnte);
@@ -166,7 +167,7 @@ public class MunicipalitySearchActivity extends SharedProgressBar {
         }
 
         @Override
-        public void setCallerActivity(SharedProgressBar caller) {
+        public void setCallerActivity(RefCountedProgressBar caller) {
             this.caller = caller;
         }
     }
@@ -174,7 +175,7 @@ public class MunicipalitySearchActivity extends SharedProgressBar {
     // TODO: serve questa classe?
     protected static class CustomAppaltiParser extends AppaltiParser implements AsyncTaskWithProgressBar {
         private static final String TAG = "MyAppaltiProgressBarParser";
-        private SharedProgressBar caller;
+        private RefCountedProgressBar caller;
 
         public CustomAppaltiParser(List<URL> urls) {
             super(urls);
@@ -193,7 +194,7 @@ public class MunicipalitySearchActivity extends SharedProgressBar {
         }
 
         @Override
-        public void setCallerActivity(SharedProgressBar caller) {
+        public void setCallerActivity(RefCountedProgressBar caller) {
             this.caller = caller;
         }
     }

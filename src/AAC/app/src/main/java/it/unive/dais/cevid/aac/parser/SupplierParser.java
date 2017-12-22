@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import it.unive.dais.cevid.datadroid.lib.parser.SharedProgressBarParser;
-import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.parser.ProgressBarParser;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,14 +22,14 @@ import okhttp3.Request;
  * Created by fbusolin on 13/11/17.
  */
 
-public class SupplierParser extends SharedProgressBarParser<SupplierParser.Data, ProgressStepper, SupplierParser> implements Serializable {
+public class SupplierParser extends ProgressBarParser<SupplierParser.Data, ProgressStepper, SupplierParser> implements Serializable {
     public static final String TAG = "SupplierParser";
     private static final String QUERY = "http://dati.consip.it/api/action/datastore_search_sql?" +
             "sql=SELECT%20*%20" +
             "FROM%20%22f476dccf-d60a-4301-b757-829b3e030ac6%22%20" +
             "ORDER%20BY%22Numero_Aggiudicazioni%22%20DESC%20LIMIT%20100";
 
-    public SupplierParser(@NonNull SharedProgressBar sharedProgressBar) {
+    public SupplierParser(@NonNull RefCountedProgressBar sharedProgressBar) {
         super(parser, sharedProgressBar);
     }
 

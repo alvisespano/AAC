@@ -6,9 +6,8 @@ import android.util.JsonReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.List;
 
-import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncJsonParser;
 import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 
@@ -17,7 +16,7 @@ import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
  */
 
 public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityParser.Data, ProgressStepper> {
-    private SharedProgressBar caller;
+    private RefCountedProgressBar caller;
 
     public MunicipalityParser(@NonNull Reader rd) {
         super(rd);

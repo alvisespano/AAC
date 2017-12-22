@@ -7,9 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.text.ParseException;
-import java.util.List;
 
-import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncCsvParser;
 
 /**
@@ -18,14 +17,14 @@ import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncCsvParser;
 
 public class EnrolledParser extends AbstractAsyncCsvParser<EnrolledParser.Data> {
 
-    private SharedProgressBar caller;
+    private RefCountedProgressBar caller;
 
-    public EnrolledParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep, SharedProgressBar caller) throws FileNotFoundException {
+    public EnrolledParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep, RefCountedProgressBar caller) throws FileNotFoundException {
         super(file, hasActualHeader, sep);
         this.caller = caller;
     }
 
-    public EnrolledParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep,SharedProgressBar caller) {
+    public EnrolledParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep,RefCountedProgressBar caller) {
         super(rd, hasActualHeader, sep);
         this.caller = caller;
     }

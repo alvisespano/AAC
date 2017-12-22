@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.parser.ParticipantParser;
-import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 
 public class SupplierSearchActivity extends AppCompatActivity {
     public static final String TAG = "SupplierSearchActivity";
@@ -43,7 +43,7 @@ public class SupplierSearchActivity extends AppCompatActivity {
 
 
         this.mainView = findViewById(R.id.supply_info_activity);
-        SharedProgressBar sharedProgressBar = new SharedProgressBar((ProgressBar) findViewById(R.id.progress_bar_supplier_search));
+        RefCountedProgressBar sharedProgressBar = new RefCountedProgressBar((ProgressBar) findViewById(R.id.progress_bar_supplier_search));
         parser = new ParticipantParser(supplier.getPiva(), sharedProgressBar);
         parser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

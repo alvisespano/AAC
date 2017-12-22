@@ -23,8 +23,8 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
-import it.unive.dais.cevid.datadroid.lib.parser.SharedProgressBarParser;
-import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.parser.ProgressBarParser;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
@@ -44,7 +44,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private LinearLayout mainView;
     private String soldiPubbliciText = " ";
     private String appaltiText = " ";
-    private SharedProgressBar sharedProgressBar;
+    private RefCountedProgressBar sharedProgressBar;
 
 
     // wrappers for Datadroid parsers
@@ -54,7 +54,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
 //        private static final String TAG = "MyAppaltiProgressBarParser";
 //
 //        @Nullable
-//        private Shared<ProgressBar>.Handle handle;
+//        private RefCounter<ProgressBar>.Handle handle;
 //
 //        public MyAppaltiProgressBarParser(List<URL> urls) {
 //            super(urls);
@@ -71,13 +71,13 @@ public class UniversitySearchActivity extends AppCompatActivity {
 //        }
 //    }
 
-    protected class MySoldipubbliciProgressBarParser extends SharedProgressBarParser<SoldipubbliciParser.Data, ProgressStepper, SoldipubbliciParser> {
+    protected class MySoldipubbliciProgressBarParser extends ProgressBarParser<SoldipubbliciParser.Data, ProgressStepper, SoldipubbliciParser> {
         public MySoldipubbliciProgressBarParser(String codiceComparto, String id) {
             super(new SoldipubbliciParser(codiceComparto, id), sharedProgressBar);
         }
     }
 
-    protected class MyAppaltiProgressBarParser extends SharedProgressBarParser<AppaltiParser.Data, ProgressStepper, AppaltiParser> {
+    protected class MyAppaltiProgressBarParser extends ProgressBarParser<AppaltiParser.Data, ProgressStepper, AppaltiParser> {
         public MyAppaltiProgressBarParser(List<URL> urls) {
             super(new AppaltiParser(urls), sharedProgressBar);
         }
@@ -113,7 +113,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
-        sharedProgressBar = new SharedProgressBar((ProgressBar) findViewById(R.id.shared_progress_bar));
+        sharedProgressBar = new RefCountedProgressBar((ProgressBar) findViewById(R.id.shared_progress_bar));
 
         if (savedInstanceState == null) {
             // crea l'activity da zero

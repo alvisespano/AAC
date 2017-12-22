@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.lib.util.SharedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 import okhttp3.Request;
@@ -33,7 +33,7 @@ public class TenderParser extends AbstractAsyncParser<TenderParser.Data, Progres
     private static String res2016 = "5e12248d-07be-4e94-8be7-05b49787427f";
     private static String res2017 = "377784b5-bb11-4a3e-a3a7-e1e48d122892";
     private final String lotto;
-    private SharedProgressBar caller;
+    private RefCountedProgressBar caller;
 
     public TenderParser(String lotto) {
         this.lotto = lotto;
@@ -137,7 +137,7 @@ public class TenderParser extends AbstractAsyncParser<TenderParser.Data, Progres
     }
 
     @Override
-    public void setCallerActivity(SharedProgressBar caller) {
+    public void setCallerActivity(RefCountedProgressBar caller) {
         this.caller = caller;
     }
 
