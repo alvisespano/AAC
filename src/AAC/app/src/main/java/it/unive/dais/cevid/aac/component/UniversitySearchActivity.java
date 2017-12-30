@@ -23,7 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
-import it.unive.dais.cevid.datadroid.lib.parser.ProgressBarParser;
+import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
@@ -54,7 +54,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
 //        private static final String TAG = "MyAppaltiProgressBarParser";
 //
 //        @Nullable
-//        private RefCounter<ProgressBar>.Handle handle;
+//        private RefCountedSingletonPool<ProgressBar>.Handle handle;
 //
 //        public MyAppaltiProgressBarParser(List<URL> urls) {
 //            super(urls);
@@ -71,13 +71,13 @@ public class UniversitySearchActivity extends AppCompatActivity {
 //        }
 //    }
 
-    protected class MySoldipubbliciProgressBarParser extends ProgressBarParser<SoldipubbliciParser.Data, ProgressStepper, SoldipubbliciParser> {
+    protected class MySoldipubbliciProgressBarParser extends ParserWithProgressBar<SoldipubbliciParser.Data, ProgressStepper, SoldipubbliciParser> {
         public MySoldipubbliciProgressBarParser(String codiceComparto, String id) {
             super(new SoldipubbliciParser(codiceComparto, id), sharedProgressBar);
         }
     }
 
-    protected class MyAppaltiProgressBarParser extends ProgressBarParser<AppaltiParser.Data, ProgressStepper, AppaltiParser> {
+    protected class MyAppaltiProgressBarParser extends ParserWithProgressBar<AppaltiParser.Data, ProgressStepper, AppaltiParser> {
         public MyAppaltiProgressBarParser(List<URL> urls) {
             super(new AppaltiParser(urls), sharedProgressBar);
         }

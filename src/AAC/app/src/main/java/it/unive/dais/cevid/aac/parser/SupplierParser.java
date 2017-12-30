@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import it.unive.dais.cevid.datadroid.lib.parser.ProgressBarParser;
+import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 import okhttp3.OkHttpClient;
@@ -22,7 +22,7 @@ import okhttp3.Request;
  * Created by fbusolin on 13/11/17.
  */
 
-public class SupplierParser extends ProgressBarParser<SupplierParser.Data, ProgressStepper, SupplierParser> implements Serializable {
+public class SupplierParser extends ParserWithProgressBar<SupplierParser.Data, ProgressStepper, SupplierParser> implements Serializable {
     public static final String TAG = "SupplierParser";
     private static final String QUERY = "http://dati.consip.it/api/action/datastore_search_sql?" +
             "sql=SELECT%20*%20" +

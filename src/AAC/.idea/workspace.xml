@@ -14,7 +14,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="02c750c7-ed75-440c-b795-17540f571f13" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/android_android_25.xml" afterPath="$PROJECT_DIR$/.idea/libraries/android_android_25.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_constraint_constraint_layout_solver_1_0_2_jar.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_constraint_constraint_layout_solver_1_0_2_jar.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_core_2_2_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_core_2_2_2.xml" />
@@ -23,16 +22,10 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_rules_0_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_rules_0_5.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_runner_0_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_runner_0_5.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MunicipalitySearchActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MunicipalitySearchActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/SupplierResultActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/SupplierResultActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/SupplierSearchActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/SupplierSearchActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/UniversitySearchActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/UniversitySearchActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/EnrolledParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/EnrolledParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/GraduatedParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/GraduatedParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/MunicipalityParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/MunicipalityParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/ParticipantParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/ParticipantParser.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/SupplierParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/SupplierParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/TenderParser.java" afterPath="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/TenderParser.java" />
     </list>
     <ignored path="AAC.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -67,71 +60,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ParticipantParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/ParticipantParser.java">
+      <file leaf-file-name="Handle.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Handle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
-              <caret line="123" column="27" lean-forward="true" selection-start-line="123" selection-start-column="27" selection-end-line="123" selection-end-column="27" />
-              <folding>
-                <element signature="docComment;class#ParticipantParser#0" expanded="true" />
-                <marker date="1513953929931" expanded="true" signature="6288:6294" ph="{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AbstractAsyncParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/AbstractAsyncParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="743">
-              <caret line="149" column="25" lean-forward="false" selection-start-line="149" selection-start-column="25" selection-end-line="149" selection-end-column="25" />
-              <folding>
-                <element signature="e#5633#5634#0" expanded="true" />
-                <element signature="e#5678#5679#0" expanded="true" />
-                <marker date="1513787360130" expanded="true" signature="3440:3441" ph="@{...}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AbstractAsyncCsvParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/AbstractAsyncCsvParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="542">
-              <caret line="102" column="39" lean-forward="true" selection-start-line="102" selection-start-column="39" selection-end-line="102" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppaltiParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/AppaltiParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="33" column="12" lean-forward="false" selection-start-line="33" selection-start-column="12" selection-end-line="33" selection-end-column="12" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ProgressBarParser.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/ProgressBarParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-              <folding>
-                <element signature="e#1756#1757#0" expanded="true" />
-                <element signature="e#1800#1801#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AsyncParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/AsyncParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
+            <state relative-caret-position="544">
+              <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -140,12 +73,79 @@
       <file leaf-file-name="RefCountedProgressBar.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCountedProgressBar.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-              <folding>
-                <element signature="e#323#324#0" expanded="true" />
-                <element signature="e#347#348#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="119">
+              <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GettableHandle.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/GettableHandle.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RefCountedSingletonPool.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCountedSingletonPool.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="612">
+              <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1292">
+              <caret line="116" column="50" lean-forward="true" selection-start-line="116" selection-start-column="50" selection-end-line="116" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="UniversitySearchActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/UniversitySearchActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="79" column="73" lean-forward="false" selection-start-line="79" selection-start-column="73" selection-end-line="79" selection-end-column="73" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ParserWithProgressBar.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/ParserWithProgressBar.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="442">
+              <caret line="38" column="13" lean-forward="true" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Pool.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Pool.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ConcurrentPool.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/ConcurrentPool.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="527">
+              <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -153,32 +153,9 @@
       <file leaf-file-name="SupplierParser.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/SupplierParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="32" column="18" lean-forward="false" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
+            <state relative-caret-position="374">
+              <caret line="38" column="47" lean-forward="true" selection-start-line="38" selection-start-column="47" selection-end-line="38" selection-end-column="47" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Producer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Producer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TenderParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/TenderParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="26" column="44" lean-forward="true" selection-start-line="26" selection-start-column="44" selection-end-line="26" selection-end-column="44" />
-              <folding>
-                <element signature="e#6042#6043#0" expanded="true" />
-                <element signature="e#6078#6079#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -3403,8 +3380,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/util/AsyncTaskWithProgressBar.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/util/EntitieExpenditure.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/util/EntiComparator.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/util/ProgressStepper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/util/Box.java" />
@@ -3432,7 +3407,6 @@
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/SharedParser.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/SupplierProgressBarParser.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/SupplierParser.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/ParticipantParser.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/util/Handle.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/util/Shared.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/util/Pool.java" />
@@ -3445,15 +3419,18 @@
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/SharedProgressBar.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/SupplierResultActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MunicipalitySearchActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MainActivity.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCounted.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Pooled.java" />
-        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Pool.java" />
-        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCounter.java" />
-        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/ConcurrentPool.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCountedProgressBar.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/SharedProgressBarParser.java" />
         <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/ProgressBarParser.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/ParticipantParser.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MainActivity.java" />
+        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Pool.java" />
+        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/ConcurrentPool.java" />
+        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCounter.java" />
+        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCountedSingletonPool.java" />
+        <option value="$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/ParserWithProgressBar.java" />
       </list>
     </option>
   </component>
@@ -3521,6 +3498,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -3560,10 +3538,6 @@
               <option name="myItemId" value="lib" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="util" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -3585,46 +3559,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="sync" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AAC" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="parser" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="AAC" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -3699,12 +3633,33 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AAC" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="aac" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="adapter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="ProjectPane" />
       <pane id="Scratches" />
-      <pane id="PackagesPane" />
+      <pane id="ProjectPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -3814,7 +3769,8 @@
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
       <method>
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513953933486" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514639830429" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -3861,7 +3817,8 @@
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
       </Profilers>
       <method>
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513953933486" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514639830429" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -3893,27 +3850,6 @@
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <method />
-    </configuration>
-    <configuration default="true" type="JUnit" factoryName="JUnit">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <module name="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PACKAGE_NAME" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="METHOD_NAME" />
-      <option name="TEST_OBJECT" value="class" />
-      <option name="VM_PARAMETERS" />
-      <option name="PARAMETERS" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="singleModule" />
-      </option>
-      <envs />
-      <patterns />
       <method />
     </configuration>
     <configuration default="true" type="JarApplication" factoryName="JAR Application">
@@ -4043,7 +3979,8 @@
       <option name="DEEP_LINK" value="" />
       <option name="ACTIVITY_CLASS" value="" />
       <method>
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513953933489" />
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1514639830430" />
       </method>
     </configuration>
     <list size="1">
@@ -4073,6 +4010,9 @@
   </component>
   <component name="StructuralSearchPlugin">
     <replaceConfiguration name="user defined" created="1504786032678" text="it.unive.dais.cevid.lib.datadroid" recursive="false" caseInsensitive="true" type="JAVA" reformatAccordingToStyle="true" shortenFQN="true" useStaticImport="true" replacement="it.unive.dais.cevid.datadroid.lib" history="1" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -4160,13 +4100,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values-it/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
@@ -4182,10 +4115,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="32" lean-forward="false" selection-start-line="18" selection-start-column="32" selection-end-line="18" selection-end-column="32" />
-          <folding>
-            <marker date="1513591322495" expanded="false" signature="1670:1695" ph="&quot;AIzaSyBKaJTQ-13g-WNxAeoJn_wHEFEfCgjqo_w&quot;" />
-            <marker date="1513591322495" expanded="false" signature="4857:4886" ph="&quot;AAC Map&quot;" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -4299,14 +4229,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/util/ProgressStepper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="11" column="11" lean-forward="false" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/util/AsyncTaskWithProgressBar.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/util/HasProgressBar.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/SharedParser.java" />
@@ -4317,21 +4239,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/GraduatedParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/MunicipalityParser.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
           <caret line="60" column="9" lean-forward="false" selection-start-line="60" selection-start-column="9" selection-end-line="60" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="docComment;class#MunicipalityParser#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -4353,45 +4264,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/GettableHandle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/UniversitySearchActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="34" column="63" lean-forward="false" selection-start-line="34" selection-start-column="46" selection-end-line="34" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MunicipalitySearchActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="147" column="92" lean-forward="false" selection-start-line="147" selection-start-column="92" selection-end-line="147" selection-end-column="92" />
-          <folding>
-            <marker date="1513949638047" expanded="true" signature="8251:8322" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="116" column="59" lean-forward="false" selection-start-line="116" selection-start-column="59" selection-end-line="116" selection-end-column="59" />
-          <folding>
-            <marker date="1513787355047" expanded="true" signature="13496:14148" ph="{...}" />
-            <marker date="1513787355047" expanded="false" signature="14428:14451" ph="&quot;Connection suspended&quot;" />
-            <marker date="1513787355047" expanded="false" signature="14668:14688" ph="&quot;Connection failed&quot;" />
-            <marker date="1513787355047" expanded="false" signature="15357:15393" ph="&quot;Denied permissions will disable some features of the app&quot;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/SupplierResultActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -4400,91 +4272,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Producer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="31" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Handle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="28" column="9" lean-forward="true" selection-start-line="28" selection-start-column="9" selection-end-line="28" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#318#319#0" expanded="true" />
-            <element signature="e#344#345#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Pool.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="21" column="48" lean-forward="false" selection-start-line="21" selection-start-column="48" selection-end-line="21" selection-end-column="48" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCounter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="714">
-          <caret line="46" column="0" lean-forward="true" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
-          <folding>
-            <element signature="e#569#570#0" expanded="true" />
-            <element signature="e#635#636#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Producer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCountedProgressBar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="24" column="0" lean-forward="true" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
-          <folding>
-            <element signature="e#323#324#0" expanded="true" />
-            <element signature="e#347#348#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/ParticipantParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="123" column="27" lean-forward="true" selection-start-line="123" selection-start-column="27" selection-end-line="123" selection-end-column="27" />
-          <folding>
-            <element signature="docComment;class#ParticipantParser#0" expanded="true" />
-            <marker date="1513953929931" expanded="true" signature="6288:6294" ph="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/SupplierParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="32" column="18" lean-forward="false" selection-start-line="32" selection-start-column="18" selection-end-line="32" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Pool.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/TenderParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="26" column="44" lean-forward="true" selection-start-line="26" selection-start-column="44" selection-end-line="26" selection-end-column="44" />
-          <folding>
-            <element signature="e#6042#6043#0" expanded="true" />
-            <element signature="e#6078#6079#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="323">
+          <caret line="26" column="44" lean-forward="false" selection-start-line="26" selection-start-column="44" selection-end-line="26" selection-end-column="44" />
         </state>
       </provider>
     </entry>
@@ -4492,13 +4284,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="33" column="12" lean-forward="false" selection-start-line="33" selection-start-column="12" selection-end-line="33" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/AsyncParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
+        <state relative-caret-position="255">
           <caret line="20" column="9" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
           <folding />
         </state>
@@ -4506,32 +4297,140 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/AbstractAsyncCsvParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="102" column="39" lean-forward="true" selection-start-line="102" selection-start-column="39" selection-end-line="102" selection-end-column="39" />
+        <state relative-caret-position="1479">
+          <caret line="102" column="39" lean-forward="false" selection-start-line="102" selection-start-column="39" selection-end-line="102" selection-end-column="39" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/AbstractAsyncParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="743">
+        <state relative-caret-position="2210">
           <caret line="149" column="25" lean-forward="false" selection-start-line="149" selection-start-column="25" selection-end-line="149" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/GraduatedParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/util/ProgressStepper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="32" column="5" lean-forward="false" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
           <folding>
-            <element signature="e#5633#5634#0" expanded="true" />
-            <element signature="e#5678#5679#0" expanded="true" />
-            <marker date="1513787360130" expanded="true" signature="3440:3441" ph="@{...}" />
+            <element signature="e#253#254#0" expanded="true" />
+            <element signature="e#289#290#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/ProgressBarParser.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/adapter/PagerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
+        <state relative-caret-position="527">
+          <caret line="38" column="20" lean-forward="false" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MunicipalitySearchActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="147" column="92" lean-forward="false" selection-start-line="147" selection-start-column="92" selection-end-line="147" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/ParticipantParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="28" column="55" lean-forward="false" selection-start-line="28" selection-start-column="55" selection-end-line="28" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Pool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/ConcurrentPool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/Handle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="38" column="0" lean-forward="true" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCountedSingletonPool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
           <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding>
-            <element signature="e#1756#1757#0" expanded="true" />
-            <element signature="e#1800#1801#0" expanded="true" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/RefCountedProgressBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" column="13" lean-forward="false" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/sync/GettableHandle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/parser/SupplierParser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="38" column="47" lean-forward="true" selection-start-line="38" selection-start-column="47" selection-end-line="38" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1292">
+          <caret line="116" column="50" lean-forward="true" selection-start-line="116" selection-start-column="50" selection-end-line="116" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/it/unive/dais/cevid/aac/component/UniversitySearchActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="79" column="73" lean-forward="false" selection-start-line="79" selection-start-column="73" selection-end-line="79" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Datadroid/lib/src/main/java/it/unive/dais/cevid/datadroid/lib/parser/ParserWithProgressBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="38" column="13" lean-forward="true" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.parser.ProgressBarParser;
+import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import okhttp3.OkHttpClient;
@@ -26,7 +26,7 @@ import okhttp3.Request;
 /**
  * @author fbusolin
  */
-public class ParticipantParser extends ProgressBarParser<ParticipantParser.Data, ProgressStepper, ParticipantParser.Actual> {
+public class ParticipantParser extends ParserWithProgressBar<ParticipantParser.Data, ProgressStepper, ParticipantParser.Actual> {
 
     public ParticipantParser(@NonNull String iva, @NonNull RefCountedProgressBar sharedProgressBar) {
         super(new Actual(iva), sharedProgressBar);
@@ -41,12 +41,6 @@ public class ParticipantParser extends ProgressBarParser<ParticipantParser.Data,
         private final static String res2016 = "996e869f-d3a3-4938-bd87-38d8d688860a";
         private final static String res2017 = "1ffc9410-9d28-47c6-b729-efc4de4e3287";
         private final String iva;
-
-//    public static class ParticipantBarParser extends ProgressBarParser<ParticipantParser.Data, ProgressStepper, ParticipantParser> {
-//        public ParticipantBarParser(@NonNull ParticipantParser parser, @NonNull RefCountedProgressBar sharedProgressBar) {
-//            super(parser, sharedProgressBar);
-//        }
-//    }
 
         public Actual(String iva) {
             this.iva = iva;

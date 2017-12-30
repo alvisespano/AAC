@@ -440,4 +440,5 @@ public class MainActivity extends AppCompatActivity
             Log.d(TAG, String.format("test progress: %d%%", (int) (p1.getPercent() * 100.)));
         }
     }
+
 }
