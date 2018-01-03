@@ -35,7 +35,6 @@ captures/
 # Intellij
 *.iml
 .idea
-src/.idea
 
 # Keystore files
 *.jks
@@ -50,3 +49,4 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+src/AAC/.idea/workspace.xml
