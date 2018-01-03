@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -24,11 +23,16 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationSettingsStates;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -40,12 +44,14 @@ import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
+import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
-import it.unive.dais.cevid.datadroid.lib.sync.Handle;
 import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks,
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity
     protected static final int REQUEST_CHECK_SETTINGS = 500;
     protected static final int PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION = 501;
 
-    private BaseFragment activeFragment = new MapFragment();
+    private BaseFragment currentMapFragment = new MapFragment();
     private BottomNavigationView bottomNavigation;
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private ProgressBarSingletonPool progressBarPool;  // TODO: provare a mettere qui la findViewById e vedere se funziona
@@ -78,7 +84,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setContentFragment(R.id.content_frame, activeFragment);
+        setContentFragment(R.id.content_frame, currentMapFragment);
         progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_main));
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -98,13 +104,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void changeActiveFragment(@NonNull BaseFragment fragment) {
-        this.activeFragment = fragment;
+        currentMapFragment = fragment;
         setContentFragment(R.id.content_frame, fragment);
     }
 
     //stub for change button onClick listener
     public void onChangeType() {
-        switch (activeFragment.getType()) {
+        switch (currentMapFragment.getType()) {
             case MAP:
                 changeActiveFragment(new ListFragment());
                 break;
@@ -121,6 +127,12 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onItemParsed(@NonNull SupplierParser.Data x) {
                 supplierItems.add(new SupplierItem(MainActivity.this, x));
+            }
+            @Override
+            public void onPostExecute(@NonNull List<SupplierParser.Data> r) {
+                for (SupplierParser.Data x : r) {
+                    supplierItems.add(new SupplierItem(MainActivity.this, x));
+                }
             }
         };
         p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -163,9 +175,78 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    protected class MyEntityParser extends ParserWithProgressBar<SoldipubbliciEntiParser.Data, PercentProgressStepper, SoldipubbliciEntiParser<PercentProgressStepper>> {
+    protected class MyEntityParser extends ParserWithProgressBar<SoldipubbliciEntiParser.Data, PercentProgressStepper> {
+        private static final String TAG = "SoldipubbliciEntiParser";
+
         public MyEntityParser() {
             super(new SoldipubbliciEntiParser<PercentProgressStepper>(), progressBarPool);
+        }
+
+
+
+            @NonNull
+            @Override
+            public List<it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data> parse() throws IOException {
+
+                Request request = new Request.Builder()
+                        .url("http://soldipubblici.gov.it/it/chi/search/%20")
+                        .addHeader("Accept", "application/json, text/javascript, */*; q=0.01")
+                        .addHeader("X-Requested-With", "XMLHttpRequest")
+                        .build();
+
+                try {
+                    return parseJSON(new OkHttpClient().newCall(request).execute().body().string());
+                } catch (JSONException e) {
+                    throw new IOException(e);
+                }
+            }
+
+            protected List<it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data> parseJSON(String data) throws JSONException {
+                List<it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data> r = new ArrayList<>();
+                JSONArray ja = new JSONArray(data);
+                for (int i = 0; i < ja.length(); i++) {
+                    JSONObject j = ja.getJSONObject(i);
+                    it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data d = new it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data();
+                    d.ripartizione_geografica = j.getString("ripartizione_geografica");
+                    d.descrizione_provincia = j.getString("descrizione_provincia");
+                    d.data_ingresso_siope = j.getString("data_ingresso_siope");
+                    d.codice_sottocomparto = j.getString("codice_sottocomparto");
+                    d.codice_provincia = j.getString("codice_provincia");
+                    d.descrizione_regione = j.getString("descrizione_regione");
+                    d.numero_abitanti = j.getString("numero_abitanti");
+                    d.descrizione_ente = j.getString("descrizione_ente");
+                    d.descrizione_ente_not_stemmed = j.getString("descrizione_ente_not_stemmed");
+                    d.codice_regione = j.getString("codice_regione");
+                    d.codice_fiscale = j.getString("codice_fiscale");
+                    d.codice_comparto = j.getString("codice_comparto");
+                    d.codice_comune = j.getString("codice_comune");
+                    d.codice_ente = j.getString("codice_ente");
+                    d.data_uscita_siope = j.getString("data_uscita_siope");
+                    d._version_ = j.getString("_version_");
+                    r.add(d);
+                }
+                return r;
+            }
+
+            public static class Data implements Serializable {
+                public String ripartizione_geografica;
+                public String descrizione_provincia;
+                public String data_ingresso_siope;
+                public String codice_sottocomparto;
+                public String codice_provincia;
+                public String descrizione_regione;
+                public String numero_abitanti;
+                public String descrizione_ente;
+                public String descrizione_ente_not_stemmed;
+                public String codice_regione;
+                public String codice_fiscale;
+                public String codice_comparto;
+                public String codice_comune;
+                public String codice_ente;
+                public String data_uscita_siope;
+                public String _version_;
+            }
+
         }
     }
 
@@ -313,7 +394,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void changeItemIcon(MenuItem item) {
-        switch (activeFragment.getType()) {
+        switch (currentMapFragment.getType()) {
             case LIST:
                 item.setIcon(R.drawable.ic_view_list);
                 break;
@@ -383,7 +464,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Mode mode = getModeByMenuItemId(item.getItemId());
         Log.d(TAG, String.format("entering mode %s", mode));
-        activeFragment.redraw(mode);
+        currentMapFragment.redraw(mode);
         return true;
     }
 
