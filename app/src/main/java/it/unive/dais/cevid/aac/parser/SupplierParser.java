@@ -43,7 +43,7 @@ public class SupplierParser extends ParserWithProgressBar<SupplierParser.Data, P
         public List<Data> parse() throws IOException {
             Request request = new Request.Builder()
                     .url(QUERY)
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                     .addHeader("Accept", "Application/json")
                     .addHeader("X-Requested-With", "XMLHttpRequest")
                     .build();

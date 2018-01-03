@@ -14,7 +14,7 @@ import java.util.List;
 
 import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.sync.Pool;
-import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.Request;
@@ -43,7 +43,7 @@ public class TenderParser extends ParserWithProgressBar<TenderParser.Data, Perce
         private static String res2016 = "5e12248d-07be-4e94-8be7-05b49787427f";
         private static String res2017 = "377784b5-bb11-4a3e-a3a7-e1e48d122892";
         private final String lotto;
-        private RefCountedProgressBar caller;
+        private ProgressBarSingletonPool caller;
 
         public Actual(String lotto) {
             this.lotto = lotto;
@@ -55,19 +55,19 @@ public class TenderParser extends ParserWithProgressBar<TenderParser.Data, Perce
             List<Data> r = new ArrayList<>();
             Request request2015 = new Request.Builder()
                     .url(this.buildURL(res2015))
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                     .addHeader("Accept", "Application/json")
                     .addHeader("X-Requested-With", "XMLHttpRequest")
                     .build();
             Request request2016 = new Request.Builder()
                     .url(this.buildURL(res2016))
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                     .addHeader("Accept", "Application/json")
                     .addHeader("X-Requested-With", "XMLHttpRequest")
                     .build();
             Request request2017 = new Request.Builder()
                     .url(this.buildURL(res2017))
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                     .addHeader("Accept", "Application/json")
                     .addHeader("X-Requested-With", "XMLHttpRequest")
                     .build();

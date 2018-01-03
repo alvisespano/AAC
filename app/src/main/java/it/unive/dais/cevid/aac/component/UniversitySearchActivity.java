@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -26,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
-import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
@@ -46,7 +44,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private LinearLayout mainView;
     private String soldiPubbliciText = " ";
     private String appaltiText = " ";
-    private RefCountedProgressBar progressBarPool;
+    private ProgressBarSingletonPool progressBarPool;
 
 
     // wrappers for parsers
@@ -94,7 +92,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
-        progressBarPool = new RefCountedProgressBar((ProgressBar) findViewById(R.id.progress_bar_university_search));
+        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_university_search));
 
         if (savedInstanceState == null) {
             // crea l'activity da zero

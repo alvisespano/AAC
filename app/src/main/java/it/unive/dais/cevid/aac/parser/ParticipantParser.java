@@ -53,19 +53,19 @@ public class ParticipantParser extends ParserWithProgressBar<ParticipantParser.D
             List<Data> returnList = new ArrayList<>();
             Request request2015 = new Request.Builder()
                     .url(this.buildURL(res2015))
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                     .addHeader("Accept", "Application/json")
                     .addHeader("X-Requested-With", "XMLHttpRequest")
                     .build();
             Request request2016 = new Request.Builder()
                     .url(this.buildURL(res2016))
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                     .addHeader("Accept", "Application/json")
                     .addHeader("X-Requested-With", "XMLHttpRequest")
                     .build();
             Request request2017 = new Request.Builder()
                     .url(this.buildURL(res2017))
-                    .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                    .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                     .addHeader("Accept", "Application/json")
                     .addHeader("X-Requested-With", "XMLHttpRequest")
                     .build();

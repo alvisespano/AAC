@@ -8,7 +8,7 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.text.ParseException;
 
-import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncCsvParser;
 
 /**
@@ -17,11 +17,11 @@ import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncCsvParser;
 
 public class GraduatedParser extends AbstractAsyncCsvParser<GraduatedParser.Data>  {
 
-    public GraduatedParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep,RefCountedProgressBar caller) throws FileNotFoundException {
+    public GraduatedParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep,ProgressBarSingletonPool caller) throws FileNotFoundException {
         super(file, hasActualHeader, sep);
     }
 
-    public GraduatedParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep,RefCountedProgressBar caller) {
+    public GraduatedParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep,ProgressBarSingletonPool caller) {
         super(rd, hasActualHeader, sep);
     }
 

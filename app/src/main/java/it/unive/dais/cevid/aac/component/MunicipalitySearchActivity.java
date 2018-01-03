@@ -2,7 +2,6 @@ package it.unive.dais.cevid.aac.component;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -23,7 +21,7 @@ import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.parser.MunicipalityParser;
 import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
-import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
@@ -41,14 +39,14 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
     @Nullable
     private MunicipalityItem municipalityItem;
     @Nullable
-    private RefCountedProgressBar progressBarPool;
+    private ProgressBarSingletonPool progressBarPool;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_municipality_search);
-        progressBarPool = new RefCountedProgressBar((ProgressBar) findViewById(R.id.progress_bar_comuni));
+        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_municipality_search));
         municipalityItem = (MunicipalityItem) getIntent().getSerializableExtra(MUNICIPALITY_ITEM);
 
         final String ente = getIntent().getStringExtra(CODICE_ENTE);
@@ -58,8 +56,7 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
         soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(
-                getResources().getIdentifier("comuni",
-                        "raw", getPackageName()))));
+                getResources().getIdentifier("comuni", "raw", getPackageName()))));
 
         municipalityParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

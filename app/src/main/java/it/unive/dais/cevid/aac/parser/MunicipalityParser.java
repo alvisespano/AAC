@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 
-import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncJsonParser;
 import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 
@@ -16,7 +16,7 @@ import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
  */
 
 public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityParser.Data, PercentProgressStepper> {
-    private RefCountedProgressBar caller;
+    private ProgressBarSingletonPool caller;
 
     public MunicipalityParser(@NonNull Reader rd) {
         super(rd);
