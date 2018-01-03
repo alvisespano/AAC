@@ -35,7 +35,7 @@ captures/
 # Intellij
 *.iml
 .idea
-src/AAC/.idea
+src/.idea
 
 # Keystore files
 *.jks
