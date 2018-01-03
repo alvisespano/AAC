@@ -26,16 +26,17 @@ public class SupplierResultActivity extends AppCompatActivity {
     public static final String TAG = "SupplierResultActivity";
     protected static final String BUNDLE_PARTECIPATIONS = "PARTS";
     private List<ParticipantParser.Data> tenders;
-    private Map<ParticipantParser.Data, TenderParser.Data> map;
-    private List<TenderParser> parsers;
+    private Map<ParticipantParser.Data, TenderParser.Data> map = new HashMap<>();
+    private List<TenderParser> parsers = new ArrayList<>();
+    private RefCountedProgressBar progressBarPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        map = new HashMap<>();
-        parsers = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supplier_result);
-        setProgressBar();
+
+        progressBarPool = new RefCountedProgressBar((ProgressBar) findViewById(R.id.progress_bar_main));
+
         Intent intent = getIntent();
         RecyclerView.LayoutManager lmanager = new LinearLayoutManager(this);
         RecyclerView view = (RecyclerView) findViewById(R.id.list_results);
@@ -44,10 +45,9 @@ public class SupplierResultActivity extends AppCompatActivity {
         tenders = (List<ParticipantParser.Data>) intent.getSerializableExtra(BUNDLE_PARTECIPATIONS);
         for (ParticipantParser.Data p : tenders) {
             String lotto = p.id_lotto;
-            TenderParser bandiParser = new TenderParser(lotto);
-            parsers.add(bandiParser);
-            bandiParser.setCallerActivity(this);
-            bandiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            TenderParser tenderParser = new TenderParser(lotto, progressBarPool);
+            parsers.add(tenderParser);
+            tenderParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
         TenderAdapter adapter = new TenderAdapter(tenders);
@@ -78,8 +78,4 @@ public class SupplierResultActivity extends AppCompatActivity {
         );
     }
 
-    @Override
-    public void setProgressBar() {
-        this.progressBar = (ProgressBar) findViewById(R.id.progress_bar_supplier_result);
-    }
 }

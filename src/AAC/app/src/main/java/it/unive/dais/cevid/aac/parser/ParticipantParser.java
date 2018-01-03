@@ -6,6 +6,7 @@ package it.unive.dais.cevid.aac.parser;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,21 +19,21 @@ import java.util.List;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
-import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
 /**
  * @author fbusolin
  */
-public class ParticipantParser extends ParserWithProgressBar<ParticipantParser.Data, ProgressStepper, ParticipantParser.Actual> {
+public class ParticipantParser extends ParserWithProgressBar<ParticipantParser.Data, PercentProgressStepper, ParticipantParser.Actual> {
 
-    public ParticipantParser(@NonNull String iva, @NonNull RefCountedProgressBar sharedProgressBar) {
-        super(new Actual(iva), sharedProgressBar);
+    public ParticipantParser(@NonNull String iva, @NonNull Pool<ProgressBar> pb) {
+        super(new Actual(iva), pb);
     }
 
-    public static class Actual extends AbstractAsyncParser<Data, ProgressStepper> {
+    public static class Actual extends AbstractAsyncParser<Data, PercentProgressStepper> {
         private final static String TAG = "ParticipantParser";
         private final static String single = "%27";
         private final static String pair = "%22";
@@ -94,7 +95,7 @@ public class ParticipantParser extends ParserWithProgressBar<ParticipantParser.D
             JSONObject jo = new JSONObject(string);
             JSONObject result = jo.getJSONObject("result");
             JSONArray array = result.getJSONArray("records");
-            ProgressStepper prog = new ProgressStepper(array.length());
+            PercentProgressStepper prog = new PercentProgressStepper(array.length());
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
                 Data d = new Data();

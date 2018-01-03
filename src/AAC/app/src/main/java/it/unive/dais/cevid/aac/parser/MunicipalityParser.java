@@ -9,13 +9,13 @@ import java.io.Serializable;
 
 import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncJsonParser;
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 
 /**
  * Created by fbusolin on 23/11/17.
  */
 
-public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityParser.Data, ProgressStepper> {
+public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityParser.Data, PercentProgressStepper> {
     private RefCountedProgressBar caller;
 
     public MunicipalityParser(@NonNull Reader rd) {

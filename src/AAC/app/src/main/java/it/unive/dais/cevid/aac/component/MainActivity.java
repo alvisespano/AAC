@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,7 +40,8 @@ import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
 import it.unive.dais.cevid.datadroid.lib.parser.EntitiesParser;
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.sync.RefCountedProgressBar;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 public class MainActivity extends AppCompatActivity
@@ -52,12 +54,10 @@ public class MainActivity extends AppCompatActivity
     protected static final int PERMISSIONS_REQUEST_ACCESS_BOTH_LOCATION = 501;
     protected EntitiesParser<?> entitiesParser;
 
-    private @NonNull
-    BaseFragment activeFragment = new MapFragment();
-    private @Nullable
-    BottomNavigationView bottomNavigation;
-    private @NonNull
-    FragmentManager fragmentManager = getSupportFragmentManager();
+    private BaseFragment activeFragment = new MapFragment();
+    private BottomNavigationView bottomNavigation;
+    private final FragmentManager fragmentManager = getSupportFragmentManager();
+    private RefCountedProgressBar progressBarPool;  // TODO: provare a mettere qui la findViewById e vedere se funziona
 
     public enum Mode {
         UNIVERSITY,
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, activeFragment);
+        progressBarPool = new RefCountedProgressBar((ProgressBar) findViewById(R.id.progress_bar_main));
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupSupplierItems() {
-        SupplierParser supplierParser = new SupplierParser() {
+        SupplierParser supplierParser = new SupplierParser(progressBarPool) {
             @Override
             public void onItemParsed(@NonNull SupplierParser.Data x) {
                 supplierItems.add(new SupplierItem(MainActivity.this, x));
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity
 
         entitiesParser = new EntitiesParser();
         entitiesParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        List<EntitiesParser.Data> entities = new ArrayList();
+        List<EntitiesParser.Data> entities = new ArrayList<>();
 
         try {
             List<EntitiesParser.Data> el = new ArrayList<>(entitiesParser.getAsyncTask().get());
@@ -429,9 +430,9 @@ public class MainActivity extends AppCompatActivity
 
     private void testProgressStepper() {
         final int n1 = 10, n2 = 30, n3 = 5;
-        ProgressStepper p1 = new ProgressStepper(n1);
+        PercentProgressStepper p1 = new PercentProgressStepper(n1);
         for (int i = 0; i < n1; ++i) {
-            ProgressStepper p2 = p1.getSubProgressStepper(n2);
+            PercentProgressStepper p2 = p1.getSubProgressStepper(n2);
             for (int j = 0; j < n2; ++j) {
                 p2.step();
                 Log.d(TAG, String.format("test progress: %d%%", (int) (p2.getPercent() * 100.)));

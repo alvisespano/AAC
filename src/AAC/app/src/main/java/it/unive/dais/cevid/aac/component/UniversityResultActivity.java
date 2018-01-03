@@ -21,7 +21,6 @@ import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
-import it.unive.dais.cevid.datadroid.lib.util.Function;
 
 
 public class UniversityResultActivity extends AppCompatActivity {
@@ -64,12 +63,7 @@ public class UniversityResultActivity extends AppCompatActivity {
                 LinearLayout lo = (LinearLayout) findViewById(R.id.sum_tenders);
                 lo.setVisibility(View.VISIBLE);
                 TextView tv = (TextView) findViewById(R.id.sum_exp);
-                Double sum = DataManipulation.sumBy(l, new Function<AppaltiParser.Data, Double>() {
-                    @Override
-                    public Double apply(AppaltiParser.Data x) {
-                        return Double.valueOf(x.importo);
-                    }
-                });
+                Double sum = DataManipulation.sumBy(l, x -> Double.valueOf(x.importo));
                 tv.setText(String.valueOf(sum));
                 break;
             }
@@ -79,7 +73,7 @@ public class UniversityResultActivity extends AppCompatActivity {
                 v.setLayoutManager(layoutManager);
                 Serializable l0 = i.getSerializableExtra(LIST_SOLDIPUBBLICI);
                 List<SoldipubbliciParser.Data> l = (List<SoldipubbliciParser.Data>) l0;
-                List el = new ArrayList<EntitieExpenditure>();
+                List<EntitieExpenditure> el = new ArrayList<>();
 
                 for (SoldipubbliciParser.Data x : l)
                     el.add(new EntitieExpenditure(x, "2016"));
@@ -102,7 +96,7 @@ public class UniversityResultActivity extends AppCompatActivity {
                 List<SoldipubbliciParser.Data> l2 = (List<SoldipubbliciParser.Data>) l0;
                 List<AppaltiParser.Data> l3 = (List<AppaltiParser.Data>) l1;
 
-                List el = new ArrayList<EntitieExpenditure>();
+                List<EntitieExpenditure> el = new ArrayList<>();
 
                 for (SoldipubbliciParser.Data x : l2)
                     el.add(new EntitieExpenditure(x, "2016"));
@@ -118,12 +112,7 @@ public class UniversityResultActivity extends AppCompatActivity {
                 LinearLayout lo = (LinearLayout) findViewById(R.id.sum_tenders);
                 lo.setVisibility(View.VISIBLE);
                 TextView tv = (TextView) findViewById(R.id.sum_exp);
-                Double sum = DataManipulation.sumBy(l3, new Function<AppaltiParser.Data, Double>() {
-                    @Override
-                    public Double apply(AppaltiParser.Data x) {
-                        return Double.valueOf(x.importo);
-                    }
-                });
+                Double sum = DataManipulation.sumBy(l3, x -> Double.valueOf(x.importo));
                 tv.setText(String.valueOf(sum));
                 break;
             }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -30,7 +32,7 @@ import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 import it.unive.dais.cevid.datadroid.lib.util.Function;
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 
 public class UniversitySearchActivity extends AppCompatActivity {
     private static final String TAG = "UniSearchActivity";
@@ -38,54 +40,33 @@ public class UniversitySearchActivity extends AppCompatActivity {
     public static final String UNIVERSITY_ITEM = "UNI";
     private static final String BUNDLE_LIST = "LIST";
 
-    private UniversityItem university;
-    private MySoldipubbliciProgressBarParser soldiPubbliciParser;
-    private MyAppaltiProgressBarParser appaltiParser;
+    private UniversityItem universityItem;
+    private MySoldipubbliciParser soldiPubbliciParser;
+    private MyAppaltiParser appaltiParser;
     private LinearLayout mainView;
     private String soldiPubbliciText = " ";
     private String appaltiText = " ";
-    private RefCountedProgressBar sharedProgressBar;
+    private RefCountedProgressBar progressBarPool;
 
 
-    // wrappers for Datadroid parsers
+    // wrappers for parsers
     //
 
-//    protected class MyAppaltiProgressBarParser extends AppaltiParser {
-//        private static final String TAG = "MyAppaltiProgressBarParser";
-//
-//        @Nullable
-//        private RefCountedSingletonPool<ProgressBar>.Handle handle;
-//
-//        public MyAppaltiProgressBarParser(List<URL> urls) {
-//            super(urls);
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            handle = sharedProgressBar.acquire();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(@NonNull List<AppaltiParser.Data> r) {
-//            if (handle != null) handle.release();
-//        }
-//    }
-
-    protected class MySoldipubbliciProgressBarParser extends ParserWithProgressBar<SoldipubbliciParser.Data, ProgressStepper, SoldipubbliciParser> {
-        public MySoldipubbliciProgressBarParser(String codiceComparto, String id) {
-            super(new SoldipubbliciParser(codiceComparto, id), sharedProgressBar);
+    protected class MySoldipubbliciParser extends ParserWithProgressBar<SoldipubbliciParser.Data, PercentProgressStepper, SoldipubbliciParser> {
+        public MySoldipubbliciParser(String codiceComparto, String id) {
+            super(new SoldipubbliciParser(codiceComparto, id), progressBarPool);
         }
     }
 
-    protected class MyAppaltiProgressBarParser extends ParserWithProgressBar<AppaltiParser.Data, ProgressStepper, AppaltiParser> {
-        public MyAppaltiProgressBarParser(List<URL> urls) {
-            super(new AppaltiParser(urls), sharedProgressBar);
+    protected class MyAppaltiParser extends ParserWithProgressBar<AppaltiParser.Data, PercentProgressStepper, AppaltiParser> {
+        public MyAppaltiParser(List<URL> urls) {
+            super(new AppaltiParser(urls), progressBarPool);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putSerializable(UNIVERSITY_ITEM, university);
+        savedInstanceState.putSerializable(UNIVERSITY_ITEM, universityItem);
 //        saveParserState(savedInstanceState, appaltiParser);
 //        saveParserState(savedInstanceState, soldiPubbliciParser);
         super.onSaveInstanceState(savedInstanceState);
@@ -113,21 +94,21 @@ public class UniversitySearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
-        sharedProgressBar = new RefCountedProgressBar((ProgressBar) findViewById(R.id.shared_progress_bar));
+        progressBarPool = new RefCountedProgressBar((ProgressBar) findViewById(R.id.progress_bar_university_search));
 
         if (savedInstanceState == null) {
             // crea l'activity da zero
-            university = (UniversityItem) getIntent().getSerializableExtra(UNIVERSITY_ITEM);
+            universityItem = (UniversityItem) getIntent().getSerializableExtra(UNIVERSITY_ITEM);
         } else {
             // ricrea l'activity deserializzando alcuni dati dal bundle
-            university = (UniversityItem) savedInstanceState.getSerializable(UNIVERSITY_ITEM);
+            universityItem = (UniversityItem) savedInstanceState.getSerializable(UNIVERSITY_ITEM);
         }
         TextView title = (TextView) findViewById(R.id.univeristy_name);
-        title.setText(university.getTitle());
+        title.setText(universityItem.getTitle());
 
         // TODO: salvare lo stato dei parser con un proxy serializzabile
-        soldiPubbliciParser = new MySoldipubbliciProgressBarParser(university.getCodiceComparto(), university.getId());
-        appaltiParser = new MyAppaltiProgressBarParser(university.getUrls());
+        soldiPubbliciParser = new MySoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId());
+        appaltiParser = new MyAppaltiParser(universityItem.getUrls());
         soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
