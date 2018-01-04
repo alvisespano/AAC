@@ -43,7 +43,7 @@ public class SupplierSearchActivity extends AppCompatActivity {
 
 
         this.mainView = findViewById(R.id.supply_info_activity);
-        ProgressBarSingletonPool sharedProgressBar = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_supplier_search));
+        ProgressBarSingletonPool sharedProgressBar = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_supplier_search));
         parser = new ParticipantParser(supplier.getPiva(), sharedProgressBar);
         parser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

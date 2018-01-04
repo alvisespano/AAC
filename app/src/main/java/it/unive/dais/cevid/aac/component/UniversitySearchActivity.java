@@ -77,7 +77,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
-        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_university_search));
+        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
 
         if (savedInstanceState == null) {
             // crea l'activity da zero

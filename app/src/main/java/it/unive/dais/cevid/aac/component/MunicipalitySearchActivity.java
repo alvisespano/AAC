@@ -43,7 +43,7 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_municipality_search);
-        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_municipality_search));
+        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_municipality_search));
         municipalityItem = (MunicipalityItem) getIntent().getSerializableExtra(MUNICIPALITY_ITEM);
 
         final String ente = getIntent().getStringExtra(CODICE_ENTE);

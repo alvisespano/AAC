@@ -35,7 +35,7 @@ public class SupplierResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supplier_result);
 
-        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_main));
+        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_main));
 
         Intent intent = getIntent();
         RecyclerView.LayoutManager lmanager = new LinearLayoutManager(this);

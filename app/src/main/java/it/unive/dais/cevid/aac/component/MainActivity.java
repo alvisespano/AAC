@@ -23,6 +23,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationSettingsStates;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
-        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_main));
+        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_main));
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -114,12 +115,18 @@ public class MainActivity extends AppCompatActivity
 
     private void setupSupplierItems() {
         SupplierParser p = new SupplierParser(progressBarPool) {
+            @NonNull
             @Override
-            public void onPostExecute(@NonNull List<SupplierParser.Data> r) {
-                // TODO: questo loop è eseguito nel contesto dello UI thread, e rallenta l'app a causa del costruttore di SupplierItem
+            public List<Data> onPostParse(List<Data> r) {
                 for (SupplierParser.Data x : r) {
                     supplierItems.add(new SupplierItem(MainActivity.this, x));
                 }
+                return r;
+            }
+
+            @Override
+            public void onPostExecute(List<Data> r) {
+                if (getCurrentMode() == Mode.SUPPLIER) currentMapFragment.redraw(Mode.SUPPLIER);
             }
         };
         p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -166,8 +173,14 @@ public class MainActivity extends AppCompatActivity
     private void setupMunicipalityItems() {
 
         CustomSoldipubbliciParser p = new CustomSoldipubbliciParser(progressBarPool) {
+
             @Override
-            public void onPostExecute(@NonNull List<CustomSoldipubbliciParser.Data> l) {
+            public void onPostExecute(List<CustomSoldipubbliciParser.Data> r) {
+                if (getCurrentMode() == Mode.MUNICIPALITY) currentMapFragment.redraw(Mode.MUNICIPALITY);
+            }
+
+            @Override
+            public List<CustomSoldipubbliciParser.Data> onPostParse(@NonNull List<CustomSoldipubbliciParser.Data> l) {
                 for (CustomSoldipubbliciParser.Data x : l) {
                     // just add Rome
                     if (x.descrizione_ente.equals("COMUNE DI ROMA")) {
@@ -244,6 +257,8 @@ public class MainActivity extends AppCompatActivity
                     Log.w(TAG, "malformed url");
                     e.printStackTrace();
                 }*/
+
+                return l;
             }
         };
         p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
