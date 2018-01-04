@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,18 +19,16 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.parser.MunicipalityParser;
-import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
-import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
-import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 
 public class MunicipalitySearchActivity extends AppCompatActivity {
     public static final String MUNICIPALITY_ITEM = "MUNICIPALITY_ITEM";
     public static String CODICE_ENTE = "ENTE", CODICE_COMPARTO = "COMPARTO";
 
     @Nullable
-    private MySoldipubbliciParser soldipubbliciParser;
+    private SoldipubbliciParser soldipubbliciParser;
     @Nullable
     private AppaltiParser appaltiParser;
     @Nullable
@@ -52,33 +49,22 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
         final String ente = getIntent().getStringExtra(CODICE_ENTE);
         final String comparto = getIntent().getStringExtra(CODICE_COMPARTO);
 
-        soldipubbliciParser = new MySoldipubbliciParser(comparto, ente);
+        soldipubbliciParser = new SoldipubbliciParser(comparto, ente, progressBarPool);
         soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(
-                getResources().getIdentifier("comuni", "raw", getPackageName()))));
+        municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(getResources().getIdentifier("comuni", "raw", getPackageName()))), progressBarPool);
 
         municipalityParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        appaltiParser = new AppaltiParser(municipalityItem.getUrls());
+        assert municipalityItem != null;
+        appaltiParser = new AppaltiParser(municipalityItem.getUrls(), progressBarPool);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         Button btnBalance = (Button) findViewById(R.id.municipality_balance_button);
         Button btnTender = (Button) findViewById(R.id.municipality_tender_button);
 
-        btnBalance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickBalance();
-            }
-        });
-
-        btnTender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickTender();
-            }
-        });
+        btnBalance.setOnClickListener(v -> clickBalance());
+        btnTender.setOnClickListener(v -> clickTender());
 
         ((TextView) findViewById(R.id.municipality_title)).setText(municipalityItem.getTitle());
         ((TextView) findViewById(R.id.municipality_desc)).setText(municipalityItem.getDescription());
@@ -144,11 +130,6 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected class MySoldipubbliciParser extends ParserWithProgressBar<SoldipubbliciParser.Data, PercentProgressStepper, SoldipubbliciParser> {
-        public MySoldipubbliciParser(String codiceComparto, String id) {
-            super(new SoldipubbliciParser(codiceComparto, id), progressBarPool);
-        }
-    }
 
 }
 

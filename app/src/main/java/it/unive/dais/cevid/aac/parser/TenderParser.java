@@ -12,10 +12,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
 import it.unive.dais.cevid.datadroid.lib.sync.Pool;
 import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
-import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
 import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.Request;
 import okhttp3.OkHttpClient;
@@ -28,8 +27,7 @@ import org.json.JSONObject;
  * @author fbusolin
  */
 
-public class TenderParser extends ParserWithProgressBar<TenderParser.Data, PercentProgressStepper> {
-    public static final String TAG = "TenderParser";
+public class TenderParser extends AbstractAsyncParser<TenderParser.Data, PercentProgressStepper> {
     private static final String single = "%27";
     private static final String pair = "%22";
     private static final String space = "%20";

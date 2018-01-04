@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.sync.Pool;
 import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.OkHttpClient;
@@ -27,9 +26,7 @@ import okhttp3.Request;
 /**
  * @author fbusolin
  */
-public class ParticipantParser extends ParserWithProgressBar<ParticipantParser.Data, PercentProgressStepper> {
-
-    private final static String TAG = "ParticipantParser";
+public class ParticipantParser extends AbstractAsyncParser<ParticipantParser.Data, PercentProgressStepper> {
     private final static String single = "%27";
     private final static String pair = "%22";
     private final static String space = "%20";
@@ -116,7 +113,6 @@ public class ParticipantParser extends ParserWithProgressBar<ParticipantParser.D
         }
         return r;
     }
-
 
     public static class Data implements Serializable {
         public String esito,

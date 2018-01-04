@@ -1,6 +1,8 @@
 package it.unive.dais.cevid.aac.parser;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.widget.ProgressBar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,25 +10,21 @@ import java.io.Reader;
 import java.io.Serializable;
 import java.text.ParseException;
 
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
 import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncCsvParser;
 
 /**
  * Created by gianmarcocallegher on 05/12/17.
  */
-
 public class EnrolledParser extends AbstractAsyncCsvParser<EnrolledParser.Data> {
 
-    private ProgressBarSingletonPool caller;
-
-    public EnrolledParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep, ProgressBarSingletonPool caller) throws FileNotFoundException {
-        super(file, hasActualHeader, sep);
-        this.caller = caller;
+    public EnrolledParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep, @Nullable Pool<ProgressBar> pool) throws FileNotFoundException {
+        super(file, hasActualHeader, sep, pool);
     }
 
-    public EnrolledParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep,ProgressBarSingletonPool caller) {
-        super(rd, hasActualHeader, sep);
-        this.caller = caller;
+    public EnrolledParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep, @Nullable Pool<ProgressBar> pool) {
+        super(rd, hasActualHeader, sep, pool);
     }
 
     @NonNull

@@ -23,12 +23,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationSettingsStates;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,15 +37,11 @@ import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
+import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
-import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser;
-import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks,
@@ -125,11 +115,8 @@ public class MainActivity extends AppCompatActivity
     private void setupSupplierItems() {
         SupplierParser p = new SupplierParser(progressBarPool) {
             @Override
-            public void onItemParsed(@NonNull SupplierParser.Data x) {
-                supplierItems.add(new SupplierItem(MainActivity.this, x));
-            }
-            @Override
             public void onPostExecute(@NonNull List<SupplierParser.Data> r) {
+                // TODO: questo loop è eseguito nel contesto dello UI thread, e rallenta l'app a causa del costruttore di SupplierItem
                 for (SupplierParser.Data x : r) {
                     supplierItems.add(new SupplierItem(MainActivity.this, x));
                 }
@@ -175,137 +162,65 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    protected class MyEntityParser extends ParserWithProgressBar<SoldipubbliciEntiParser.Data, PercentProgressStepper> {
-        private static final String TAG = "SoldipubbliciEntiParser";
-
-        public MyEntityParser() {
-            super(new SoldipubbliciEntiParser<PercentProgressStepper>(), progressBarPool);
-        }
-
-
-
-            @NonNull
-            @Override
-            public List<it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data> parse() throws IOException {
-
-                Request request = new Request.Builder()
-                        .url("http://soldipubblici.gov.it/it/chi/search/%20")
-                        .addHeader("Accept", "application/json, text/javascript, */*; q=0.01")
-                        .addHeader("X-Requested-With", "XMLHttpRequest")
-                        .build();
-
-                try {
-                    return parseJSON(new OkHttpClient().newCall(request).execute().body().string());
-                } catch (JSONException e) {
-                    throw new IOException(e);
-                }
-            }
-
-            protected List<it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data> parseJSON(String data) throws JSONException {
-                List<it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data> r = new ArrayList<>();
-                JSONArray ja = new JSONArray(data);
-                for (int i = 0; i < ja.length(); i++) {
-                    JSONObject j = ja.getJSONObject(i);
-                    it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data d = new it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciEntiParser.Data();
-                    d.ripartizione_geografica = j.getString("ripartizione_geografica");
-                    d.descrizione_provincia = j.getString("descrizione_provincia");
-                    d.data_ingresso_siope = j.getString("data_ingresso_siope");
-                    d.codice_sottocomparto = j.getString("codice_sottocomparto");
-                    d.codice_provincia = j.getString("codice_provincia");
-                    d.descrizione_regione = j.getString("descrizione_regione");
-                    d.numero_abitanti = j.getString("numero_abitanti");
-                    d.descrizione_ente = j.getString("descrizione_ente");
-                    d.descrizione_ente_not_stemmed = j.getString("descrizione_ente_not_stemmed");
-                    d.codice_regione = j.getString("codice_regione");
-                    d.codice_fiscale = j.getString("codice_fiscale");
-                    d.codice_comparto = j.getString("codice_comparto");
-                    d.codice_comune = j.getString("codice_comune");
-                    d.codice_ente = j.getString("codice_ente");
-                    d.data_uscita_siope = j.getString("data_uscita_siope");
-                    d._version_ = j.getString("_version_");
-                    r.add(d);
-                }
-                return r;
-            }
-
-            public static class Data implements Serializable {
-                public String ripartizione_geografica;
-                public String descrizione_provincia;
-                public String data_ingresso_siope;
-                public String codice_sottocomparto;
-                public String codice_provincia;
-                public String descrizione_regione;
-                public String numero_abitanti;
-                public String descrizione_ente;
-                public String descrizione_ente_not_stemmed;
-                public String codice_regione;
-                public String codice_fiscale;
-                public String codice_comparto;
-                public String codice_comune;
-                public String codice_ente;
-                public String data_uscita_siope;
-                public String _version_;
-            }
-
-        }
-    }
 
     private void setupMunicipalityItems() {
 
-        MyEntityParser p = new MyEntityParser() {
+        CustomSoldipubbliciParser p = new CustomSoldipubbliciParser(progressBarPool) {
             @Override
-            public void onItemParsed(@NonNull SoldipubbliciEntiParser.Data x) {
-                // just add Rome
-                if (x.descrizione_ente.equals("COMUNE DI ROMA")) {
-                    try {
-                        List<URL> urls = new ArrayList<>();
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp_m02_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp_m02_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Bandi_e_contratti_Elenchi_annuali_avcp_m03_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m04-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp.m05.2016gen.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m06-2016_1.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m07-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m08-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/AVCP_31dic16.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m10-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Mun_XV_Elenco_Bandi_2016_xml.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/mun_12_avcp_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m13-2016_NUOVO.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m14-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m15-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/elenchi_annuali_avcp-d01-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-D02-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d12-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d03-2016-2.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp_Dipartimento_Patrimonio_2016.xml\n"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/xmlnuovo.xml"));
-                        urls.add(new URL("http://www.urbanistica.comune.roma.it/images/dipartimento/elenchi-annuali-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d08-2016_gennaio2017.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d09-2016_2.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp2016completo.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcpd11_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-dip.tut.ambient-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d32-2016_new.xml"));
-                        urls.add(new URL("http://www.sovraintendenzaroma.it/content/download/20537/548162/version/5/file/avcp-d14-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Elenchi_annuali_2016_V1.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d16-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d18-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d19-2016_DIT.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-ORU-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d21-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Elenco2016_Art1c32_L190_2012_avcp-d17-2016.xml"));
-                        urls.add(new URL("https://www.comune.roma.it/resources/cms/documents/avcp_d25_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Elenchi_ANAC_UfficioAssembleaCapitolina_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d26-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/elenchi_annuali_DRS_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/File_xml_gare_2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d28-2016.xml"));
-                        urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d30-2016.xml"));
-                        municipalityItems.add(new MunicipalityItem(x.codice_ente, "Roma", x.descrizione_ente, x.numero_abitanti, 41.9102411, 12.3955688, urls));
-                    } catch (MalformedURLException e) {
-                        Log.w(TAG, "malformed url");
-                        e.printStackTrace();
+            public void onPostExecute(@NonNull List<CustomSoldipubbliciParser.Data> l) {
+                for (CustomSoldipubbliciParser.Data x : l) {
+                    // just add Rome
+                    if (x.descrizione_ente.equals("COMUNE DI ROMA")) {
+                        try {
+                            List<URL> urls = new ArrayList<>();
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp_m02_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp_m02_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Bandi_e_contratti_Elenchi_annuali_avcp_m03_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m04-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp.m05.2016gen.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m06-2016_1.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m07-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m08-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/AVCP_31dic16.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m10-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Mun_XV_Elenco_Bandi_2016_xml.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/mun_12_avcp_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m13-2016_NUOVO.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m14-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-m15-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/elenchi_annuali_avcp-d01-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-D02-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d12-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d03-2016-2.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp_Dipartimento_Patrimonio_2016.xml\n"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/xmlnuovo.xml"));
+                            urls.add(new URL("http://www.urbanistica.comune.roma.it/images/dipartimento/elenchi-annuali-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d08-2016_gennaio2017.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d09-2016_2.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp2016completo.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcpd11_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-dip.tut.ambient-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d32-2016_new.xml"));
+                            urls.add(new URL("http://www.sovraintendenzaroma.it/content/download/20537/548162/version/5/file/avcp-d14-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Elenchi_annuali_2016_V1.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d16-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d18-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d19-2016_DIT.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-ORU-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d21-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Elenco2016_Art1c32_L190_2012_avcp-d17-2016.xml"));
+                            urls.add(new URL("https://www.comune.roma.it/resources/cms/documents/avcp_d25_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/Elenchi_ANAC_UfficioAssembleaCapitolina_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d26-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/elenchi_annuali_DRS_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/File_xml_gare_2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d28-2016.xml"));
+                            urls.add(new URL("http://www.comune.roma.it/resources/cms/documents/avcp-d30-2016.xml"));
+                            municipalityItems.add(new MunicipalityItem(x.codice_ente, "Roma", x.descrizione_ente, x.numero_abitanti, 41.9102411, 12.3955688, urls));
+                        } catch (MalformedURLException e) {
+                            Log.w(TAG, "malformed url");
+                            e.printStackTrace();
+                        }
                     }
                 }
 
@@ -332,7 +247,6 @@ public class MainActivity extends AppCompatActivity
             }
         };
         p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
 
     }
 

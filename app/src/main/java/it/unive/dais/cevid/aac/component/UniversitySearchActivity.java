@@ -16,21 +16,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
-import it.unive.dais.cevid.datadroid.lib.parser.ParserWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
-import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 import it.unive.dais.cevid.datadroid.lib.util.Function;
-import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 
 public class UniversitySearchActivity extends AppCompatActivity {
     private static final String TAG = "UniSearchActivity";
@@ -39,8 +36,8 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private static final String BUNDLE_LIST = "LIST";
 
     private UniversityItem universityItem;
-    private MySoldipubbliciParser soldiPubbliciParser;
-    private MyAppaltiParser appaltiParser;
+    private SoldipubbliciParser soldiPubbliciParser;
+    private AppaltiParser appaltiParser;
     private LinearLayout mainView;
     private String soldiPubbliciText = " ";
     private String appaltiText = " ";
@@ -49,18 +46,6 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
     // wrappers for parsers
     //
-
-    protected class MySoldipubbliciParser extends ParserWithProgressBar<SoldipubbliciParser.Data, PercentProgressStepper, SoldipubbliciParser> {
-        public MySoldipubbliciParser(String codiceComparto, String id) {
-            super(new SoldipubbliciParser(codiceComparto, id), progressBarPool);
-        }
-    }
-
-    protected class MyAppaltiParser extends ParserWithProgressBar<AppaltiParser.Data, PercentProgressStepper, AppaltiParser> {
-        public MyAppaltiParser(List<URL> urls) {
-            super(new AppaltiParser(urls), progressBarPool);
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -105,8 +90,8 @@ public class UniversitySearchActivity extends AppCompatActivity {
         title.setText(universityItem.getTitle());
 
         // TODO: salvare lo stato dei parser con un proxy serializzabile
-        soldiPubbliciParser = new MySoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId());
-        appaltiParser = new MyAppaltiParser(universityItem.getUrls());
+        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarPool);
+        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarPool);
         soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
