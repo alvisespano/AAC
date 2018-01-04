@@ -1,35 +1,28 @@
 package it.unive.dais.cevid.aac.parser;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.JsonReader;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncJsonParser;
-import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 
 /**
  * Created by fbusolin on 23/11/17.
  */
 
-public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityParser.Data, ProgressStepper> implements AsyncTaskWithProgressBar {
-    private AppCompatActivityWithProgressBar caller;
+public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityParser.Data, PercentProgressStepper> {
+    private ProgressBarSingletonPool caller;
 
-    public MunicipalityParser(@NonNull Reader rd) {
-        super(rd);
+    public MunicipalityParser(@NonNull Reader rd, @Nullable Pool<ProgressBar> pool) {
+        super(rd, pool);
     }
 
     @NonNull
@@ -70,23 +63,6 @@ public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityPars
         }
         reader.endObject();
         return data;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        caller.requestProgressBar(this);
-    }
-
-    @Override
-    protected void onPostExecute(@NonNull List<MunicipalityParser.Data> r) {
-        super.onPostExecute(r);
-        caller.releaseProgressBar(this);
-    }
-
-    @Override
-    public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-        this.caller = caller;
     }
 
     public static class Data implements Serializable {

@@ -2,8 +2,8 @@ package it.unive.dais.cevid.aac.component;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,23 +19,24 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.parser.TenderParser;
 import it.unive.dais.cevid.aac.adapter.TenderAdapter;
 import it.unive.dais.cevid.aac.parser.ParticipantParser;
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.aac.util.RecyclerItemClickListener;
 
-public class SupplierResultActivity extends AppCompatActivityWithProgressBar {
+public class SupplierResultActivity extends AppCompatActivity {
     public static final String TAG = "SupplierResultActivity";
     protected static final String BUNDLE_PARTECIPATIONS = "PARTS";
     private List<ParticipantParser.Data> tenders;
-    private Map<ParticipantParser.Data, TenderParser.Data> map;
-    private List<TenderParser> parsers;
+    private Map<ParticipantParser.Data, TenderParser.Data> map = new HashMap<>();
+    private List<TenderParser> parsers = new ArrayList<>();
+    private ProgressBarSingletonPool progressBarPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        map = new HashMap<>();
-        parsers = new ArrayList<>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supplier_result);
-        setProgressBar();
+
+        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_main));
+
         Intent intent = getIntent();
         RecyclerView.LayoutManager lmanager = new LinearLayoutManager(this);
         RecyclerView view = (RecyclerView) findViewById(R.id.list_results);
@@ -44,10 +45,9 @@ public class SupplierResultActivity extends AppCompatActivityWithProgressBar {
         tenders = (List<ParticipantParser.Data>) intent.getSerializableExtra(BUNDLE_PARTECIPATIONS);
         for (ParticipantParser.Data p : tenders) {
             String lotto = p.id_lotto;
-            TenderParser bandiParser = new TenderParser(lotto);
-            parsers.add(bandiParser);
-            bandiParser.setCallerActivity(this);
-            bandiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            TenderParser tenderParser = new TenderParser(lotto, progressBarPool);
+            parsers.add(tenderParser);
+            tenderParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
 
         TenderAdapter adapter = new TenderAdapter(tenders);
@@ -78,8 +78,4 @@ public class SupplierResultActivity extends AppCompatActivityWithProgressBar {
         );
     }
 
-    @Override
-    public void setProgressBar() {
-        this.progressBar = (ProgressBar) findViewById(R.id.progress_bar_supplier_result);
-    }
 }

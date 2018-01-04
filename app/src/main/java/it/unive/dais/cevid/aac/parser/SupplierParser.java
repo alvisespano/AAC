@@ -1,6 +1,7 @@
 package it.unive.dais.cevid.aac.parser;
 
 import android.support.annotation.NonNull;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,11 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.util.Function;
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -24,37 +23,23 @@ import okhttp3.Request;
  * Created by fbusolin on 13/11/17.
  */
 
-public class SupplierParser extends AbstractAsyncParser<SupplierParser.Data, ProgressStepper> implements Serializable,AsyncTaskWithProgressBar{
-    public static final String TAG = "SupplierParser";
-    private AppCompatActivityWithProgressBar caller;
+public class SupplierParser extends AbstractAsyncParser<SupplierParser.Data, PercentProgressStepper> implements Serializable {
+
     private static final String QUERY = "http://dati.consip.it/api/action/datastore_search_sql?" +
             "sql=SELECT%20*%20" +
             "FROM%20%22f476dccf-d60a-4301-b757-829b3e030ac6%22%20" +
             "ORDER%20BY%22Numero_Aggiudicazioni%22%20DESC%20LIMIT%20100";
 
-    public SupplierParser() {}
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        caller.requestProgressBar(this);
+    public SupplierParser(@NonNull Pool<ProgressBar> pb) {
+        super(pb);
     }
 
-    @Override
-    protected void onPostExecute(@NonNull List<SupplierParser.Data> r) {
-        super.onPostExecute(r);
-        caller.releaseProgressBar(this);
-    }
-
-    @Override
-    public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-        this.caller = caller;
-    }
     @NonNull
     @Override
     public List<Data> parse() throws IOException {
         Request request = new Request.Builder()
                 .url(QUERY)
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                 .addHeader("Accept", "Application/json")
                 .addHeader("X-Requested-With", "XMLHttpRequest")
                 .build();
@@ -70,7 +55,7 @@ public class SupplierParser extends AbstractAsyncParser<SupplierParser.Data, Pro
         JSONObject jo = new JSONObject(data);
         JSONObject result = jo.getJSONObject("result");
         JSONArray array = result.getJSONArray("records");
-        ProgressStepper prog = new ProgressStepper(array.length());
+        PercentProgressStepper prog = new PercentProgressStepper(array.length());
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
             Data d = new Data();
@@ -90,16 +75,12 @@ public class SupplierParser extends AbstractAsyncParser<SupplierParser.Data, Pro
             if (!Objects.equals(d.n_aggiudicati, "") && !Objects.equals(d.n_aggiudicati, "0")) {
                 r.add(d);
             }
-            onItemParsed(d);
             prog.step();
             publishProgress(prog);
         }
         return r;
     }
 
-    /**
-     * Created by fbusolin on 30/11/17.
-     */
     public static class Data implements Serializable {
         public String n_abilitazioni,
                 n_aggiudicati,
@@ -115,4 +96,5 @@ public class SupplierParser extends AbstractAsyncParser<SupplierParser.Data, Pro
                 comune,
                 n_attivi;
     }
+
 }

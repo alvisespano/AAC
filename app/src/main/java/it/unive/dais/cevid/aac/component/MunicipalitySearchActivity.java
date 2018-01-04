@@ -2,16 +2,15 @@ package it.unive.dais.cevid.aac.component;
 
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.os.Bundle;
-import android.view.View;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -20,72 +19,61 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.parser.MunicipalityParser;
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
-import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
+import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 
-public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar {
+public class MunicipalitySearchActivity extends AppCompatActivity {
     public static final String MUNICIPALITY_ITEM = "MUNICIPALITY_ITEM";
     public static String CODICE_ENTE = "ENTE", CODICE_COMPARTO = "COMPARTO";
 
+    @Nullable
     private SoldipubbliciParser soldipubbliciParser;
+    @Nullable
     private AppaltiParser appaltiParser;
+    @Nullable
     private MunicipalityParser municipalityParser; // TODO: dobbiamo ancora usarlo ma intanto è un attributo di classe
+    @Nullable
+    private MunicipalityItem municipalityItem;
+    @Nullable
+    private ProgressBarSingletonPool progressBarPool;
 
-    private MunicipalityItem comune;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_municipality_search);
+        progressBarPool = new ProgressBarSingletonPool((ProgressBar) findViewById(R.id.progress_bar_municipality_search));
+        municipalityItem = (MunicipalityItem) getIntent().getSerializableExtra(MUNICIPALITY_ITEM);
 
-        String ente = getIntent().getStringExtra(CODICE_ENTE);
-        String comparto = getIntent().getStringExtra(CODICE_COMPARTO);
+        final String ente = getIntent().getStringExtra(CODICE_ENTE);
+        final String comparto = getIntent().getStringExtra(CODICE_COMPARTO);
 
-        setProgressBar();
-
-        comune = (MunicipalityItem) getIntent().getSerializableExtra(MUNICIPALITY_ITEM);
-
-        soldipubbliciParser = new CustomSoldipubbliciParser(comparto, ente);
-        ((CustomSoldipubbliciParser) soldipubbliciParser).setCallerActivity(this);
+        soldipubbliciParser = new SoldipubbliciParser(comparto, ente, progressBarPool);
         soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(
-                getResources().getIdentifier("comuni",
-                        "raw", getPackageName()))));
+        municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(getResources().getIdentifier("comuni", "raw", getPackageName()))), progressBarPool);
 
-        municipalityParser.setCallerActivity(this);
         municipalityParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        appaltiParser = new AppaltiParser(comune.getUrls());
-        //((CustomAppaltiParser) appaltiParser).setCallerActivity(this);
+        assert municipalityItem != null;
+        appaltiParser = new AppaltiParser(municipalityItem.getUrls(), progressBarPool);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         Button btnBalance = (Button) findViewById(R.id.municipality_balance_button);
         Button btnTender = (Button) findViewById(R.id.municipality_tender_button);
 
-        btnBalance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickBalance();
-            }
-        });
+        btnBalance.setOnClickListener(v -> clickBalance());
+        btnTender.setOnClickListener(v -> clickTender());
 
-        btnTender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickTender();
-            }
-        });
-
-        ((TextView) findViewById(R.id.municipality_title)).setText(comune.getTitle());
-        ((TextView) findViewById(R.id.municipality_desc)).setText(comune.getDescription());
+        ((TextView) findViewById(R.id.municipality_title)).setText(municipalityItem.getTitle());
+        ((TextView) findViewById(R.id.municipality_desc)).setText(municipalityItem.getDescription());
     }
 
     private void clickTender() {
         Intent intent = new Intent(MunicipalitySearchActivity.this, MunicipalityTenderActivity.class);
         try {
+            assert appaltiParser != null;
             intent.putExtra("appalti_ente", (Serializable) appaltiParser.getAsyncTask().get());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -94,7 +82,8 @@ public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar
 
 
     protected void clickBalance() {
-        String descrizione_ente = comune.getDescription(), numero_abitanti = comune.getCapite();
+        assert municipalityItem != null;
+        String descrizione_ente = municipalityItem.getDescription(), numero_abitanti = municipalityItem.getCapite();
         List<EntitieExpenditure> spese_ente_2017 = new ArrayList<>();
         List<EntitieExpenditure> spese_ente_2016 = new ArrayList<>();
         List<EntitieExpenditure> spese_ente_2015 = new ArrayList<>();
@@ -106,6 +95,7 @@ public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar
          numero_abitanti = findNumeroAbitantiByDescrizioneEnte(descrizione_ente);*/
 
         try {
+            assert soldipubbliciParser != null;
             List<SoldipubbliciParser.Data> l = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());
             for (SoldipubbliciParser.Data x : l) {
                 if (!(x.importo_2017).equals("0") && !(x.importo_2017).equals("null") && !(x.importo_2017).equals("")) {
@@ -140,63 +130,6 @@ public class MunicipalitySearchActivity extends AppCompatActivityWithProgressBar
         startActivity(intent);
     }
 
-    @Override
-    public void setProgressBar() {
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar_comuni);
-    }
 
-    protected static class CustomSoldipubbliciParser extends SoldipubbliciParser implements AsyncTaskWithProgressBar {
-
-        private static final String TAG = "CustomSoldipubbliciParser";
-        private AppCompatActivityWithProgressBar caller;
-
-        public CustomSoldipubbliciParser(String codiceComparto, String codiceEnte) {
-            super(codiceComparto, codiceEnte);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            caller.requestProgressBar(this);
-        }
-
-        @Override
-        protected void onPostExecute(@NonNull List<SoldipubbliciParser.Data> r) {
-            super.onPostExecute(r);
-            caller.releaseProgressBar(this);
-        }
-
-        @Override
-        public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-            this.caller = caller;
-        }
-    }
-
-    // TODO: serve questa classe?
-    protected static class CustomAppaltiParser extends AppaltiParser implements AsyncTaskWithProgressBar {
-        private static final String TAG = "MyAppaltiParser";
-        private AppCompatActivityWithProgressBar caller;
-
-        public CustomAppaltiParser(List<URL> urls) {
-            super(urls);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            caller.requestProgressBar(this);
-        }
-
-        @Override
-        protected void onPostExecute(@NonNull List<AppaltiParser.Data> r) {
-            super.onPostExecute(r);
-            caller.releaseProgressBar(this);
-        }
-
-        @Override
-        public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-            this.caller = caller;
-        }
-    }
 }
 

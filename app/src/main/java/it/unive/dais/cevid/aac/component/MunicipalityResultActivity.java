@@ -1,30 +1,19 @@
 package it.unive.dais.cevid.aac.component;
 
 import android.content.Intent;
-
-import android.support.design.widget.TabLayout;
-
-import android.support.v7.app.AppCompatActivity;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+
+import java.io.Serializable;
+import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.adapter.PagerAdapter;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
-import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 
 public class MunicipalityResultActivity extends AppCompatActivity {
-
-
-    //private SectionsPagerAdapter mSectionsPagerAdapter;
-
-
-    private ViewPager mViewPager;
     private List<EntitieExpenditure> spese_ente_2017, spese_ente_2016, spese_ente_2015, spese_ente_2014, spese_ente_2013;
     private String descrizione_ente, numero_abitanti;
 
@@ -88,23 +77,23 @@ public class MunicipalityResultActivity extends AppCompatActivity {
         return numero_abitanti;
     }
 
-    public List<EntitieExpenditure> getSpese_Ente_2017 () {
+    public List<EntitieExpenditure> getSpese_Ente_2017() {
         return spese_ente_2017;
     }
 
-    public List<EntitieExpenditure> getSpese_Ente_2016 () {
+    public List<EntitieExpenditure> getSpese_Ente_2016() {
         return spese_ente_2016;
     }
 
-    public List<EntitieExpenditure> getSpese_Ente_2015 () {
+    public List<EntitieExpenditure> getSpese_Ente_2015() {
         return spese_ente_2015;
     }
 
-    public List<EntitieExpenditure> getSpese_Ente_2014 () {
+    public List<EntitieExpenditure> getSpese_Ente_2014() {
         return spese_ente_2014;
     }
 
-    public List<EntitieExpenditure> getSpese_Ente_2013 () {
+    public List<EntitieExpenditure> getSpese_Ente_2013() {
         return spese_ente_2013;
     }
 }

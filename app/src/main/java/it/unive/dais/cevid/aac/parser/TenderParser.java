@@ -5,16 +5,17 @@ package it.unive.dais.cevid.aac.parser;
  */
 
 import android.support.annotation.NonNull;
+import android.widget.ProgressBar;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.Request;
 import okhttp3.OkHttpClient;
 
@@ -25,52 +26,52 @@ import org.json.JSONObject;
 /**
  * @author fbusolin
  */
-public class TenderParser extends AbstractAsyncParser<TenderParser.Data, ProgressStepper> implements AsyncTaskWithProgressBar {
-    public static final String TAG = "TenderParser";
-    private static String single = "%27";
-    private static String pair = "%22";
-    private static String space = "%20";
-    private static String res2015 = "072fac7d-beda-4146-b574-1108e3bc030f";
-    private static String res2016 = "5e12248d-07be-4e94-8be7-05b49787427f";
-    private static String res2017 = "377784b5-bb11-4a3e-a3a7-e1e48d122892";
-    private final String lotto;
-    private AppCompatActivityWithProgressBar caller;
 
-    public TenderParser(String lotto) {
+public class TenderParser extends AbstractAsyncParser<TenderParser.Data, PercentProgressStepper> {
+    private static final String single = "%27";
+    private static final String pair = "%22";
+    private static final String space = "%20";
+    private static final String res2015 = "072fac7d-beda-4146-b574-1108e3bc030f";
+    private static final String res2016 = "5e12248d-07be-4e94-8be7-05b49787427f";
+    private static final String res2017 = "377784b5-bb11-4a3e-a3a7-e1e48d122892";
+    private final String lotto;
+    private ProgressBarSingletonPool caller;
+
+    public TenderParser(String lotto, @NonNull Pool<ProgressBar> pb) {
+        super(pb);
         this.lotto = lotto;
     }
 
     @NonNull
-    public List parse() throws IOException {
+    public List<Data> parse() throws IOException {
         OkHttpClient client = new OkHttpClient();
-        List returnList = new ArrayList();
+        List<Data> r = new ArrayList<>();
         Request request2015 = new Request.Builder()
                 .url(this.buildURL(res2015))
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                 .addHeader("Accept", "Application/json")
                 .addHeader("X-Requested-With", "XMLHttpRequest")
                 .build();
         Request request2016 = new Request.Builder()
                 .url(this.buildURL(res2016))
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                 .addHeader("Accept", "Application/json")
                 .addHeader("X-Requested-With", "XMLHttpRequest")
                 .build();
         Request request2017 = new Request.Builder()
                 .url(this.buildURL(res2017))
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                 .addHeader("Accept", "Application/json")
                 .addHeader("X-Requested-With", "XMLHttpRequest")
                 .build();
         try {
-            returnList.addAll(parseJSON(client.newCall(request2015).execute().body().string()));
-            returnList.addAll(parseJSON(client.newCall(request2016).execute().body().string()));
-            returnList.addAll(parseJSON(client.newCall(request2017).execute().body().string()));
+            r.addAll(parseJSON(client.newCall(request2015).execute().body().string()));
+            r.addAll(parseJSON(client.newCall(request2016).execute().body().string()));
+            r.addAll(parseJSON(client.newCall(request2017).execute().body().string()));
         } catch (JSONException e) {
             e.printStackTrace();
-        } finally {
-            return returnList;
         }
+        return r;
     }
 
     private String buildURL(String resource) {
@@ -85,11 +86,11 @@ public class TenderParser extends AbstractAsyncParser<TenderParser.Data, Progres
     }
 
     public List<Data> parseJSON(String data) throws JSONException {
-        List r = new ArrayList();
+        List<Data> r = new ArrayList<>();
         JSONObject jo = new JSONObject(data);
         JSONObject result = jo.getJSONObject("result");
         JSONArray array = result.getJSONArray("records");
-        ProgressStepper prog = new ProgressStepper(array.length());
+        PercentProgressStepper prog = new PercentProgressStepper(array.length());
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
             Data d = new Data();
@@ -125,22 +126,7 @@ public class TenderParser extends AbstractAsyncParser<TenderParser.Data, Progres
         }
         return r;
     }
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        caller.requestProgressBar(this);
-    }
 
-    @Override
-    protected void onPostExecute(@NonNull List<TenderParser.Data> r) {
-        super.onPostExecute(r);
-        caller.releaseProgressBar(this);
-    }
-
-    @Override
-    public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-        this.caller = caller;
-    }
 
     public static class Data implements Serializable {
         public String unita_misura,

@@ -42,7 +42,7 @@ public abstract class YearFragment extends Fragment {
         return rootView;
     }
 
-    //protected abstract double getSpendingItemFromData(EntitieExpenditure x) throws NumberFormatException;
+    //protected abstract double getSpendingItemFromData(EntitieExpenditure content) throws NumberFormatException;
     protected abstract List<EntitieExpenditure> getSpendingListFromData();
 
 

@@ -5,62 +5,60 @@ package it.unive.dais.cevid.aac.parser;
  */
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.widget.ProgressBar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.aac.util.AppCompatActivityWithProgressBar;
-import it.unive.dais.cevid.aac.util.AsyncTaskWithProgressBar;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import it.unive.dais.cevid.datadroid.lib.util.ProgressStepper;
 
 /**
  * @author fbusolin
  */
-public class ParticipantParser extends AbstractAsyncParser<ParticipantParser.Data, ProgressStepper> implements AsyncTaskWithProgressBar {
-    public static final String TAG = "ParticipantParser";
-    private AppCompatActivityWithProgressBar caller;
+public class ParticipantParser extends AbstractAsyncParser<ParticipantParser.Data, PercentProgressStepper> {
+    private final static String single = "%27";
+    private final static String pair = "%22";
+    private final static String space = "%20";
+    private final static String res2015 = "f2fcfe51-fe2b-4e5b-a730-659e24aa2b1d";
+    private final static String res2016 = "996e869f-d3a3-4938-bd87-38d8d688860a";
+    private final static String res2017 = "1ffc9410-9d28-47c6-b729-efc4de4e3287";
     private final String iva;
-    private static String single = "%27";
-    private static String pair = "%22";
-    private static String space = "%20";
-    private static String res2015 = "f2fcfe51-fe2b-4e5b-a730-659e24aa2b1d";
-    private static String res2016 = "996e869f-d3a3-4938-bd87-38d8d688860a";
-    private static String res2017 = "1ffc9410-9d28-47c6-b729-efc4de4e3287";
 
-    public ParticipantParser(String iva) {
+    public ParticipantParser(@NonNull String iva, @NonNull Pool<ProgressBar> pb) {
+        super(pb);
         this.iva = iva;
-
     }
 
     @NonNull
     public List<Data> parse() throws IOException {
         OkHttpClient client = new OkHttpClient();
-        List returnList = new ArrayList();
+        List<Data> returnList = new ArrayList<>();
         Request request2015 = new Request.Builder()
                 .url(this.buildURL(res2015))
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                 .addHeader("Accept", "Application/json")
                 .addHeader("X-Requested-With", "XMLHttpRequest")
                 .build();
         Request request2016 = new Request.Builder()
                 .url(this.buildURL(res2016))
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                 .addHeader("Accept", "Application/json")
                 .addHeader("X-Requested-With", "XMLHttpRequest")
                 .build();
         Request request2017 = new Request.Builder()
                 .url(this.buildURL(res2017))
-                .addHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
+                .addHeader("Content-Type", "application/content-www-form-urlencoded; charset=UTF-8")
                 .addHeader("Accept", "Application/json")
                 .addHeader("X-Requested-With", "XMLHttpRequest")
                 .build();
@@ -70,9 +68,8 @@ public class ParticipantParser extends AbstractAsyncParser<ParticipantParser.Dat
             returnList.addAll(parseJSON(client.newCall(request2017).execute().body().string()));
         } catch (JSONException e) {
             e.printStackTrace();
-        } finally {
-            return returnList;
         }
+        return returnList;
     }
 
     private String buildURL(String resource) {
@@ -86,12 +83,12 @@ public class ParticipantParser extends AbstractAsyncParser<ParticipantParser.Dat
         * WHERE "Partita_Iva" LIKE '[iva]'*/
     }
 
-    private List<Data> parseJSON(String string) throws JSONException {
-        List r = new ArrayList();
+    private List<Data> parseJSON(@Nullable String string) throws JSONException {
+        List<Data> r = new ArrayList<>();
         JSONObject jo = new JSONObject(string);
         JSONObject result = jo.getJSONObject("result");
         JSONArray array = result.getJSONArray("records");
-        ProgressStepper prog = new ProgressStepper(array.length());
+        PercentProgressStepper prog = new PercentProgressStepper(array.length());
         for (int i = 0; i < array.length(); i++) {
             JSONObject obj = array.getJSONObject(i);
             Data d = new Data();
@@ -116,22 +113,6 @@ public class ParticipantParser extends AbstractAsyncParser<ParticipantParser.Dat
         }
         return r;
     }
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        caller.requestProgressBar(this);
-    }
-
-    @Override
-    protected void onPostExecute(@NonNull List<ParticipantParser.Data> r) {
-        super.onPostExecute(r);
-        caller.releaseProgressBar(this);
-    }
-
-    @Override
-    public void setCallerActivity(AppCompatActivityWithProgressBar caller) {
-        this.caller = caller;
-    }
 
     public static class Data implements Serializable {
         public String esito,
@@ -148,7 +129,6 @@ public class ParticipantParser extends AbstractAsyncParser<ParticipantParser.Dat
                 piva,
                 capogruppo,
                 id_download;
-
     }
 
 }
