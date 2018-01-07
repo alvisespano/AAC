@@ -19,8 +19,8 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.parser.TenderParser;
 import it.unive.dais.cevid.aac.adapter.TenderAdapter;
 import it.unive.dais.cevid.aac.parser.ParticipantParser;
-import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.aac.util.RecyclerItemClickListener;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 
 public class SupplierResultActivity extends AppCompatActivity {
     public static final String TAG = "SupplierResultActivity";
@@ -28,14 +28,13 @@ public class SupplierResultActivity extends AppCompatActivity {
     private List<ParticipantParser.Data> tenders;
     private Map<ParticipantParser.Data, TenderParser.Data> map = new HashMap<>();
     private List<TenderParser> parsers = new ArrayList<>();
-    private ProgressBarSingletonPool progressBarPool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_supplier_result);
 
-        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_main));
+        ProgressBarManager progressBarPool = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_main));
 
         Intent intent = getIntent();
         RecyclerView.LayoutManager lmanager = new LinearLayoutManager(this);

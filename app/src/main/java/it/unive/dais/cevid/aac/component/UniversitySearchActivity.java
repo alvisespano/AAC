@@ -23,9 +23,9 @@ import java.util.concurrent.ExecutionException;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
-import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 import it.unive.dais.cevid.datadroid.lib.util.Function;
 
@@ -41,7 +41,6 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private LinearLayout mainView;
     private String soldiPubbliciText = " ";
     private String appaltiText = " ";
-    private ProgressBarSingletonPool progressBarPool;
 
 
     // wrappers for parsers
@@ -77,7 +76,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
-        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
+        ProgressBarManager progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
 
         if (savedInstanceState == null) {
             // crea l'activity da zero
@@ -90,8 +89,8 @@ public class UniversitySearchActivity extends AppCompatActivity {
         title.setText(universityItem.getTitle());
 
         // TODO: salvare lo stato dei parser con un proxy serializzabile
-        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarPool);
-        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarPool);
+        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarManager);
+        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarManager);
         soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 

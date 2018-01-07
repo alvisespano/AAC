@@ -20,8 +20,8 @@ import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.parser.MunicipalityParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
-import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 
 public class MunicipalitySearchActivity extends AppCompatActivity {
     public static final String MUNICIPALITY_ITEM = "MUNICIPALITY_ITEM";
@@ -35,29 +35,27 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
     private MunicipalityParser municipalityParser; // TODO: dobbiamo ancora usarlo ma intanto è un attributo di classe
     @Nullable
     private MunicipalityItem municipalityItem;
-    @Nullable
-    private ProgressBarSingletonPool progressBarPool;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_municipality_search);
-        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_municipality_search));
+        ProgressBarManager progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_municipality_search));
         municipalityItem = (MunicipalityItem) getIntent().getSerializableExtra(MUNICIPALITY_ITEM);
 
         final String ente = getIntent().getStringExtra(CODICE_ENTE);
         final String comparto = getIntent().getStringExtra(CODICE_COMPARTO);
 
-        soldipubbliciParser = new SoldipubbliciParser(comparto, ente, progressBarPool);
+        soldipubbliciParser = new SoldipubbliciParser(comparto, ente, progressBarManager);
         soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(getResources().getIdentifier("comuni", "raw", getPackageName()))), progressBarPool);
+        municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(getResources().getIdentifier("comuni", "raw", getPackageName()))), progressBarManager);
 
         municipalityParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         assert municipalityItem != null;
-        appaltiParser = new AppaltiParser(municipalityItem.getUrls(), progressBarPool);
+        appaltiParser = new AppaltiParser(municipalityItem.getUrls(), progressBarManager);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         Button btnBalance = (Button) findViewById(R.id.municipality_balance_button);
