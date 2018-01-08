@@ -110,7 +110,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".component.MunicipalityDetailsActivity" />
-        <activity android:name=".component.MunicipalityTenderActivity"></activity>
+        <activity android:name=".component.MunicipalityTenderActivity" />
+        <activity android:name=".component.UniversityDetailsActivity"></activity>
     </application>
 
 </manifest>

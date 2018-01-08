@@ -59,4 +59,5 @@
     <string name="mun_button_text">Mostra voci di spesa</string>
     <string name="mun_details_procapite">Spesa procapite:\u0020</string>
     <string name="year_search_hint">Inserisci una voce di spesa da cercare</string>
+    <string name="button_show_companies">Mostra elenco aziende con appalti</string>
 </resources>

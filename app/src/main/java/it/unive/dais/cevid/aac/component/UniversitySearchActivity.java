@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
+import it.unive.dais.cevid.aac.util.Company;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
@@ -134,14 +135,14 @@ public class UniversitySearchActivity extends AppCompatActivity {
         tendersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, Azienda> map = new HashMap<>();
+                Map<String, Company> map = new HashMap<>();
                 try {
                     List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
                     for(AppaltiParser.Data appalto : appalti){
                         String f = appalto.codiceFiscaleAgg;
-                        Azienda agg;
+                        Company agg;
                         if(!map.containsKey(f)){
-                            Azienda az = new Azienda(f);
+                            Company az = new Company(f,appalto.aggiudicatario);
                             map.put(f,az);
                         }
                         agg = map.get(f);
@@ -152,7 +153,10 @@ public class UniversitySearchActivity extends AppCompatActivity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-                //TODO creare intent e Activity DetailsUniversity
+                ArrayList values = new ArrayList<>(map.values());
+                Intent intent = new Intent(UniversitySearchActivity.this,UniversityDetailsActivity.class);
+                intent.putExtra("LIST_APPALTI",values);
+                startActivity(intent);
             }
         });
         mainView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -234,21 +238,5 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = x -> x.descrizione_codice;
 
     private static final Function<SoldipubbliciParser.Data, Integer> Soldipubblici_getCode = x -> Integer.parseInt(x.codice_siope);
-
-    private class Azienda{
-        private String codiceFiscale;
-        private List<AppaltiParser.Data> appalti;
-
-        public Azienda(String fiscal){
-            this.codiceFiscale = fiscal;
-            this.appalti = new ArrayList<AppaltiParser.Data>();
-        }
-        public void addAppalto(AppaltiParser.Data a){
-            this.appalti.add(a);
-        }
-        public int getSize(){
-            return this.appalti.size();
-        }
-    }
 
 }
