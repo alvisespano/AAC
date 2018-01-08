@@ -17,7 +17,9 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
@@ -127,7 +129,32 @@ public class UniversitySearchActivity extends AppCompatActivity {
                     alert("Compilare entrambi i campi di testo ed assicurarsi che diano risultati per richiedere una ricerca combinata.");
             }
         });
-
+        //TODO: punto 2 documento: aggiungere bottone per visualizzare tutti gli appalti aggregati per p. IVA.
+        Button tendersButton = (Button) findViewById(R.id.button_view_tenders);
+        tendersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, Azienda> map = new HashMap<>();
+                try {
+                    List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
+                    for(AppaltiParser.Data appalto : appalti){
+                        String f = appalto.codiceFiscaleAgg;
+                        Azienda agg;
+                        if(!map.containsKey(f)){
+                            Azienda az = new Azienda(f);
+                            map.put(f,az);
+                        }
+                        agg = map.get(f);
+                        agg.addAppalto(appalto);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                //TODO creare intent e Activity DetailsUniversity
+            }
+        });
         mainView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -207,5 +234,21 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = x -> x.descrizione_codice;
 
     private static final Function<SoldipubbliciParser.Data, Integer> Soldipubblici_getCode = x -> Integer.parseInt(x.codice_siope);
+
+    private class Azienda{
+        private String codiceFiscale;
+        private List<AppaltiParser.Data> appalti;
+
+        public Azienda(String fiscal){
+            this.codiceFiscale = fiscal;
+            this.appalti = new ArrayList<AppaltiParser.Data>();
+        }
+        public void addAppalto(AppaltiParser.Data a){
+            this.appalti.add(a);
+        }
+        public int getSize(){
+            return this.appalti.size();
+        }
+    }
 
 }

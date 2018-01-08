@@ -58,6 +58,14 @@
         android:layout_gravity="end"
         />
 
+    <Button
+        android:id="@+id/button_view_tenders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vedi dati"
+        android:layout_gravity="end"
+        />
+
 
 
 </LinearLayout>
