@@ -61,6 +61,7 @@
     <string name="year_search_hint">Inserisci una voce di spesa da cercare</string>
 <<<<<<< HEAD
     <string name="button_show_companies">Mostra elenco aziende con appalti</string>
+<<<<<<< HEAD
     <string name="company_name">Nome:\u0020</string>
     <string name="company_fc">Codice Fiscale:\u0020</string>
     <string name="company_wins">Aggiudicazioni:\u0020</string>
@@ -70,4 +71,6 @@
     <string name="university_tender_total">Differenza tra budget e costo reale:\u0020</string>
 =======
 >>>>>>> parent of 1679085... Created activity UniversityDetails
+=======
+>>>>>>> parent of 794903c... Advance in p 2
 </resources>

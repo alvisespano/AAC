@@ -64,6 +64,7 @@
     <string name="year_search_hint">Filter by expenditure item\'s name</string>
 <<<<<<< HEAD
     <string name="button_show_companies">Show Suppliers and tenders Info</string>
+<<<<<<< HEAD
     <string name="company_name">Name:\u0020</string>
     <string name="company_fc">Fiscal Code:\u0020</string>
     <string name="company_wins">Aggiudications:\u0020</string>
@@ -73,4 +74,6 @@
     <string name="university_tender_total">Difference between budget and actual cost:\u0020</string>
 =======
 >>>>>>> parent of 1679085... Created activity UniversityDetails
+=======
+>>>>>>> parent of 794903c... Advance in p 2
 </resources>
