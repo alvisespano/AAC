@@ -39,6 +39,7 @@ import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.Handle;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
@@ -75,10 +76,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
-        progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_main));
+        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
+//        progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_main));
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
+
+//        testProgressBarManager();
 
         setupMunicipalityItems();
         setupSupplierItems();
@@ -175,7 +179,8 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onPostExecute(@NonNull List<CustomSoldipubbliciParser.Data> r) {
-                if (getCurrentMode() == Mode.MUNICIPALITY) currentMapFragment.redraw(Mode.MUNICIPALITY);
+                if (getCurrentMode() == Mode.MUNICIPALITY)
+                    currentMapFragment.redraw(Mode.MUNICIPALITY);
             }
 
             @NonNull
@@ -450,4 +455,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void testProgressBarManager() {
+        ProgressBarManager m = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
+
+        runOnUiThread(() -> {
+            Handle<ProgressBar> h1 = m.acquire();
+            Handle<ProgressBar> h2 = m.acquire();
+            h1.apply(b -> {
+                b.setMax(100);
+                return null;
+            });
+            for (int i = 0; i < 100; i++) {
+                int finalI = i;
+                h1.apply(b -> {
+                    b.setProgress(finalI);
+                    return null;
+                });
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }
