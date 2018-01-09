@@ -2,17 +2,14 @@ package it.unive.dais.cevid.aac.parser;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.widget.ProgressBar;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.text.ParseException;
-
-import it.unive.dais.cevid.datadroid.lib.sync.Pool;
-import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncCsvParser;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 
 /**
  * Created by gianmarcocallegher on 05/12/17.
@@ -20,12 +17,12 @@ import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncCsvParser;
 
 public class GraduatedParser extends AbstractAsyncCsvParser<GraduatedParser.Data>  {
 
-    public GraduatedParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep, @Nullable Pool<ProgressBar> pool) throws FileNotFoundException {
-        super(file, hasActualHeader, sep, pool);
+    public GraduatedParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep, @Nullable ProgressBarManager pbm) throws FileNotFoundException {
+        super(file, hasActualHeader, sep, pbm);
     }
 
-    public GraduatedParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep, @Nullable Pool<ProgressBar> pool) {
-        super(rd, hasActualHeader, sep, pool);
+    public GraduatedParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep, @Nullable ProgressBarManager pbm) {
+        super(rd, hasActualHeader, sep, pbm);
     }
 
     @NonNull

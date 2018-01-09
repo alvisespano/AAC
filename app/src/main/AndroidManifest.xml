@@ -110,17 +110,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".component.MunicipalityDetailsActivity" />
-<<<<<<< HEAD
         <activity android:name=".component.MunicipalityTenderActivity" />
-<<<<<<< HEAD
         <activity android:name=".component.UniversityDetailsActivity" />
         <activity android:name=".component.UniversityCompanyDetailsActivity"></activity>
-=======
-        <activity android:name=".component.MunicipalityTenderActivity"></activity>
->>>>>>> parent of 1679085... Created activity UniversityDetails
-=======
-        <activity android:name=".component.UniversityDetailsActivity"></activity>
->>>>>>> parent of 794903c... Advance in p 2
     </application>
 
 </manifest>

@@ -3,6 +3,7 @@ package it.unive.dais.cevid.aac.component;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,18 +25,12 @@ import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.UniversityItem;
-<<<<<<< HEAD
 import it.unive.dais.cevid.aac.util.Company;
-<<<<<<< HEAD
 import it.unive.dais.cevid.aac.util.CompanyComparator;
-=======
->>>>>>> parent of 1679085... Created activity UniversityDetails
-=======
->>>>>>> parent of 794903c... Advance in p 2
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
-import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 import it.unive.dais.cevid.datadroid.lib.util.Function;
 
@@ -51,7 +46,6 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private LinearLayout mainView;
     private String soldiPubbliciText = " ";
     private String appaltiText = " ";
-    private ProgressBarSingletonPool progressBarPool;
 
 
     // wrappers for parsers
@@ -87,7 +81,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
-        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
+        ProgressBarManager progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
 
         if (savedInstanceState == null) {
             // crea l'activity da zero
@@ -100,8 +94,8 @@ public class UniversitySearchActivity extends AppCompatActivity {
         title.setText(universityItem.getTitle());
 
         // TODO: salvare lo stato dei parser con un proxy serializzabile
-        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarPool);
-        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarPool);
+        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarManager);
+        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarManager);
         soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -143,14 +137,14 @@ public class UniversitySearchActivity extends AppCompatActivity {
         tendersButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, Azienda> map = new HashMap<>();
+                Map<String, Company> map = new HashMap<>();
                 try {
                     List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
                     for(AppaltiParser.Data appalto : appalti){
                         String f = appalto.codiceFiscaleAgg;
-                        Azienda agg;
+                        Company agg;
                         if(!map.containsKey(f)){
-                            Azienda az = new Azienda(f);
+                            Company az = new Company(f,appalto.aggiudicatario);
                             map.put(f,az);
                         }
                         agg = map.get(f);
@@ -161,21 +155,13 @@ public class UniversitySearchActivity extends AppCompatActivity {
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 }
-<<<<<<< HEAD
-<<<<<<< HEAD
                 ArrayList<Company> values = new ArrayList<>(map.values());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     values.sort(new CompanyComparator());
                 }
-=======
-                ArrayList values = new ArrayList<>(map.values());
->>>>>>> parent of 794903c... Advance in p 2
                 Intent intent = new Intent(UniversitySearchActivity.this,UniversityDetailsActivity.class);
-                intent.putExtra("LIST_APPALTI",values);
+                UniversityDetailsActivity.setItems(values); // troppi dati, usiamo un campo statico
                 startActivity(intent);
-=======
-                //TODO creare intent e Activity DetailsUniversity
->>>>>>> parent of 1679085... Created activity UniversityDetails
             }
         });
         mainView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -257,21 +243,5 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = x -> x.descrizione_codice;
 
     private static final Function<SoldipubbliciParser.Data, Integer> Soldipubblici_getCode = x -> Integer.parseInt(x.codice_siope);
-
-    private class Azienda{
-        private String codiceFiscale;
-        private List<AppaltiParser.Data> appalti;
-
-        public Azienda(String fiscal){
-            this.codiceFiscale = fiscal;
-            this.appalti = new ArrayList<AppaltiParser.Data>();
-        }
-        public void addAppalto(AppaltiParser.Data a){
-            this.appalti.add(a);
-        }
-        public int getSize(){
-            return this.appalti.size();
-        }
-    }
 
 }
