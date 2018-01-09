@@ -94,7 +94,6 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
          codice_ente = findCodiceEnteByDescrizioneEnte(descrizione_ente);
          numero_abitanti = findNumeroAbitantiByDescrizioneEnte(descrizione_ente);*/
 
-        // TODO: rifare la stessa cosa per le università, secodno il punto 4 del documento delle strategie
         try {
             assert soldipubbliciParser != null;
             List<SoldipubbliciParser.Data> l = new ArrayList<>(soldipubbliciParser.getAsyncTask().get());
