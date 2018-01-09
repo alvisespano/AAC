@@ -2,6 +2,7 @@ package it.unive.dais.cevid.aac.parser;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
-import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 
@@ -23,8 +24,8 @@ import okhttp3.Request;
  */
 public class CustomSoldipubbliciParser extends AbstractAsyncParser<CustomSoldipubbliciParser.Data, PercentProgressStepper> {
 
-    public CustomSoldipubbliciParser(@Nullable ProgressBarManager pbm) {
-        super(pbm);
+    public CustomSoldipubbliciParser(@Nullable Pool<ProgressBar> pool) {
+        super(pool);
     }
 
     @NonNull

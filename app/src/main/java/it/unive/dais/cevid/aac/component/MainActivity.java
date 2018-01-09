@@ -23,6 +23,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationSettingsStates;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -39,8 +40,8 @@ import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
-import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
-import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 public class MainActivity extends AppCompatActivity
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity
     private BaseFragment currentMapFragment = new MapFragment();
     private BottomNavigationView bottomNavigation;
     private final FragmentManager fragmentManager = getSupportFragmentManager();
-    private ProgressBarManager progressBarManager;  // TODO: provare a mettere qui la findViewById e vedere se funziona
+    private ProgressBarSingletonPool progressBarPool;  // TODO: provare a mettere qui la findViewById e vedere se funziona
 
     public enum Mode {
         UNIVERSITY,
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
-        progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_main));
+        progressBarPool = new ProgressBarSingletonPool(this, (ProgressBar) findViewById(R.id.progress_bar_main));
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -113,10 +114,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupSupplierItems() {
-        SupplierParser p = new SupplierParser(progressBarManager) {
+        SupplierParser p = new SupplierParser(progressBarPool) {
             @NonNull
             @Override
-            public List<Data> onPostParse(@NonNull List<Data> r) {
+            public List<Data> onPostParse(List<Data> r) {
                 for (SupplierParser.Data x : r) {
                     supplierItems.add(new SupplierItem(MainActivity.this, x));
                 }
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onPostExecute(@NonNull List<Data> r) {
+            public void onPostExecute(List<Data> r) {
                 if (getCurrentMode() == Mode.SUPPLIER) currentMapFragment.redraw(Mode.SUPPLIER);
             }
         };
@@ -171,14 +172,13 @@ public class MainActivity extends AppCompatActivity
 
     private void setupMunicipalityItems() {
 
-        CustomSoldipubbliciParser p = new CustomSoldipubbliciParser(progressBarManager) {
+        CustomSoldipubbliciParser p = new CustomSoldipubbliciParser(progressBarPool) {
 
             @Override
-            public void onPostExecute(@NonNull List<CustomSoldipubbliciParser.Data> r) {
+            public void onPostExecute(List<CustomSoldipubbliciParser.Data> r) {
                 if (getCurrentMode() == Mode.MUNICIPALITY) currentMapFragment.redraw(Mode.MUNICIPALITY);
             }
 
-            @NonNull
             @Override
             public List<CustomSoldipubbliciParser.Data> onPostParse(@NonNull List<CustomSoldipubbliciParser.Data> l) {
                 for (CustomSoldipubbliciParser.Data x : l) {

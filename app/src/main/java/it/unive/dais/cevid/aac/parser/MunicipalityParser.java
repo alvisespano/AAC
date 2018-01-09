@@ -3,21 +3,26 @@ package it.unive.dais.cevid.aac.parser;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.JsonReader;
+import android.widget.ProgressBar;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
+
+import it.unive.dais.cevid.datadroid.lib.sync.Pool;
+import it.unive.dais.cevid.datadroid.lib.sync.ProgressBarSingletonPool;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncJsonParser;
-import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
-import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.util.PercentProgressStepper;
 
 /**
  * Created by fbusolin on 23/11/17.
  */
 
 public class MunicipalityParser extends AbstractAsyncJsonParser<MunicipalityParser.Data, PercentProgressStepper> {
+    private ProgressBarSingletonPool caller;
 
-    public MunicipalityParser(@NonNull Reader rd, @Nullable ProgressBarManager pbm) {
-        super(rd, pbm);
+    public MunicipalityParser(@NonNull Reader rd, @Nullable Pool<ProgressBar> pool) {
+        super(rd, pool);
     }
 
     @NonNull
