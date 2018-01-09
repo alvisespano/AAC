@@ -450,4 +450,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void testProgressBarManager() {
+        ProgressBar pb1 = (ProgressBar) findViewById(R.id.progress_bar_main);
+        ProgressBar pb2 = (ProgressBar) findViewById(R.id.progress_bar_main_2);
+        ProgressBar pb3 = (ProgressBar) findViewById(R.id.progress_bar_main_3);
+        ProgressBarManager pbm = new ProgressBarManager(this, new ProgressBar[] { pb1, pb2, pb3 });
+    }
+
 }
