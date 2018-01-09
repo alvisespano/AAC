@@ -63,4 +63,11 @@
     <string name="mun_details_procapite">Per capita expenditure:\u0020</string>
     <string name="year_search_hint">Filter by expenditure item\'s name</string>
     <string name="button_show_companies">Show Suppliers and tenders Info</string>
+    <string name="company_name">Name:\u0020</string>
+    <string name="company_fc">Fiscal Code:\u0020</string>
+    <string name="company_wins">Aggiudications:\u0020</string>
+    <string name="university_tender_paid">Paid:\u0020</string>
+    <string name="university_tender_cost">Cost:\u0020</string>
+    <string name="university_tender_cig">CIG:\u0020</string>
+    <string name="university_tender_total">Difference between budget and actual cost:\u0020</string>
 </resources>

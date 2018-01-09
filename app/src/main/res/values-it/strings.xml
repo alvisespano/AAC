@@ -60,4 +60,11 @@
     <string name="mun_details_procapite">Spesa procapite:\u0020</string>
     <string name="year_search_hint">Inserisci una voce di spesa da cercare</string>
     <string name="button_show_companies">Mostra elenco aziende con appalti</string>
+    <string name="company_name">Nome:\u0020</string>
+    <string name="company_fc">Codice Fiscale:\u0020</string>
+    <string name="company_wins">Aggiudicazioni:\u0020</string>
+    <string name="university_tender_paid">Pagato:\u0020</string>
+    <string name="university_tender_cost">Costo:\u0020</string>
+    <string name="university_tender_cig">CIG:\u0020</string>
+    <string name="university_tender_total">Differenza tra budget e costo reale:\u0020</string>
 </resources>
