@@ -4,13 +4,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.adapter.CompanyAdapter;
 import it.unive.dais.cevid.aac.adapter.UniversityTenderAdapter;
 import it.unive.dais.cevid.aac.util.Company;
 
@@ -40,5 +43,25 @@ public class UniversityCompanyDetailsActivity extends AppCompatActivity {
 
     public static void setItems(ArrayList<Company.Tender> tenders) {
         values = new ArrayList<>(tenders);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.company_warning_menu, menu);
+        return true;
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.company_warning:
+                //doSomething();
+                Toast.makeText(this,this.getResources().getText(R.string.warning_msg), Toast.LENGTH_LONG).show();//codice temporaneo
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
