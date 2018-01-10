@@ -39,6 +39,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
     public static final String UNIVERSITY_ITEM = "UNI";
     private static final String BUNDLE_LIST = "LIST";
+    private static final int FISCAL_CODE_LENGTH = 11 ;
 
     private UniversityItem universityItem;
     private SoldipubbliciParser soldiPubbliciParser;
@@ -132,17 +133,15 @@ public class UniversitySearchActivity extends AppCompatActivity {
                     alert("Compilare entrambi i campi di testo ed assicurarsi che diano risultati per richiedere una ricerca combinata.");
             }
         });
-        //TODO: punto 2 documento: aggiungere bottone per visualizzare tutti gli appalti aggregati per p. IVA.
         Button tendersButton = (Button) findViewById(R.id.button_view_tenders);
-        tendersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Map<String, Company> map = new HashMap<>();
-                try {
-                    List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
-                    for(AppaltiParser.Data appalto : appalti){
-                        String f = appalto.codiceFiscaleAgg;
-                        Company agg;
+        tendersButton.setOnClickListener(v -> {
+            Map<String, Company> map = new HashMap<>();
+            try {
+                List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
+                for(AppaltiParser.Data appalto : appalti){
+                    String f = appalto.codiceFiscaleAgg;
+                    Company agg;
+                    if(f.length() == FISCAL_CODE_LENGTH){ //TODO: segnalare i dati incompleti/errati magari
                         if(!map.containsKey(f)){
                             Company az = new Company(f,appalto.aggiudicatario);
                             map.put(f,az);
@@ -150,19 +149,17 @@ public class UniversitySearchActivity extends AppCompatActivity {
                         agg = map.get(f);
                         agg.addAppalto(appalto);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
                 }
-                ArrayList<Company> values = new ArrayList<>(map.values());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    values.sort(new CompanyComparator());
-                }
-                Intent intent = new Intent(UniversitySearchActivity.this,UniversityDetailsActivity.class);
-                UniversityDetailsActivity.setItems(values); // troppi dati, usiamo un campo statico
-                startActivity(intent);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
             }
+            ArrayList<Company> values = new ArrayList<>(map.values());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                values.sort(new CompanyComparator());
+            }
+            Intent intent = new Intent(UniversitySearchActivity.this,UniversityDetailsActivity.class);
+            UniversityDetailsActivity.setItems(values); // troppi dati, usiamo un campo statico
+            startActivity(intent);
         });
         mainView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
