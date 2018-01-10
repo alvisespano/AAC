@@ -71,4 +71,7 @@
     <string name="university_tender_cig">CIG:\u0020</string>
     <string name="university_tender_total">Difference between budget and actual cost:\u0020</string>
     <string name="warning_msg">Warning sent</string>
+    <string name="exp_cost">Cost:\u0020</string>
+    <string name="exp_desc">Description:\u0020</string>
+    <string name="exp_siope">SIOPE:\u0020</string>
 </resources>

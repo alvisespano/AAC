@@ -74,10 +74,8 @@ public class UniversityResultActivity extends AppCompatActivity {
                 Serializable l0 = i.getSerializableExtra(LIST_SOLDIPUBBLICI);
                 List<SoldipubbliciParser.Data> l = (List<SoldipubbliciParser.Data>) l0;
                 List<EntitieExpenditure> el = new ArrayList<>();
-
                 for (SoldipubbliciParser.Data x : l)
                     el.add(new EntitieExpenditure(x, "2016"));
-
                 SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(el, "1");
                 v.setAdapter(soldiPubbliciAdapter);
                 break;

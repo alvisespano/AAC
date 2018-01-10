@@ -158,15 +158,19 @@ public class UniversitySearchActivity extends AppCompatActivity {
                 values.sort(new CompanyComparator());
             }
             Intent intent = new Intent(UniversitySearchActivity.this,UniversityDetailsActivity.class);
-            UniversityDetailsActivity.setItems(values); // troppi dati, usiamo un campo statico
+            UniversityDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
+            List<SoldipubbliciParser.Data> spese = new ArrayList<>();
+            try {
+                spese = soldiPubbliciParser.getAsyncTask().get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            UniversityDetailsActivity.setSpese(spese);
             startActivity(intent);
         });
-        mainView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    hideKeyboard(v);
-                }
+        mainView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                hideKeyboard(v);
             }
         });
 
