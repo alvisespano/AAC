@@ -34,7 +34,7 @@
         android:visibility="visible">
 
         <ProgressBar
-            android:id="@+id/progress_bar_main_1"
+            android:id="@+id/progress_bar_main"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
