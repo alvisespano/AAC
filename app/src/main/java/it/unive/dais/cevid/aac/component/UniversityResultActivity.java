@@ -57,14 +57,17 @@ public class UniversityResultActivity extends AppCompatActivity {
                 v.setLayoutManager(layoutManager);
                 Serializable l0 = i.getSerializableExtra(LIST_APPALTI);
                 List<AppaltiParser.Data> l = (List<AppaltiParser.Data>) l0;
-                AppaltiAdapter ad = new AppaltiAdapter(l);
+
+                double sum = DataManipulation.sumBy(l, x -> Double.parseDouble(x.importo));
+                double avg = sum / l.size();
+
+                AppaltiAdapter ad = new AppaltiAdapter(l, avg);
                 v.setAdapter(ad);
 
                 LinearLayout lo = (LinearLayout) findViewById(R.id.sum_tenders);
                 lo.setVisibility(View.VISIBLE);
                 TextView tv = (TextView) findViewById(R.id.sum_exp);
-                Double sum = DataManipulation.sumBy(l, x -> Double.valueOf(x.importo));
-                tv.setText(String.valueOf(sum));
+                tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
                 break;
             }
 
@@ -74,8 +77,10 @@ public class UniversityResultActivity extends AppCompatActivity {
                 Serializable l0 = i.getSerializableExtra(LIST_SOLDIPUBBLICI);
                 List<SoldipubbliciParser.Data> l = (List<SoldipubbliciParser.Data>) l0;
                 List<EntitieExpenditure> el = new ArrayList<>();
+
                 for (SoldipubbliciParser.Data x : l)
                     el.add(new EntitieExpenditure(x, "2016"));
+
                 SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(el, "1");
                 v.setAdapter(soldiPubbliciAdapter);
                 break;
@@ -94,6 +99,9 @@ public class UniversityResultActivity extends AppCompatActivity {
                 List<SoldipubbliciParser.Data> l2 = (List<SoldipubbliciParser.Data>) l0;
                 List<AppaltiParser.Data> l3 = (List<AppaltiParser.Data>) l1;
 
+                double sum = DataManipulation.sumBy(l3, x -> Double.valueOf(x.importo));
+                double avg = sum / l3.size();
+
                 List<EntitieExpenditure> el = new ArrayList<>();
 
                 for (SoldipubbliciParser.Data x : l2)
@@ -103,18 +111,17 @@ public class UniversityResultActivity extends AppCompatActivity {
                 v1.setAdapter(soldiPubbliciAdapter);
                 v1.setVisibility(View.VISIBLE);
 
-                AppaltiAdapter appaltiAdapter = new AppaltiAdapter(l3);
+                AppaltiAdapter appaltiAdapter = new AppaltiAdapter(l3, avg);
                 v2.setAdapter(appaltiAdapter);
                 v2.setVisibility(View.VISIBLE);
 
                 LinearLayout lo = (LinearLayout) findViewById(R.id.sum_tenders);
                 lo.setVisibility(View.VISIBLE);
                 TextView tv = (TextView) findViewById(R.id.sum_exp);
-                Double sum = DataManipulation.sumBy(l3, x -> Double.valueOf(x.importo));
-                tv.setText(String.valueOf(sum));
+                tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
                 break;
             }
-            
+
             default: {
                 Log.e("URA", "unknown mode");
             }
@@ -125,4 +132,3 @@ public class UniversityResultActivity extends AppCompatActivity {
 
 
 }
-

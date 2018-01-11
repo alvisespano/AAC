@@ -27,7 +27,7 @@
         android:id="@+id/progress_overlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:alpha="0.6"
         android:animateLayoutChanges="true"
         android:orientation="vertical"

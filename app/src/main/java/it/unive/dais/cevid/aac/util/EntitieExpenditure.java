@@ -7,7 +7,7 @@ import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 /**
  * Created by gianmarcocallegher on 14/12/17.
  */
-public class EntitieExpenditure implements Serializable {   // TODO: la parola Enti è in italiano, ma abbiamo generalizzato tutto in inglese: bisogna carbiarla
+public class EntitieExpenditure implements Serializable {
 
     private String descrizione_codice, codice_siope, importo;
 

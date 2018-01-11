@@ -26,7 +26,7 @@ public class EnrolledParser extends AbstractAsyncCsvParser<EnrolledParser.Data> 
 
     @NonNull
     @Override
-    protected Data parseColumns(@NonNull String[] columns) throws ParseException {
+    protected Data parseColumns(@NonNull String[] columns) {
         Data d = new Data();
         int displacement = 0;
         // in 2016-20017_iscritti.csv c'è il campo Data che bisogna saltare

@@ -1,5 +1,8 @@
 package it.unive.dais.cevid.aac.adapter;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +21,13 @@ import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.Item> {
 
-
+    private static final int AGGIUDICATARI_THRESHOLD = 10;
+    private static final double DIRETTE_PERCENT_THRESHOLD = 0.2;
     private List<Company> dataList;
+    private Context ctx;
 
-    public CompanyAdapter(List<Company> dataList) {
+    public CompanyAdapter(Context ctx, List<Company> dataList) {
+        this.ctx = ctx;
         this.dataList = dataList;
     }
 
@@ -35,9 +41,26 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.Item> {
     @Override
     public void onBindViewHolder(Item holder, int position) {
         Company item = dataList.get(position);
+
         holder.name.setText(item.name);
         holder.iva.setText(item.fiscalCode);
-        holder.wins.setText(""+item.getSize());
+        int dirette = 0;
+        for (Company.Tender t : item.tenders) {
+            if (t.sceltac.contains("AFFIDAMENTO DIRETTO")) dirette++;
+        }
+        final int aggiudicatari = item.getSize();
+        holder.wins.setText(String.format(ctx.getString(R.string.company_adapter_wins_format), aggiudicatari, dirette));
+        if (aggiudicatari > AGGIUDICATARI_THRESHOLD) {
+            if (dirette > aggiudicatari * DIRETTE_PERCENT_THRESHOLD) {
+                holder.wins.setBackgroundColor(Color.RED);
+            }
+            else {
+                holder.wins.setBackgroundColor(Color.YELLOW);
+            }
+        }
+        else {
+            holder.wins.setBackgroundColor(Color.parseColor("#EEEEEE"));
+        }
     }
 
     @Override
@@ -46,7 +69,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.Item> {
     }
 
     public class Item extends RecyclerView.ViewHolder {
-        public TextView name,iva,wins;
+        public TextView name, iva, wins, directWins;
+
         public Item(View itemView) {
             super(itemView);
             this.name = (TextView) itemView.findViewById(R.id.company_name);

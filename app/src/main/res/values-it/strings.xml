@@ -71,4 +71,6 @@
     <string name="exp_cost">Costo:\u0020</string>
     <string name="exp_desc">Descrizione:\u0020</string>
     <string name="exp_siope">SIOPE:\u0020</string>
+    <string name="university_result_appalti_format">%g€ (totale)\n%g€ (media)</string>
+    <string name="company_adapter_wins_format">%d (%d dirette)</string>
 </resources>

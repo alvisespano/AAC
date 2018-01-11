@@ -1,5 +1,7 @@
 package it.unive.dais.cevid.aac.adapter;
 
+import android.graphics.Color;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,25 +18,32 @@ import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 public class AppaltiAdapter extends RecyclerView.Adapter<AppaltiAdapter.AppaltoItem> {
 
     private List<AppaltiParser.Data> dataList;
+    @Nullable
+    private final Double avg;
+
+    public AppaltiAdapter(List<AppaltiParser.Data> dataList, Double avg) {
+        this.dataList = dataList;
+        this.avg = avg;
+    }
 
     public AppaltiAdapter(List<AppaltiParser.Data> dataList) {
-        this.dataList = dataList;
+        this(dataList, null);
     }
 
     @Override
     public AppaltoItem onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView;
-        itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.element_appalti, parent, false);
+        itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.element_appalti, parent, false);
         return new AppaltoItem(itemView);
     }
 
     @Override
     public void onBindViewHolder(AppaltoItem holder, int position) {
-        holder.importo.setText(dataList.get(position).importo + "€");
-        holder.aggiudicatario.setText(dataList.get(position).aggiudicatario);
-        holder.oggetto.setText(dataList.get(position).oggetto);
-        holder.scelta.setText(dataList.get(position).sceltac);
+        final AppaltiParser.Data x = dataList.get(position);
+        holder.setImporto(x.importo);
+        holder.setAggiudicatario(x.aggiudicatario);
+        holder.setOggetto(x.oggetto);
+        holder.setScelta(x.sceltac);
     }
 
     @Override
@@ -44,7 +53,7 @@ public class AppaltiAdapter extends RecyclerView.Adapter<AppaltiAdapter.AppaltoI
 
     public class AppaltoItem extends RecyclerView.ViewHolder {
 
-        public TextView importo, oggetto, aggiudicatario, scelta;
+        private TextView importo, oggetto, aggiudicatario, scelta;
 
         public AppaltoItem(View itemView) {
             super(itemView);
@@ -53,6 +62,24 @@ public class AppaltiAdapter extends RecyclerView.Adapter<AppaltiAdapter.AppaltoI
             aggiudicatario = (TextView) itemView.findViewById(R.id.text_supplier);
             scelta = (TextView) itemView.findViewById(R.id.text_selection);
         }
+
+        public void setImporto(String s) {
+            double x = Double.parseDouble(s);
+            importo.setText(String.format("%s€", s));
+            if (avg != null)
+                importo.setBackgroundColor(x < avg ? Color.GREEN : Color.RED);
+        }
+
+        public void setAggiudicatario(String s) {
+            aggiudicatario.setText(s);
+        }
+
+        public void setOggetto(String s) {
+            oggetto.setText(s);
+        }
+
+        public void setScelta(String s) {
+            scelta.setText(s);
+        }
     }
 }
-

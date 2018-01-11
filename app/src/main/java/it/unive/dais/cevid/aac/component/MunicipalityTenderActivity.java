@@ -37,12 +37,7 @@ public class MunicipalityTenderActivity extends AppCompatActivity {
         LinearLayout lo = (LinearLayout) findViewById(R.id.sum_tenders);
         lo.setVisibility(View.VISIBLE);
         TextView tv = (TextView) findViewById(R.id.sum_exp);
-        Double sum = DataManipulation.sumBy(l, new Function<AppaltiParser.Data, Double>() {
-            @Override
-            public Double apply(AppaltiParser.Data x) {
-                return Double.valueOf(x.importo);
-            }
-        });
+        Double sum = DataManipulation.sumBy(l, x -> Double.valueOf(x.importo));
         tv.setText(String.valueOf(sum));
     }
 }

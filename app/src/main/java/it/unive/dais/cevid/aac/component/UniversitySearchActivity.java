@@ -39,7 +39,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
     public static final String UNIVERSITY_ITEM = "UNI";
     private static final String BUNDLE_LIST = "LIST";
-    private static final int FISCAL_CODE_LENGTH = 11 ;
+    private static final int FISCAL_CODE_LENGTH = 11;
 
     private UniversityItem universityItem;
     private SoldipubbliciParser soldiPubbliciParser;
@@ -138,13 +138,13 @@ public class UniversitySearchActivity extends AppCompatActivity {
             Map<String, Company> map = new HashMap<>();
             try {
                 List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
-                for(AppaltiParser.Data appalto : appalti){
+                for (AppaltiParser.Data appalto : appalti) {
                     String f = appalto.codiceFiscaleAgg;
                     Company agg;
-                    if(f.length() == FISCAL_CODE_LENGTH){ //TODO: segnalare i dati incompleti/errati magari
-                        if(!map.containsKey(f)){
-                            Company az = new Company(f,appalto.aggiudicatario);
-                            map.put(f,az);
+                    if (f.length() == FISCAL_CODE_LENGTH) { //TODO: segnalare i dati incompleti/errati magari
+                        if (!map.containsKey(f)) {
+                            Company az = new Company(f, appalto.aggiudicatario);
+                            map.put(f, az);
                         }
                         agg = map.get(f);
                         agg.addAppalto(appalto);
@@ -157,7 +157,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 values.sort(new CompanyComparator());
             }
-            Intent intent = new Intent(UniversitySearchActivity.this,UniversityDetailsActivity.class);
+            Intent intent = new Intent(UniversitySearchActivity.this, UniversityDetailsActivity.class);
             UniversityDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
             List<SoldipubbliciParser.Data> spese = new ArrayList<>();
             try {

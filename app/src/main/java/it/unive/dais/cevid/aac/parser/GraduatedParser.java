@@ -27,7 +27,7 @@ public class GraduatedParser extends AbstractAsyncCsvParser<GraduatedParser.Data
 
     @NonNull
     @Override
-    protected GraduatedParser.Data parseColumns(@NonNull String[] columns) throws ParseException {
+    protected GraduatedParser.Data parseColumns(@NonNull String[] columns) {
         GraduatedParser.Data d = new GraduatedParser.Data();
         d.anno_solare = columns[0];
         d.codice_ateneo = columns[1];

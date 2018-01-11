@@ -39,9 +39,11 @@ import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
+import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.Handle;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 public class MainActivity extends AppCompatActivity
@@ -77,12 +79,9 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
         progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
-//        progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_main));
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
-
-//        testProgressBarManager();
 
         setupMunicipalityItems();
         setupSupplierItems();

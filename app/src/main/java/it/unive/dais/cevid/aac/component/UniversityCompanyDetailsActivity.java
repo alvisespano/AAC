@@ -1,5 +1,6 @@
 package it.unive.dais.cevid.aac.component;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,7 +39,9 @@ public class UniversityCompanyDetailsActivity extends AppCompatActivity {
             paid += Double.parseDouble(t.liquidato);
         }
         TextView total = (TextView) findViewById(R.id.university_tender_total);
-        total.setText(new DecimalFormat("##.##").format(costs-paid));
+        total.setText(new DecimalFormat("##.##").format(costs - paid));
+        if (costs != paid)
+            total.setBackgroundColor(costs > paid ? Color.RED : Color.YELLOW);
     }
 
     public static void setItems(ArrayList<Company.Tender> tenders) {
