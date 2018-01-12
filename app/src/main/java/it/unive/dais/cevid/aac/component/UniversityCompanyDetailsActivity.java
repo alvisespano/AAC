@@ -39,7 +39,7 @@ public class UniversityCompanyDetailsActivity extends AppCompatActivity {
             paid += Double.parseDouble(t.liquidato);
         }
         TextView total = (TextView) findViewById(R.id.university_tender_total);
-        total.setText(new DecimalFormat("##.##").format(costs - paid));
+        total.setText(String.format("%s€", new DecimalFormat("##.##").format(costs - paid)));
         if (costs != paid)
             total.setBackgroundColor(costs > paid ? Color.RED : Color.YELLOW);
     }
@@ -53,7 +53,6 @@ public class UniversityCompanyDetailsActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.company_warning_menu, menu);
         return true;
-
     }
 
     @Override
