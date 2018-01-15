@@ -78,10 +78,18 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mainView = (LinearLayout) findViewById(R.id.search_activity);
+        mainView.requestFocus();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_search);
         mainView = (LinearLayout) findViewById(R.id.search_activity);
+        mainView.requestFocus();
         ProgressBarManager progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
 
         if (savedInstanceState == null) {

@@ -113,7 +113,6 @@
         <activity android:name=".component.MunicipalityTenderActivity" />
         <activity android:name=".component.UniversityDetailsActivity" />
         <activity android:name=".component.UniversityCompanyDetailsActivity" />
-        <activity android:name=".component.UniversityExpenditureDetailsActivity"></activity>
     </application>
 
 </manifest>

@@ -31,7 +31,8 @@ public class UniversityDetailsActivity extends AppCompatActivity {
         APPALTI;
     }
 
-    public Mode currentMode;
+    private Mode currentMode;
+    private Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +82,6 @@ public class UniversityDetailsActivity extends AppCompatActivity {
                 activeListener = new RecyclerItemClickListener(getBaseContext(), view, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        EntitieExpenditure exp = el.get(position);
-                        Intent intent = new Intent(UniversityDetailsActivity.this, UniversityExpenditureDetailsActivity.class);
-                        intent.putExtra(UniversityExpenditureDetailsActivity.DATA, exp);
-                        startActivity(intent);
-
                     }
 
                     @Override
@@ -110,7 +106,28 @@ public class UniversityDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_options_details, menu);
+        setActiveItems(menu,currentMode);
+        this.optionsMenu = menu;
         return true;
+    }
+
+    private void setActiveItems(Menu menu, Mode mode) {
+        MenuItem money = menu.findItem(R.id.menu_details_money);
+        MenuItem noMoney = menu.findItem(R.id.menu_details_no_money);
+        switch(mode){
+            case SPESE:
+                money.setEnabled(true);
+                money.setVisible(true);
+                noMoney.setEnabled(true);
+                noMoney.setVisible(true);
+                break;
+            case APPALTI:
+                money.setEnabled(false);
+                money.setVisible(false);
+                noMoney.setEnabled(false);
+                noMoney.setVisible(false);
+                break;
+        }
     }
 
     @Override
@@ -125,11 +142,13 @@ public class UniversityDetailsActivity extends AppCompatActivity {
                 } else {
                     setVisualizationMode(currentMode, appalti, view);
                 }
+                setActiveItems(optionsMenu,currentMode);
                 return true;
             case R.id.menu_details_money:
                 if (currentMode == Mode.SPESE) {
                     setVisualizationMode(currentMode, filterExpenditure(spese, false), view);
                 }
+                setActiveItems(optionsMenu,currentMode);
                 return true;
             case R.id.menu_details_no_money:
                 if (currentMode == Mode.SPESE) {
@@ -139,6 +158,7 @@ public class UniversityDetailsActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
     }
 
     private ArrayList filterExpenditure(ArrayList<SoldipubbliciParser.Data> data, boolean zero) {
