@@ -39,11 +39,9 @@ import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
-import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.Handle;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
-import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 public class MainActivity extends AppCompatActivity
@@ -315,8 +313,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 break;
-            case R.id.menu_info:
-                startActivity(new Intent(this, InfoActivity.class));
+            case R.id.menu_about:
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.menu_button_swap:
                 changeItemIcon(item);

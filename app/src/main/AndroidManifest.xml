@@ -34,7 +34,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".component.InfoActivity"
+            android:name=".component.AboutActivity"
             android:parentActivityName=".component.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -198,7 +198,6 @@ public class MapFragment extends BaseFragment
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
@@ -294,16 +293,20 @@ public class MapFragment extends BaseFragment
         if (gMap != null) {
             gMap.clear();
             assert parentActivity != null;
-            switch (mode) {
-                case MUNICIPALITY:
-                    putMarkers(parentActivity.getMunicipalityItems(), BitmapDescriptorFactory.HUE_GREEN);
-                    break;
-                case UNIVERSITY:
-                    putMarkers(parentActivity.getUniversityItems(), BitmapDescriptorFactory.HUE_RED);
-                    break;
-                case SUPPLIER:
-                    putMarkers(parentActivity.getSupplierItems(), BitmapDescriptorFactory.HUE_BLUE);
-                    break;
+            try {
+                switch (mode) {
+                    case MUNICIPALITY:
+                        putMarkers(parentActivity.getMunicipalityItems(), BitmapDescriptorFactory.HUE_GREEN);
+                        break;
+                    case UNIVERSITY:
+                        putMarkers(parentActivity.getUniversityItems(), BitmapDescriptorFactory.HUE_RED);
+                        break;
+                    case SUPPLIER:
+                        putMarkers(parentActivity.getSupplierItems(), BitmapDescriptorFactory.HUE_BLUE);
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -313,13 +316,13 @@ public class MapFragment extends BaseFragment
         return Type.MAP;
     }
 
-    public <I extends MapItem> void putMarkers(@NonNull Collection<I> c, float hue) {
+    public <I extends MapItem> void putMarkers(@NonNull Collection<I> c, float hue) throws Exception {
         for (I i : c) {
             putMarker(hue, i);
         }
     }
 
-    public <I extends MapItem> void putMarker(float hue, I i) {
+    public <I extends MapItem> void putMarker(float hue, I i) throws Exception {
         MarkerOptions opts = new MarkerOptions()
                 .position(i.getPosition())
                 .title(i.getTitle())
