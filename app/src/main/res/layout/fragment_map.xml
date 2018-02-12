@@ -39,6 +39,13 @@
             android:layout_weight="1"
             android:layout_marginTop="@dimen/button_margin"
             />
-
     </LinearLayout>
+
+    <Button
+        android:id="@+id/confronto_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confronta"
+        android:visibility="invisible"/>
+
 </FrameLayout>

@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -27,7 +28,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import it.unive.dais.cevid.aac.R;
@@ -396,6 +399,9 @@ public class MainActivity extends AppCompatActivity
         Mode mode = getModeByMenuItemId(item.getItemId());
         Log.d(TAG, String.format("entering mode %s", mode));
         currentMapFragment.redraw(mode);
+        if (currentMapFragment instanceof MapFragment) {
+            ((MapFragment) currentMapFragment).getSelectedMarkers().clear();
+        }
         return true;
     }
 
@@ -432,6 +438,7 @@ public class MainActivity extends AppCompatActivity
     public Collection<MunicipalityItem> getMunicipalityItems() {
         return municipalityItems;
     }
+
 
 
     // test stuff

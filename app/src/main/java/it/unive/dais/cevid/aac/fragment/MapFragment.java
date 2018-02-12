@@ -5,9 +5,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -17,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.android.gms.location.LocationServices;
@@ -31,14 +34,22 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import it.unive.dais.cevid.aac.R;
+import it.unive.dais.cevid.aac.component.ConfrontoActivity;
 import it.unive.dais.cevid.aac.component.MainActivity;
 import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
 import it.unive.dais.cevid.aac.component.SettingsActivity;
 import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
 import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
+import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
@@ -135,6 +146,18 @@ public class MapFragment extends BaseFragment
                     Log.d(TAG, "no current position available");
             }
         });
+
+        selectedMarkers = new HashSet<>();
+
+        confrontoMultiploButton = (Button) mView.findViewById(R.id.confronto_button);
+
+        confrontoMultiploButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                confrontoMultiplo();
+            }
+        });
+
         return mView;
     }
 
@@ -169,27 +192,38 @@ public class MapFragment extends BaseFragment
         redraw(parentActivity.getCurrentMode());
 
         gMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onInfoWindowClick(Marker marker) {
+                marker.hideInfoWindow();
+                if (selectedMarkers.size() == 1) {
+                    selectedMarkers.clear();
+                    final MapItem markerTag = (MapItem) marker.getTag();
 
-                final MapItem markerTag = (MapItem) marker.getTag();
-                if (markerTag instanceof UniversityItem) {
-                    if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
-                        Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
-                        intent.putExtra(UniversitySearchActivity.UNIVERSITY_ITEM, markerTag);
+                    if (markerTag instanceof UniversityItem) {
+                        if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
+                            Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
+                            intent.putExtra(UniversitySearchActivity.UNIVERSITY_ITEM, markerTag);
+                            startActivity(intent);
+                        }
+                    } else if (markerTag instanceof MunicipalityItem) {
+                        MunicipalityItem item = (MunicipalityItem) markerTag;
+                        Intent intent = new Intent(getContext(), MunicipalitySearchActivity.class);
+                        intent.putExtra(MunicipalitySearchActivity.CODICE_ENTE, item.getId());
+                        intent.putExtra(MunicipalitySearchActivity.CODICE_COMPARTO, item.getCodiceComparto());
+                        intent.putExtra(MunicipalitySearchActivity.MUNICIPALITY_ITEM, item);
+                        startActivity(intent);
+                    } else if (markerTag instanceof SupplierItem) {
+                        Intent intent = new Intent(getContext(), SupplierSearchActivity.class);
+                        intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, markerTag);
                         startActivity(intent);
                     }
-                } else if (markerTag instanceof MunicipalityItem) {
-                    MunicipalityItem item = (MunicipalityItem) markerTag;
-                    Intent intent = new Intent(getContext(), MunicipalitySearchActivity.class);
-                    intent.putExtra(MunicipalitySearchActivity.CODICE_ENTE, item.getId());
-                    intent.putExtra(MunicipalitySearchActivity.CODICE_COMPARTO, item.getCodiceComparto());
-                    intent.putExtra(MunicipalitySearchActivity.MUNICIPALITY_ITEM, item);
-                    startActivity(intent);
-                } else if (markerTag instanceof SupplierItem) {
-                    Intent intent = new Intent(getContext(), SupplierSearchActivity.class);
-                    intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, markerTag);
-                    startActivity(intent);
+                }
+                else {
+                    removeSelectedMarker(marker);
+
+                    if (selectedMarkers.size() == 1)
+                        selectedMarkers.stream().forEach(x -> x.showInfoWindow());
                 }
             }
         });
@@ -214,17 +248,34 @@ public class MapFragment extends BaseFragment
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        marker.showInfoWindow();
-        button_car.setVisibility(View.VISIBLE);
-        button_car.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
-                if (currentPosition != null) {
-                    navigate(currentPosition, marker.getPosition());
-                }
+        //marker.showInfoWindow();
+        if (!selectedMarkers.contains(marker)) {
+
+            addSelectedMarker(marker);
+            marker.setSnippet(manageMarkerDescription(marker));
+
+            if (selectedMarkers.size() == 1) {
+                button_car.setVisibility(View.VISIBLE);
+                button_car.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
+                        if (currentPosition != null) {
+                            navigate(currentPosition, marker.getPosition());
+                        }
+                    }
+                });
             }
-        });
+
+            if (selectedMarkers.size() > 1)
+                confrontoMultiploButton.setVisibility(View.VISIBLE);
+            else {
+                button_car.setVisibility(View.INVISIBLE);
+            }
+        }
+        else {
+            marker.setSnippet(manageMarkerDescription(marker));
+        }
         return false;
     }
 
@@ -302,7 +353,7 @@ public class MapFragment extends BaseFragment
                         putMarkers(parentActivity.getUniversityItems(), BitmapDescriptorFactory.HUE_RED);
                         break;
                     case SUPPLIER:
-                        putMarkers(parentActivity.getSupplierItems(), BitmapDescriptorFactory.HUE_BLUE);
+                        putMarkers(parentActivity.getSupplierItems(), BitmapDescriptorFactory.HUE_YELLOW);
                         break;
                 }
             } catch (Exception e) {
@@ -317,6 +368,7 @@ public class MapFragment extends BaseFragment
     }
 
     public <I extends MapItem> void putMarkers(@NonNull Collection<I> c, float hue) throws Exception {
+        //denominazioneCodiceEnte = new HashMap<>();
         for (I i : c) {
             putMarker(hue, i);
         }
@@ -331,6 +383,59 @@ public class MapFragment extends BaseFragment
         assert gMap != null;
         Marker marker = gMap.addMarker(opts);
         marker.setTag(i);
+
+        //denominazioneCodiceEnte.put(i.getDescription(), ((AbstractItem) i).getId());
     }
 
+    //confronto stuff
+
+    private Set<Marker> selectedMarkers;
+
+    Button confrontoMultiploButton;
+
+    private String manageMarkerDescription(Marker marker) {
+        if (selectedMarkers.size() > 1 && selectedMarkers.contains(marker)) {
+            return "Clicca per rimuovere dal confronto";
+        }
+        return "Clicca per maggiori informazioni";
+    }
+
+    public Set<Marker> getSelectedMarkers() {
+        return selectedMarkers;
+    }
+
+    private void removeSelectedMarker(Marker marker) {
+        //marker.hideInfoWindow();
+        selectedMarkers.remove(marker); // remove from the list of pressed marker
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker());
+        if (selectedMarkers.size() < 2)
+            confrontoMultiploButton.setVisibility(View.INVISIBLE);
+    }
+
+    private void addSelectedMarker(Marker marker) {
+        selectedMarkers.add(marker);
+        marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+    }
+
+    private void confrontoMultiplo() {
+        Intent intent = new Intent(getContext(), ConfrontoActivity.class);
+        int i = 0;
+
+        for (Marker m : selectedMarkers) {
+            final MapItem markerTag = (MapItem) m.getTag();
+
+            if (parentActivity.getCurrentMode().equals(MainActivity.Mode.MUNICIPALITY)) {
+                MunicipalityItem municipalityItem = (MunicipalityItem) markerTag;
+                intent.putExtra("markerTag" + i, markerTag);
+            }
+            if (parentActivity.getCurrentMode().equals(MainActivity.Mode.MUNICIPALITY)) {
+                UniversityItem universityItem = (UniversityItem) markerTag;
+                intent.putExtra("markerTag" + i, markerTag);
+            }
+
+            i++;
+        }
+        intent.putExtra("NumOfMarkerTag", i);
+        startActivity(intent);
+    }
 }
