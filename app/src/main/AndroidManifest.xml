@@ -113,6 +113,13 @@
         <activity android:name=".component.MunicipalityTenderActivity" />
         <activity android:name=".component.UniversityDetailsActivity" />
         <activity android:name=".component.UniversityCompanyDetailsActivity" />
+        <activity
+            android:name=".component.ConfrontoActivity"
+            android:parentActivityName=".component.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".component.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
