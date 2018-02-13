@@ -34,11 +34,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -419,23 +421,15 @@ public class MapFragment extends BaseFragment
 
     private void confrontoMultiplo() {
         Intent intent = new Intent(getContext(), ConfrontoActivity.class);
-        int i = 0;
+        List<AbstractItem> markerTags = new ArrayList<>();
 
         for (Marker m : selectedMarkers) {
             final MapItem markerTag = (MapItem) m.getTag();
-
-            if (parentActivity.getCurrentMode().equals(MainActivity.Mode.MUNICIPALITY)) {
-                MunicipalityItem municipalityItem = (MunicipalityItem) markerTag;
-                intent.putExtra("markerTag" + i, markerTag);
-            }
-            if (parentActivity.getCurrentMode().equals(MainActivity.Mode.MUNICIPALITY)) {
-                UniversityItem universityItem = (UniversityItem) markerTag;
-                intent.putExtra("markerTag" + i, markerTag);
-            }
-
-            i++;
+            AbstractItem abstractItem = (AbstractItem) markerTag;
+            markerTags.add(abstractItem);
         }
-        intent.putExtra("NumOfMarkerTag", i);
+
+        intent.putExtra("Entities", (Serializable) markerTags);
         startActivity(intent);
     }
 }
