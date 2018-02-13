@@ -58,6 +58,7 @@ public class UniversityResultActivity extends AppCompatActivity {
                 Serializable l0 = i.getSerializableExtra(LIST_APPALTI);
                 List<AppaltiParser.Data> l = (List<AppaltiParser.Data>) l0;
 
+                // TODO: calcolare la media ANCHE DEGLI ALTRI ENTI (università, in questo caso) per lo stesso tipo di fornitura
                 double sum = DataManipulation.sumBy(l, x -> Double.parseDouble(x.importo));
                 double avg = sum / l.size();
 

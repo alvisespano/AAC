@@ -67,7 +67,7 @@ public class AppaltiAdapter extends RecyclerView.Adapter<AppaltiAdapter.AppaltoI
             double x = Double.parseDouble(s);
             importo.setText(String.format("%s€", s));
             if (avg != null)
-                importo.setBackgroundColor(x < avg ? Color.GREEN : Color.RED);
+                importo.setBackgroundColor(x <= avg ? Color.GREEN : Color.RED);
         }
 
         public void setAggiudicatario(String s) {

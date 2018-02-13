@@ -63,8 +63,8 @@
     <string name="company_name">Nome:\u0020</string>
     <string name="company_fc">Codice Fiscale:\u0020</string>
     <string name="company_wins">Aggiudicazioni:\u0020</string>
-    <string name="university_tender_paid">Pagato:\u0020</string>
-    <string name="university_tender_cost">Costo:\u0020</string>
+    <string name="university_tender_paid">Liquidato:\u0020</string>
+    <string name="university_tender_cost">Importo:\u0020</string>
     <string name="university_tender_cig">CIG:\u0020</string>
     <string name="university_tender_total">Differenza tra budget e costo reale:\u0020</string>
     <string name="warning_msg">Anomalia segnalata</string>

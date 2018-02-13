@@ -22,7 +22,7 @@ import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.Item> {
 
     private static final int AGGIUDICATARI_THRESHOLD = 10;
-    private static final double DIRETTE_PERCENT_THRESHOLD = 0.2;
+    private static final double DIRETTE_PERCENT_THRESHOLD = 0.20;
     private List<Company> dataList;
     private Context ctx;
 
