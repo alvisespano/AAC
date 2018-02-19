@@ -24,7 +24,7 @@ public class ConfrontoActivity extends AppCompatActivity {
 
     private List l;
 
-    private Map<Integer, String> positionTitleMap;
+    private Map positionTitleMap;
     private String mode;
     private FragmentAdapter fragmentAdapter;
 
@@ -47,6 +47,8 @@ public class ConfrontoActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        if (l.size() > 2)
+            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         int i = 0;
 
