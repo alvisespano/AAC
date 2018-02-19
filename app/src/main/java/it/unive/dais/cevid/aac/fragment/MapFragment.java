@@ -35,13 +35,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import it.unive.dais.cevid.aac.R;
@@ -128,37 +125,29 @@ public class MapFragment extends BaseFragment
         button_car = (ImageButton) mView.findViewById(R.id.button_car);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        button_here.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "here button clicked");
-                gpsCheck();
-                updateCurrentPosition();
-                if (hereMarker != null) hereMarker.remove();
-                if (currentPosition != null) {
-                    MarkerOptions opts = new MarkerOptions();
-                    opts.position(currentPosition);
-                    opts.title(getString(R.string.marker_title));
-                    opts.snippet(String.format("lat: %g\nlng: %g", currentPosition.latitude, currentPosition.longitude));
-                    assert gMap != null;
-                    hereMarker = gMap.addMarker(opts);
-                    if (gMap != null)
-                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, getResources().getInteger(R.integer.zoomFactor_button_here)));
-                } else
-                    Log.d(TAG, "no current position available");
-            }
+        button_here.setOnClickListener(v -> {
+            Log.d(TAG, "here button clicked");
+            gpsCheck();
+            updateCurrentPosition();
+            if (hereMarker != null) hereMarker.remove();
+            if (currentPosition != null) {
+                MarkerOptions opts = new MarkerOptions();
+                opts.position(currentPosition);
+                opts.title(getString(R.string.marker_title));
+                opts.snippet(String.format("lat: %g\nlng: %g", currentPosition.latitude, currentPosition.longitude));
+                assert gMap != null;
+                hereMarker = gMap.addMarker(opts);
+                if (gMap != null)
+                    gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, getResources().getInteger(R.integer.zoomFactor_button_here)));
+            } else
+                Log.d(TAG, "no current position available");
         });
 
         selectedMarkers = new HashSet<>();
 
         confrontoMultiploButton = (Button) mView.findViewById(R.id.confronto_button);
 
-        confrontoMultiploButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confrontoMultiplo();
-            }
-        });
+        confrontoMultiploButton.setOnClickListener(v -> confrontoMultiplo());
 
         return mView;
     }
@@ -205,7 +194,9 @@ public class MapFragment extends BaseFragment
                     if (markerTag instanceof UniversityItem) {
                         if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
                             Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
-                            intent.putExtra(UniversitySearchActivity.UNIVERSITY_ITEM, markerTag);
+                            List l = new ArrayList<UniversityItem>();
+                            l.add((UniversityItem) markerTag);
+                            intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, (Serializable) (l));
                             startActivity(intent);
                         }
                     } else if (markerTag instanceof MunicipalityItem) {
@@ -233,7 +224,6 @@ public class MapFragment extends BaseFragment
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(rome, 5));
     }
 
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
@@ -248,30 +238,27 @@ public class MapFragment extends BaseFragment
     public void onMapLongClick(LatLng latLng) {
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        //marker.showInfoWindow();
         if (!selectedMarkers.contains(marker)) {
 
             addSelectedMarker(marker);
+
             marker.setSnippet(manageMarkerDescription(marker));
 
             if (selectedMarkers.size() == 1) {
                 button_car.setVisibility(View.VISIBLE);
-                button_car.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
-                        if (currentPosition != null) {
-                            navigate(currentPosition, marker.getPosition());
-                        }
+                button_car.setOnClickListener(v -> {
+                    Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
+                    if (currentPosition != null) {
+                        navigate(currentPosition, marker.getPosition());
                     }
                 });
             }
 
-            if (selectedMarkers.size() > 1)
+            if (selectedMarkers.size() > 1) {
                 confrontoMultiploButton.setVisibility(View.VISIBLE);
-            else {
                 button_car.setVisibility(View.INVISIBLE);
             }
         }
@@ -385,8 +372,6 @@ public class MapFragment extends BaseFragment
         assert gMap != null;
         Marker marker = gMap.addMarker(opts);
         marker.setTag(i);
-
-        //denominazioneCodiceEnte.put(i.getDescription(), ((AbstractItem) i).getId());
     }
 
     //confronto stuff
@@ -396,10 +381,10 @@ public class MapFragment extends BaseFragment
     Button confrontoMultiploButton;
 
     private String manageMarkerDescription(Marker marker) {
-        if (selectedMarkers.size() > 1 && selectedMarkers.contains(marker)) {
-            return "Clicca per rimuovere dal confronto";
-        }
+        if (selectedMarkers.contains(marker) && selectedMarkers.size() > 1)
+            return "Clicca per rimuovere dalla selezione";
         return "Clicca per maggiori informazioni";
+
     }
 
     public Set<Marker> getSelectedMarkers() {
@@ -407,9 +392,9 @@ public class MapFragment extends BaseFragment
     }
 
     private void removeSelectedMarker(Marker marker) {
-        //marker.hideInfoWindow();
-        selectedMarkers.remove(marker); // remove from the list of pressed marker
+        selectedMarkers.remove(marker);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker());
+
         if (selectedMarkers.size() < 2)
             confrontoMultiploButton.setVisibility(View.INVISIBLE);
     }
@@ -429,7 +414,12 @@ public class MapFragment extends BaseFragment
             markerTags.add(abstractItem);
         }
 
-        intent.putExtra("Entities", (Serializable) markerTags);
+        if (parentActivity.getCurrentMode() == MainActivity.Mode.UNIVERSITY)
+            intent.putExtra("Mode", "University");
+        else
+            intent.putExtra("Mode", "Municipality");
+
+        intent.putExtra("List", (Serializable) markerTags);
         startActivity(intent);
     }
 }

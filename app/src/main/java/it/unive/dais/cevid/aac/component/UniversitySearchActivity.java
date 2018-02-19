@@ -37,7 +37,7 @@ import it.unive.dais.cevid.datadroid.lib.util.Function;
 public class UniversitySearchActivity extends AppCompatActivity {
     private static final String TAG = "UniSearchActivity";
 
-    public static final String UNIVERSITY_ITEM = "UNI";
+    public static final String UNIVERSITY_LIST = "UNI";
     private static final String BUNDLE_LIST = "LIST";
     private static final int FISCAL_CODE_LENGTH = 11;
 
@@ -54,7 +54,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putSerializable(UNIVERSITY_ITEM, universityItem);
+        savedInstanceState.putSerializable(UNIVERSITY_LIST, universityItem);
 //        saveParserState(savedInstanceState, appaltiParser);
 //        saveParserState(savedInstanceState, soldiPubbliciParser);
         super.onSaveInstanceState(savedInstanceState);
@@ -94,10 +94,15 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             // crea l'activity da zero
-            universityItem = (UniversityItem) getIntent().getSerializableExtra(UNIVERSITY_ITEM);
+            Serializable l = getIntent().getSerializableExtra(UNIVERSITY_LIST);
+            List<UniversityItem> universityItems = (List<UniversityItem>) l;
+
+            if (universityItems.size() == 1) {
+                universityItem = universityItems.get(0);
+            }
         } else {
             // ricrea l'activity deserializzando alcuni dati dal bundle
-            universityItem = (UniversityItem) savedInstanceState.getSerializable(UNIVERSITY_ITEM);
+            universityItem = (UniversityItem) savedInstanceState.getSerializable(UNIVERSITY_LIST);
         }
         TextView title = (TextView) findViewById(R.id.univeristy_name);
         title.setText(universityItem.getTitle());

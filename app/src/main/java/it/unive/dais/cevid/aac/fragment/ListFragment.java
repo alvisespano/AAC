@@ -3,7 +3,6 @@ package it.unive.dais.cevid.aac.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -93,7 +92,7 @@ public class ListFragment extends BaseFragment implements
                 break;
             case UNIVERSITY:
                 intent = new Intent(getContext(), UniversitySearchActivity.class);
-                intent.putExtra(UniversitySearchActivity.UNIVERSITY_ITEM, item);
+                intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, item);
                 startActivity(intent);
                 break;
             case SUPPLIER:
