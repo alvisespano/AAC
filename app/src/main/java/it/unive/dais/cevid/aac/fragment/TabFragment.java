@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
@@ -19,19 +21,30 @@ import it.unive.dais.cevid.aac.adapter.SoldiPubbliciAdapter;
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
+import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 
 /**
  * Created by gianmarcocallegher on 19/02/2018.
  */
 
 public class TabFragment extends Fragment {
-    String name;
+
+    private List<SoldipubbliciParser.Data> expenditureList;
+    private List<AppaltiParser.Data> tenedersList;
 
     public void onCreate(Bundle fragmentBundle) {
         super.onCreate(fragmentBundle);
         Bundle bundle = this.getArguments();
+
         if (bundle != null) {
-            name = bundle.getString("name");
+            Serializable es = bundle.getSerializable("Expenditures");
+            Serializable ts = bundle.getSerializable("Tenders");
+
+            expenditureList = new ArrayList<>();
+            tenedersList = new ArrayList<>();
+
+            expenditureList.addAll((List<SoldipubbliciParser.Data>) es);
+            tenedersList.addAll((List<AppaltiParser.Data>) ts);
         }
     }
 
@@ -48,64 +61,19 @@ public class TabFragment extends Fragment {
         recyclerViewExpenditure.setLayoutManager(expendituresLayoutManager);
         recyclerViewTenders.setLayoutManager(tendersLayoutManager);
 
+        double sum = DataManipulation.sumBy(tenedersList, x -> Double.valueOf(x.importo));
+        double avg = sum / tenedersList.size();
+
         List eel = new ArrayList<EntitieExpenditure>();
 
-        //prova soldipubblici
-
-        SoldipubbliciParser.Data sppd = new SoldipubbliciParser.Data();
-
-        sppd.descrizione_codice = "desc";
-        sppd.codice_siope = "13";
-        sppd.anno = "2018";
-        sppd.codice_gestionale = "AAA";
-        sppd.idtable = "true";
-        sppd.data_di_fine_validita = "2019";
-        sppd.cod_ente = "codente";
-        sppd.imp_uscite_att = "1.0";
-        sppd.periodo = "anni";
-        sppd.ricerca = "ricerca";
-        sppd.descrizione_ente = "descente";
-        sppd.importo_2017 = "10";
-        sppd.importo_2016 = "10";
-        sppd.importo_2015 = "10";
-        sppd.importo_2014 = "10";
-        sppd.importo_2013 = "10";
-
-        List<SoldipubbliciParser.Data> l1 = new ArrayList<SoldipubbliciParser.Data>();
-
-        l1.add(sppd);
-
-        for (SoldipubbliciParser.Data x : l1)
+        for (SoldipubbliciParser.Data x : expenditureList)
             eel.add(new EntitieExpenditure(x, "2016"));
-
-        //fine prova soldipubblici
-
-        //prova appalti
-
-        AppaltiParser.Data apd = new AppaltiParser.Data();
-
-        apd.cig = "14";
-        apd.proponente = "proponente";
-        apd.codiceFiscaleProp = "cfprop";
-        apd.oggetto = "ogg";
-        apd.sceltac = "sceltac";
-        apd.aggiudicatario = "agg";
-        apd.codiceFiscaleAgg = "cfagg";
-        apd.importo = "10";
-        apd.importoSommeLiquidate = "10";
-        apd.dataInizio = "inizio";
-        apd.dataFine = "fine";
-
-        List<AppaltiParser.Data> l2 = new ArrayList<>();
-        l2.add(apd);
-
-        //fine prova appalti
 
         SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(eel, "1");
         recyclerViewExpenditure.setAdapter(soldiPubbliciAdapter);
         recyclerViewExpenditure.setVisibility(View.VISIBLE);
 
-        AppaltiAdapter appaltiAdapter = new AppaltiAdapter(l2, 1.0);
+        AppaltiAdapter appaltiAdapter = new AppaltiAdapter(tenedersList, avg);
         recyclerViewTenders.setAdapter(appaltiAdapter);
         recyclerViewTenders.setVisibility(View.VISIBLE);
 
@@ -113,7 +81,7 @@ public class TabFragment extends Fragment {
         linearLayoutTenders.setVisibility(View.VISIBLE);
 
         TextView tv = (TextView) view.findViewById(R.id.sum_exp);
-        tv.setText(String.format(getString(R.string.university_result_appalti_format), 1.0, 1.0));
+        tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
 
         return view;
     }

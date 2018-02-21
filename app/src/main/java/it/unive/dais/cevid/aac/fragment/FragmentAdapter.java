@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import it.unive.dais.cevid.aac.R;
+import java.io.Serializable;
+
 import it.unive.dais.cevid.aac.component.ConfrontoActivity;
 
 /**
@@ -33,9 +31,12 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
         TabFragment tab = new TabFragment();
         Bundle bundle = new Bundle();
 
-        for (Object i : parentActivity.getPositionTitleMap().keySet()) {
+        for (Object i : parentActivity.getPositionCodiceEnteMap().keySet()) {
             if (position == (Integer) i) {
-                bundle.putString("name", (String) parentActivity.getPositionTitleMap().get(position));
+                bundle.putSerializable("Expenditures", (Serializable) parentActivity.getCodiceEnteExpenditureMap().
+                        get(parentActivity.getPositionCodiceEnteMap().get(position)));
+                bundle.putSerializable("Tenders", (Serializable) parentActivity.getCodiceEnteTendersMap().
+                        get(parentActivity.getPositionCodiceEnteMap().get(position)));
                 tab.setArguments(bundle);
             }
 

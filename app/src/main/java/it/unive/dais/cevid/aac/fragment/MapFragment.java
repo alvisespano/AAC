@@ -195,7 +195,7 @@ public class MapFragment extends BaseFragment
                         if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
                             Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
                             List l = new ArrayList<UniversityItem>();
-                            l.add((UniversityItem) markerTag);
+                            l.add(markerTag);
                             intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, (Serializable) (l));
                             startActivity(intent);
                         }
@@ -420,6 +420,7 @@ public class MapFragment extends BaseFragment
             intent.putExtra("Mode", "Municipality");
 
         intent.putExtra("List", (Serializable) markerTags);
+        selectedMarkers.clear();
         startActivity(intent);
     }
 }
