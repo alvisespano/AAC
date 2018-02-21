@@ -165,12 +165,9 @@ public class MapFragment extends BaseFragment
         uis.setMyLocationButtonEnabled(true);
         applyMapSettings();
         gMap.setOnMyLocationButtonClickListener(
-                new GoogleMap.OnMyLocationButtonClickListener() {
-                    @Override
-                    public boolean onMyLocationButtonClick() {
-                        gpsCheck();
-                        return false;
-                    }
+                () -> {
+                    gpsCheck();
+                    return false;
                 });
         gMap.setOnMapClickListener(this);
         gMap.setOnMapLongClickListener(this);
@@ -188,28 +185,17 @@ public class MapFragment extends BaseFragment
             public void onInfoWindowClick(Marker marker) {
                 marker.hideInfoWindow();
                 if (selectedMarkers.size() == 1) {
-                    selectedMarkers.clear();
+                    removeSelectedMarker(marker);
                     final MapItem markerTag = (MapItem) marker.getTag();
 
                     if (markerTag instanceof UniversityItem) {
                         if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
-                            Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
-                            List l = new ArrayList<UniversityItem>();
-                            l.add(markerTag);
-                            intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, (Serializable) (l));
-                            startActivity(intent);
+                            manageUniversityItemCase(markerTag);
                         }
                     } else if (markerTag instanceof MunicipalityItem) {
-                        MunicipalityItem item = (MunicipalityItem) markerTag;
-                        Intent intent = new Intent(getContext(), MunicipalitySearchActivity.class);
-                        intent.putExtra(MunicipalitySearchActivity.CODICE_ENTE, item.getId());
-                        intent.putExtra(MunicipalitySearchActivity.CODICE_COMPARTO, item.getCodiceComparto());
-                        intent.putExtra(MunicipalitySearchActivity.MUNICIPALITY_ITEM, item);
-                        startActivity(intent);
+                        manageMunicipalityItemCase(markerTag);
                     } else if (markerTag instanceof SupplierItem) {
-                        Intent intent = new Intent(getContext(), SupplierSearchActivity.class);
-                        intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, markerTag);
-                        startActivity(intent);
+                        manageSupplierItemCase(markerTag);
                     }
                 }
                 else {
@@ -217,11 +203,37 @@ public class MapFragment extends BaseFragment
 
                     if (selectedMarkers.size() == 1)
                         selectedMarkers.stream().forEach(x -> x.showInfoWindow());
+
+                    if (selectedMarkers.size() < 2)
+                        confrontoMultiploButton.setVisibility(View.INVISIBLE);
                 }
             }
         });
         LatLng rome = new LatLng(41.89, 12.51);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(rome, 5));
+    }
+
+    private void manageUniversityItemCase(MapItem markerTag) {
+        Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
+        List l = new ArrayList<UniversityItem>();
+        l.add(markerTag);
+        intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, (Serializable) (l));
+        startActivity(intent);
+    }
+
+    private void manageMunicipalityItemCase(MapItem markerTag) {
+        MunicipalityItem item = (MunicipalityItem) markerTag;
+        Intent intent = new Intent(getContext(), MunicipalitySearchActivity.class);
+        intent.putExtra(MunicipalitySearchActivity.CODICE_ENTE, item.getId());
+        intent.putExtra(MunicipalitySearchActivity.CODICE_COMPARTO, item.getCodiceComparto());
+        intent.putExtra(MunicipalitySearchActivity.MUNICIPALITY_ITEM, item);
+        startActivity(intent);
+    }
+
+    private void manageSupplierItemCase(MapItem markerTag) {
+        Intent intent = new Intent(getContext(), SupplierSearchActivity.class);
+        intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, markerTag);
+        startActivity(intent);
     }
 
     @Override
@@ -394,9 +406,6 @@ public class MapFragment extends BaseFragment
     private void removeSelectedMarker(Marker marker) {
         selectedMarkers.remove(marker);
         marker.setIcon(BitmapDescriptorFactory.defaultMarker());
-
-        if (selectedMarkers.size() < 2)
-            confrontoMultiploButton.setVisibility(View.INVISIBLE);
     }
 
     private void addSelectedMarker(Marker marker) {
@@ -420,7 +429,17 @@ public class MapFragment extends BaseFragment
             intent.putExtra("Mode", "Municipality");
 
         intent.putExtra("List", (Serializable) markerTags);
-        selectedMarkers.clear();
+
+        clearSelectedMarker();
+
         startActivity(intent);
+    }
+
+    private void clearSelectedMarker() {
+        Set<Marker> s = new HashSet<>(selectedMarkers);
+
+        for (Marker m : s) {
+            removeSelectedMarker(m);
+        }
     }
 }

@@ -28,7 +28,6 @@ public class UniversityResultActivity extends AppCompatActivity {
 
     public static final String LIST_APPALTI = "LIST_APPALTI";
     public static final String LIST_SOLDIPUBBLICI = "LIST_SOLDIPUBBLICI";
-//    private static final String MODE = "MODE";
 
     private enum Mode {
         APPALTI,
@@ -48,88 +47,72 @@ public class UniversityResultActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_university_result);
-        Intent i = getIntent();
+
+        Intent intent = getIntent();
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        switch (Mode.ofIntent(i)) {
+        switch (Mode.ofIntent(intent)) {
             case APPALTI: {
-                RecyclerView v = (RecyclerView) findViewById(R.id.list_tenders);
-                v.setLayoutManager(layoutManager);
-                Serializable l0 = i.getSerializableExtra(LIST_APPALTI);
-                List<AppaltiParser.Data> l = (List<AppaltiParser.Data>) l0;
-
-                // TODO: calcolare la media ANCHE DEGLI ALTRI ENTI (università, in questo caso) per lo stesso tipo di fornitura
-                double sum = DataManipulation.sumBy(l, x -> Double.parseDouble(x.importo));
-                double avg = sum / l.size();
-
-                AppaltiAdapter ad = new AppaltiAdapter(l, avg);
-                v.setAdapter(ad);
-
-                LinearLayout lo = (LinearLayout) findViewById(R.id.sum_tenders);
-                lo.setVisibility(View.VISIBLE);
-                TextView tv = (TextView) findViewById(R.id.sum_exp);
-                tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
+                manageAppaltiCase(layoutManager, intent);
                 break;
             }
-
             case SOLDI_PUBBLICI: {
-                RecyclerView v = (RecyclerView) findViewById(R.id.list_exp);
-                v.setLayoutManager(layoutManager);
-                Serializable l0 = i.getSerializableExtra(LIST_SOLDIPUBBLICI);
-                List<SoldipubbliciParser.Data> l = (List<SoldipubbliciParser.Data>) l0;
-                List<EntitieExpenditure> el = new ArrayList<>();
-
-                for (SoldipubbliciParser.Data x : l)
-                    el.add(new EntitieExpenditure(x, "2016"));
-
-                SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(el, "1");
-                v.setAdapter(soldiPubbliciAdapter);
+                manageSoldiPubbliciCase(layoutManager, intent);
                 break;
             }
-
             case COMBINE:{
-                RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this);
-
-                RecyclerView v1 = (RecyclerView) findViewById(R.id.list_exp);
-                RecyclerView v2 = (RecyclerView) findViewById(R.id.list_tenders);
-                v1.setLayoutManager(layoutManager);
-                v2.setLayoutManager(layoutManager2);
-
-                Serializable l0 = i.getSerializableExtra(LIST_SOLDIPUBBLICI);
-                Serializable l1 = i.getSerializableExtra(LIST_APPALTI);
-                List<SoldipubbliciParser.Data> l2 = (List<SoldipubbliciParser.Data>) l0;
-                List<AppaltiParser.Data> l3 = (List<AppaltiParser.Data>) l1;
-
-                double sum = DataManipulation.sumBy(l3, x -> Double.valueOf(x.importo));
-                double avg = sum / l3.size();
-
-                List<EntitieExpenditure> el = new ArrayList<>();
-
-                for (SoldipubbliciParser.Data x : l2)
-                    el.add(new EntitieExpenditure(x, "2016"));
-
-                SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(el, "1");
-                v1.setAdapter(soldiPubbliciAdapter);
-                v1.setVisibility(View.VISIBLE);
-
-                AppaltiAdapter appaltiAdapter = new AppaltiAdapter(l3, avg);
-                v2.setAdapter(appaltiAdapter);
-                v2.setVisibility(View.VISIBLE);
-
-                LinearLayout lo = (LinearLayout) findViewById(R.id.sum_tenders);
-                lo.setVisibility(View.VISIBLE);
-                TextView tv = (TextView) findViewById(R.id.sum_exp);
-                tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
+                manageCombineCase(layoutManager, intent);
                 break;
             }
-
             default: {
                 Log.e("URA", "unknown mode");
             }
-
         }
-
     }
 
+    private void manageAppaltiCase(RecyclerView.LayoutManager layoutManager, Intent intent) {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_tenders);
+        recyclerView.setLayoutManager(layoutManager);
 
+        Serializable appaltiSerializableList = intent.getSerializableExtra(LIST_APPALTI);
+        List<AppaltiParser.Data> appaltiList = (List<AppaltiParser.Data>) appaltiSerializableList;
+
+        // TODO: calcolare la media ANCHE DEGLI ALTRI ENTI (università, in questo caso) per lo stesso tipo di fornitura
+        double sum = DataManipulation.sumBy(appaltiList, x -> Double.parseDouble(x.importo));
+        double avg = sum / appaltiList.size();
+
+        AppaltiAdapter appaltiAdapter = new AppaltiAdapter(appaltiList, avg);
+        recyclerView.setAdapter(appaltiAdapter);
+        recyclerView.setVisibility(View.VISIBLE);
+
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.sum_tenders);
+        linearLayout.setVisibility(View.VISIBLE);
+
+        TextView tv = (TextView) findViewById(R.id.sum_exp);
+        tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
+    }
+
+    private void manageSoldiPubbliciCase(RecyclerView.LayoutManager layoutManager, Intent intent) {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_exp);
+        recyclerView.setLayoutManager(layoutManager);
+
+        Serializable soldiPubbliciSerializableList = intent.getSerializableExtra(LIST_SOLDIPUBBLICI);
+        List<SoldipubbliciParser.Data> soldiPubbliciList = (List<SoldipubbliciParser.Data>) soldiPubbliciSerializableList;
+
+        List<EntitieExpenditure> entitieExpenditureListl = new ArrayList<>();
+
+        for (SoldipubbliciParser.Data x : soldiPubbliciList)
+            entitieExpenditureListl.add(new EntitieExpenditure(x, "2016"));
+
+        SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(entitieExpenditureListl, "1");
+        recyclerView.setAdapter(soldiPubbliciAdapter);
+        recyclerView.setVisibility(View.VISIBLE);
+    }
+
+    private void manageCombineCase (RecyclerView.LayoutManager soldiPubbliciLayoutManager, Intent intent) {
+        RecyclerView.LayoutManager appaltiLayoutManager = new LinearLayoutManager(this);
+
+        manageSoldiPubbliciCase(soldiPubbliciLayoutManager, intent);
+        manageAppaltiCase(appaltiLayoutManager, intent);
+    }
 }

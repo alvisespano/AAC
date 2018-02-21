@@ -25,17 +25,15 @@ import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 
 public class MunicipalitySearchActivity extends AppCompatActivity {
     public static final String MUNICIPALITY_ITEM = "MUNICIPALITY_ITEM";
-    public static String CODICE_ENTE = "ENTE", CODICE_COMPARTO = "COMPARTO";
+    public static String CODICE_ENTE = "ENTE";
+    public static String CODICE_COMPARTO = "COMPARTO";
 
     @Nullable
     private SoldipubbliciParser soldipubbliciParser;
     @Nullable
     private AppaltiParser appaltiParser;
     @Nullable
-    private MunicipalityParser municipalityParser; // TODO: dobbiamo ancora usarlo ma intanto è un attributo di classe
-    @Nullable
     private MunicipalityItem municipalityItem;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +47,6 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
 
         soldipubbliciParser = new SoldipubbliciParser(comparto, ente, progressBarManager);
         soldipubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-        municipalityParser = new MunicipalityParser(new InputStreamReader(getResources().openRawResource(getResources().getIdentifier("comuni", "raw", getPackageName()))), progressBarManager);
-
-        municipalityParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         assert municipalityItem != null;
         appaltiParser = new AppaltiParser(municipalityItem.getUrls(), progressBarManager);
@@ -127,7 +121,5 @@ public class MunicipalitySearchActivity extends AppCompatActivity {
         intent.putExtra("spese_ente_2013", (Serializable) spese_ente_2013);
         startActivity(intent);
     }
-
-
 }
 
