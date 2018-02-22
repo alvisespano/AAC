@@ -87,100 +87,25 @@ public class UniversitySearchActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_university_search);
+
         mainView = (LinearLayout) findViewById(R.id.search_activity);
         mainView.requestFocus();
+
         ProgressBarManager progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
 
-        if (savedInstanceState == null) {
-            // crea l'activity da zero
-            Serializable l = getIntent().getSerializableExtra(UNIVERSITY_LIST);
-            List<UniversityItem> universityItems = (List<UniversityItem>) l;
+        checkSavedInstanceState(savedInstanceState);
 
-            if (universityItems.size() == 1) {
-                universityItem = universityItems.get(0);
-            }
-        } else {
-            // ricrea l'activity deserializzando alcuni dati dal bundle
-            universityItem = (UniversityItem) savedInstanceState.getSerializable(UNIVERSITY_LIST);
-        }
-        TextView title = (TextView) findViewById(R.id.univeristy_name);
-        title.setText(universityItem.getTitle());
+        manageSingleElement();
 
-        // TODO: salvare lo stato dei parser con un proxy serializzabile
-        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarManager);
-        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarManager);
-        soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        launchParsersSingleElement(progressBarManager);
 
-        SearchView appaltiSearch = (SearchView) findViewById(R.id.search_tenders);
-        SearchView soldipubbliciSearch = (SearchView) findViewById(R.id.search_exp);
-        appaltiSearch.onActionViewExpanded();
-        soldipubbliciSearch.onActionViewExpanded();
+        setSearchViews();
 
-        setSingleListener(appaltiSearch, appaltiParser, UniversityResultActivity.LIST_APPALTI, Appalti_getText, Appalti_getCode, new Function<String, Void>() {
-            @Override
-            public Void apply(String x) {
-                UniversitySearchActivity.this.appaltiText = x;
-                return null;
-            }
-        });
-        setSingleListener(soldipubbliciSearch, soldiPubbliciParser, UniversityResultActivity.LIST_SOLDIPUBBLICI, Soldipubblici_getText, Soldipubblici_getCode, new Function<String, Void>() {
-            @Override
-            public Void apply(String x) {
-                UniversitySearchActivity.this.soldiPubbliciText = x;
-                return null;
-            }
-        });
+        manageCombineButton();
+        manageTendersButton();
 
-        Button combineButton = (Button) findViewById(R.id.button_combine_data);
-        combineButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
-                boolean r1 = processQuery(appaltiParser, appaltiText, intent, UniversityResultActivity.LIST_APPALTI, Appalti_getText, Appalti_getCode),
-                        r2 = processQuery(soldiPubbliciParser, soldiPubbliciText, intent, UniversityResultActivity.LIST_SOLDIPUBBLICI, Soldipubblici_getText, Soldipubblici_getCode);
-                if (r1 && r2)
-                    startActivity(intent);
-                else
-                    alert("Compilare entrambi i campi di testo ed assicurarsi che diano risultati per richiedere una ricerca combinata.");
-            }
-        });
-        Button tendersButton = (Button) findViewById(R.id.button_view_tenders);
-        tendersButton.setOnClickListener(v -> {
-            Map<String, Company> map = new HashMap<>();
-            try {
-                List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
-                for (AppaltiParser.Data appalto : appalti) {
-                    String f = appalto.codiceFiscaleAgg;
-                    Company agg;
-                    if (f.length() == FISCAL_CODE_LENGTH) { //TODO: segnalare i dati incompleti/errati magari
-                        if (!map.containsKey(f)) {
-                            Company az = new Company(f, appalto.aggiudicatario);
-                            map.put(f, az);
-                        }
-                        agg = map.get(f);
-                        agg.addAppalto(appalto);
-                    }
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-            ArrayList<Company> values = new ArrayList<>(map.values());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                values.sort(new CompanyComparator());
-            }
-            Intent intent = new Intent(UniversitySearchActivity.this, UniversityDetailsActivity.class);
-            UniversityDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
-            List<SoldipubbliciParser.Data> spese = new ArrayList<>();
-            try {
-                spese = soldiPubbliciParser.getAsyncTask().get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-            UniversityDetailsActivity.setSpese(spese);
-            startActivity(intent);
-        });
         mainView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 hideKeyboard(v);
@@ -249,6 +174,125 @@ public class UniversitySearchActivity extends AppCompatActivity {
     // higher-order functions
     //
     //
+
+    private void checkSavedInstanceState(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            // crea l'activity da zero
+            Serializable l = getIntent().getSerializableExtra(UNIVERSITY_LIST);
+            List<UniversityItem> universityItems = (List<UniversityItem>) l;
+
+            if (universityItems.size() == 1) {
+                universityItem = universityItems.get(0);
+            }
+        } else {
+            // ricrea l'activity deserializzando alcuni dati dal bundle
+            universityItem = (UniversityItem) savedInstanceState.getSerializable(UNIVERSITY_LIST);
+        }
+    }
+
+    private void manageCombineButton() {
+        Button combineButton = (Button) findViewById(R.id.button_combine_data);
+        combineButton.setOnClickListener(view -> {
+            Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
+            boolean r1 = processQuery(appaltiParser, appaltiText, intent, UniversityResultActivity.LIST_APPALTI, Appalti_getText, Appalti_getCode),
+                    r2 = processQuery(soldiPubbliciParser, soldiPubbliciText, intent, UniversityResultActivity.LIST_SOLDIPUBBLICI, Soldipubblici_getText, Soldipubblici_getCode);
+            if (r1 && r2)
+                startActivity(intent);
+            else
+                alert("Compilare entrambi i campi di testo ed assicurarsi che diano risultati per richiedere una ricerca combinata.");
+        });
+    }
+
+    private void manageTendersButton () {
+        Button tendersButton = (Button) findViewById(R.id.button_view_tenders);
+        tendersButton.setOnClickListener(v -> {
+            Map<String, Company> stringCompanyMap = new HashMap<>();
+
+            populateStringCompanyMap(stringCompanyMap);
+
+            setTendersUniversityDetailsActivity(stringCompanyMap);
+            setExpenditureUniversityDetailsActivity();
+
+            Intent intent = new Intent(UniversitySearchActivity.this, UniversityDetailsActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void populateStringCompanyMap(Map<String, Company> stringCompanyMap) {
+        try {
+            List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
+            for (AppaltiParser.Data appalto : appalti) {
+                String cfAgg = appalto.codiceFiscaleAgg;
+                if (cfAgg.length() == FISCAL_CODE_LENGTH) { //TODO: segnalare i dati incompleti/errati magari
+                    if (!stringCompanyMap.containsKey(cfAgg)) {
+                        stringCompanyMap.put(cfAgg, new Company(cfAgg, appalto.aggiudicatario));
+                    }
+                    stringCompanyMap.get(cfAgg).addAppalto(appalto);
+                }
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void manageSingleElement() {
+        TextView title = (TextView) findViewById(R.id.univeristy_name);
+        title.setText(universityItem.getTitle());
+    }
+
+    private void manageMutipleelement() {
+
+    }
+
+    private void launchParsersSingleElement(ProgressBarManager progressBarManager) {
+        // TODO: salvare lo stato dei parser con un proxy serializzabile
+        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarManager);
+        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarManager);
+        soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void setSearchViews() {
+        SearchView appaltiSearch = initializeSearchView(R.id.search_tenders);
+        SearchView soldipubbliciSearch = initializeSearchView(R.id.search_exp);
+
+        setSingleListener(appaltiSearch, appaltiParser, UniversityResultActivity.LIST_APPALTI, Appalti_getText, Appalti_getCode, x -> {
+            UniversitySearchActivity.this.appaltiText = x;
+            return null;
+        });
+
+        setSingleListener(soldipubbliciSearch, soldiPubbliciParser, UniversityResultActivity.LIST_SOLDIPUBBLICI, Soldipubblici_getText, Soldipubblici_getCode, x -> {
+            UniversitySearchActivity.this.soldiPubbliciText = x;
+            return null;
+        });
+    }
+
+    private SearchView initializeSearchView(int resourceId) {
+        SearchView searchView = (SearchView) findViewById(resourceId);
+        searchView.onActionViewExpanded();
+
+        return searchView;
+    }
+
+    private void setTendersUniversityDetailsActivity(Map<String, Company> stringCompanyMap) {
+        ArrayList<Company> values = new ArrayList<>(stringCompanyMap.values());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            values.sort(new CompanyComparator());
+        }
+
+        UniversityDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
+    }
+
+    private void setExpenditureUniversityDetailsActivity() {
+        List<SoldipubbliciParser.Data> spese = new ArrayList<>();
+        try {
+            spese = soldiPubbliciParser.getAsyncTask().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        UniversityDetailsActivity.setSpese(spese);
+    }
 
     private static final Function<AppaltiParser.Data, String> Appalti_getText = x -> x.oggetto;
 
