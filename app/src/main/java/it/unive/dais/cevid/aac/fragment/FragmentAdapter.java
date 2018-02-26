@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.io.Serializable;
 
 import it.unive.dais.cevid.aac.component.ConfrontoActivity;
+import it.unive.dais.cevid.aac.component.UniversityResultActivity;
 
 /**
  * Created by gianmarcocallegher on 19/02/2018.
@@ -17,12 +18,12 @@ import it.unive.dais.cevid.aac.component.ConfrontoActivity;
 public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     private int numOfTabs;
-    private ConfrontoActivity parentActivity;
+    private UniversityResultActivity parentActivity;
 
     public FragmentAdapter(FragmentManager fm, int numOfTabs, Context context) {
         super(fm);
         this.numOfTabs = numOfTabs;
-        parentActivity = (ConfrontoActivity) context;
+        parentActivity = (UniversityResultActivity) context;
     }
 
     @Override

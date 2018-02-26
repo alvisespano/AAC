@@ -56,7 +56,6 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private Map<String, SoldipubbliciParser> codiceEnteSoldiPubbliciParserMap;
     private Map<String, AppaltiParser> codiceEnteAppaltiParserMap;
 
-
     // wrappers for parsers
     //
 
@@ -205,6 +204,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
                     manageCombineButtonSingleElement(intent);
                 }
                 else {
+                    intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
                     manageCombineButtonMultipleElements();
                 }
                 startActivity(intent);
@@ -248,7 +248,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         String s = "Confronto: ";
 
         for (UniversityItem item : universityItems) {
-            s += item.getTitle() + " ";
+            s += item.getTitle() + ", ";
         }
 
         title.setText(s);
@@ -360,6 +360,8 @@ public class UniversitySearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String text) {
                 Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
                 Map m;
+
+                intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
 
                 if (label == UniversityResultActivity.LIST_SOLDIPUBBLICI) {
                     m = populateCodiceEnteExpenditureMap();

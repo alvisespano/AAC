@@ -105,11 +105,13 @@ public class ConfrontoActivity extends AppCompatActivity {
 
         //view pager stuff
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+
         fragmentAdapter = new FragmentAdapter(
                 getSupportFragmentManager(),
                 tabLayout.getTabCount(),
                 this
         );
+
         viewPager.setAdapter(fragmentAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
