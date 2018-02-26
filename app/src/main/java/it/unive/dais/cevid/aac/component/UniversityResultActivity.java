@@ -12,7 +12,10 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.adapter.AppaltiAdapter;
@@ -24,10 +27,13 @@ import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 
 
 public class UniversityResultActivity extends AppCompatActivity {
-    private static final String TAG = "UniversityResultActivity";
+    private static final String TAG = "UniResultActivity";
 
     public static final String LIST_APPALTI = "LIST_APPALTI";
     public static final String LIST_SOLDIPUBBLICI = "LIST_SOLDIPUBBLICI";
+
+    private static Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap;
+    private static Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap;
 
     private enum Mode {
         APPALTI,
@@ -65,9 +71,11 @@ public class UniversityResultActivity extends AppCompatActivity {
                 break;
             }
             default: {
-                Log.e("URA", "unknown mode");
+                manageMultipleElements();
+                Log.e(TAG, "unknown mode");
             }
         }
+
     }
 
     private void manageAppaltiCase(RecyclerView.LayoutManager layoutManager, Intent intent) {
@@ -109,10 +117,21 @@ public class UniversityResultActivity extends AppCompatActivity {
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void manageCombineCase (RecyclerView.LayoutManager soldiPubbliciLayoutManager, Intent intent) {
+    private void manageCombineCase(RecyclerView.LayoutManager soldiPubbliciLayoutManager, Intent intent) {
         RecyclerView.LayoutManager appaltiLayoutManager = new LinearLayoutManager(this);
 
         manageSoldiPubbliciCase(soldiPubbliciLayoutManager, intent);
         manageAppaltiCase(appaltiLayoutManager, intent);
+    }
+
+    public static void setCodiceEnteExpenditureMap(Map<String, List<SoldipubbliciParser.Data>> values) {
+        codiceEnteExpenditureMap = new HashMap<>(values);
+    }
+
+    public static void setCodiceEnteTendersMap(Map<String, List<AppaltiParser.Data>> values) {
+        codiceEnteTendersMap = new HashMap<>(values);
+    }
+
+    private void manageMultipleElements() {
     }
 }

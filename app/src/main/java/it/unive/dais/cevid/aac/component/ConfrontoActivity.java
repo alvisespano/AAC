@@ -37,8 +37,9 @@ public class ConfrontoActivity extends AppCompatActivity {
     private FragmentAdapter fragmentAdapter;
     private Map<String, SoldipubbliciParser> codiceEnteSoldiPubbliciParserMap;
     private Map<String, AppaltiParser> codiceEnteAppaltiParserMap;
-    private Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap;
-    private Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap;
+
+    private static Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap;
+    private static Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
