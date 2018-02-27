@@ -1,31 +1,21 @@
 package it.unive.dais.cevid.aac.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.adapter.AppaltiAdapter;
-import it.unive.dais.cevid.aac.adapter.SoldiPubbliciAdapter;
 import it.unive.dais.cevid.aac.component.UniversityResultActivity;
-import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.util.URALayoutSetter;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
-import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 /**
@@ -45,8 +35,8 @@ public class TabFragment extends Fragment {
         Bundle bundle = this.getArguments();
 
         if (bundle != null) {
-            Serializable es = bundle.getSerializable("Expenditures");
-            Serializable ts = bundle.getSerializable("Tenders");
+            Serializable es = bundle.getSerializable(UniversityResultActivity.LIST_SOLDIPUBBLICI);
+            Serializable ts = bundle.getSerializable(UniversityResultActivity.LIST_APPALTI);
 
             soldiPubbliciList = new ArrayList<>();
             appaltiList = new ArrayList<>();

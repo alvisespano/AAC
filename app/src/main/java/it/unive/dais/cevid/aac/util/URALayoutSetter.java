@@ -55,7 +55,6 @@ public class URALayoutSetter {
     public void manageSoldiPubbliciCase(List<SoldipubbliciParser.Data> soldiPubbliciList) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_exp);
-
         recyclerView.setLayoutManager(layoutManager);
 
         List<EntitieExpenditure> entitieExpenditureList = new ArrayList<>();

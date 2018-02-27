@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.io.Serializable;
 
-import it.unive.dais.cevid.aac.component.ConfrontoActivity;
 import it.unive.dais.cevid.aac.component.UniversityResultActivity;
 
 /**
@@ -34,9 +33,9 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
         for (Object i : parentActivity.getPositionCodiceEnteMap().keySet()) {
             if (position == (Integer) i) {
-                bundle.putSerializable("Expenditures", (Serializable) parentActivity.getCodiceEnteExpenditureMap().
+                bundle.putSerializable(UniversityResultActivity.LIST_SOLDIPUBBLICI, (Serializable) parentActivity.getCodiceEnteExpenditureMap().
                         get(parentActivity.getPositionCodiceEnteMap().get(position)));
-                bundle.putSerializable("Tenders", (Serializable) parentActivity.getCodiceEnteTendersMap().
+                bundle.putSerializable(UniversityResultActivity.LIST_APPALTI, (Serializable) parentActivity.getCodiceEnteTendersMap().
                         get(parentActivity.getPositionCodiceEnteMap().get(position)));
                 tab.setArguments(bundle);
             }

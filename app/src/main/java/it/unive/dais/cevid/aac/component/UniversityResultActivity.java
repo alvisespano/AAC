@@ -5,30 +5,19 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.adapter.AppaltiAdapter;
-import it.unive.dais.cevid.aac.adapter.SoldiPubbliciAdapter;
 import it.unive.dais.cevid.aac.fragment.FragmentAdapter;
 import it.unive.dais.cevid.aac.item.UniversityItem;
-import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.util.URALayoutSetter;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
-import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
-
 
 public class UniversityResultActivity extends AppCompatActivity {
     private static final String TAG = "UniResultActivity";
