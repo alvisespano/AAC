@@ -83,8 +83,13 @@ public class UniversityResultActivity extends AppCompatActivity {
                 break;
             }
             default: {
-                manageMultipleElements(intent);
-                Log.e(TAG, "unknown mode");
+                if ((codiceEnteExpenditureMap == null || codiceEnteExpenditureMap.isEmpty()) &&
+                        (codiceEnteTendersMap == null || codiceEnteTendersMap.isEmpty())) {
+                    Log.e(TAG, "Unknown mode");
+                }
+                else {
+                    manageMultipleElements(intent);
+                }
             }
         }
 

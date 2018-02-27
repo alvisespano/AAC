@@ -73,4 +73,6 @@
     <string name="exp_siope">SIOPE:\u0020</string>
     <string name="university_result_appalti_format">%g€ (totale)\n%g€ (media)</string>
     <string name="company_adapter_wins_format">%d (%d dirette)</string>
+    <string name="combine_button_aler">Compilare entrambi i campi di testo con stringhe di almeno 3 caratteri</string>
+    <string name="combine_button_single_element_alert">"Assicurarsi che entrambi i campi diano un risultato per richiedere una ricerca combinata"</string>
 </resources>

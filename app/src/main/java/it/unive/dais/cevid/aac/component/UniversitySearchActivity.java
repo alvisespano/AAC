@@ -195,25 +195,22 @@ public class UniversitySearchActivity extends AppCompatActivity {
         Button combineButton = (Button) findViewById(R.id.button_combine_data);
         combineButton.setOnClickListener(view -> {
 
-            if (appaltiText.length() < SEARCH_INPUT_MIN_LENGTH && soldiPubbliciText.length() < SEARCH_INPUT_MIN_LENGTH)
-                alert("Compilare entrambi i campi di testo con stringhe di almeno 3 caratteri " +
-                        "ed assicurarsi che diano risultati per richiedere una ricerca combinata.");
+            if (appaltiText.length() < SEARCH_INPUT_MIN_LENGTH && soldiPubbliciText.length() < SEARCH_INPUT_MIN_LENGTH) {
+                alert(getString(R.string.combine_button_alert));
+            }
             else {
-                Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
                 if (singleElement) {
-                    manageCombineButtonSingleElement(intent);
+                    manageCombineButtonSingleElement();
                 }
                 else {
-                    intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
                     manageCombineButtonMultipleElements();
                 }
-                startActivity(intent);
             }
 
         });
     }
 
-    private void manageCombineButtonSingleElement(Intent intent) {
+    private void manageCombineButtonSingleElement() {
         List<AppaltiParser.Data> tendersFilteredList;
         List<SoldipubbliciParser.Data> expenditureFilteredList;
 
@@ -221,17 +218,30 @@ public class UniversitySearchActivity extends AppCompatActivity {
         expenditureFilteredList = processQuery(soldiPubbliciParser, soldiPubbliciText, Soldipubblici_getText, Soldipubblici_getCode);
 
         if (expenditureFilteredList != null && tendersFilteredList != null) {
+            Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
+
             intent.putExtra(UniversityResultActivity.LIST_SOLDIPUBBLICI, (Serializable) expenditureFilteredList);
             intent.putExtra(UniversityResultActivity.LIST_APPALTI, (Serializable) tendersFilteredList);
+
+            startActivity(intent);
+        }
+        else {
+            alert(getString(R.string.combine_button_single_element_alert));
         }
     }
 
     private void manageCombineButtonMultipleElements() {
         Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap = populateCodiceEnteExpenditureMap();
         Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap = populateCodiceEnteTendersMap();
+        Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
 
+        intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
         UniversityResultActivity.setCodiceEnteExpenditureMap(codiceEnteExpenditureMap);
         UniversityResultActivity.setCodiceEnteTendersMap(codiceEnteTendersMap);
+
+        intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
+
+        startActivity(intent);
     }
 
 
