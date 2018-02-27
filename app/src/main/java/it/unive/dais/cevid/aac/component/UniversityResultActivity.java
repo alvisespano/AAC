@@ -24,6 +24,7 @@ import it.unive.dais.cevid.aac.adapter.SoldiPubbliciAdapter;
 import it.unive.dais.cevid.aac.fragment.FragmentAdapter;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
+import it.unive.dais.cevid.aac.util.URALayoutSetter;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
@@ -45,13 +46,13 @@ public class UniversityResultActivity extends AppCompatActivity {
         APPALTI,
         SOLDI_PUBBLICI,
         COMBINE,
-        UNKNOWN;
+        MULTIPLE_ELEMENTS;
 
         public static Mode ofIntent(Intent i) {
             if (i.hasExtra(LIST_APPALTI) && i.hasExtra(LIST_SOLDIPUBBLICI)) return COMBINE;
             if (i.hasExtra(LIST_APPALTI)) return APPALTI;
             if (i.hasExtra(LIST_SOLDIPUBBLICI)) return SOLDI_PUBBLICI;
-            return UNKNOWN; //throw new UnexpectedException("Unknown intent labels would lead to unsupported mode");
+            return MULTIPLE_ELEMENTS; //throw new UnexpectedException("Unknown intent labels would lead to unsupported mode");
         }
     }
 
@@ -64,84 +65,35 @@ public class UniversityResultActivity extends AppCompatActivity {
 
         if (mode == Mode.APPALTI || mode == Mode.SOLDI_PUBBLICI || mode == Mode.COMBINE) {
             setContentView(R.layout.activity_university_result);
-        }
-        else {
+        } else {
             setContentView(R.layout.fragment_layout);
         }
-
+        URALayoutSetter uraLayoutSetter = new URALayoutSetter(this, getCurrentFocus(), true);
         switch (mode) {
             case APPALTI: {
-                manageAppaltiCase(intent);
+                uraLayoutSetter.manageAppaltiCase((List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI));
                 break;
             }
             case SOLDI_PUBBLICI: {
-                manageSoldiPubbliciCase(intent);
+                uraLayoutSetter.manageSoldiPubbliciCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI));
                 break;
             }
-            case COMBINE:{
-                manageCombineCase(intent);
+            case COMBINE: {
+                uraLayoutSetter.manageCombineCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI),
+                        (List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI));
                 break;
             }
-            default: {
-                if ((codiceEnteExpenditureMap == null || codiceEnteExpenditureMap.isEmpty()) &&
-                        (codiceEnteTendersMap == null || codiceEnteTendersMap.isEmpty())) {
-                    Log.e(TAG, "Unknown mode");
-                }
-                else {
+            case MULTIPLE_ELEMENTS: {
+                if (!((codiceEnteExpenditureMap == null || codiceEnteExpenditureMap.isEmpty()) &&
+                        (codiceEnteTendersMap == null || codiceEnteTendersMap.isEmpty()))) {
                     manageMultipleElements(intent);
                 }
             }
+            default: {
+                Log.e(TAG, "Unknown mode");
+            }
         }
 
-    }
-
-    //Single Item stuff
-
-    private void manageAppaltiCase(Intent intent) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_tenders);
-        recyclerView.setLayoutManager(layoutManager);
-
-        Serializable appaltiSerializableList = intent.getSerializableExtra(LIST_APPALTI);
-        List<AppaltiParser.Data> appaltiList = (List<AppaltiParser.Data>) appaltiSerializableList;
-
-        // TODO: calcolare la media ANCHE DEGLI ALTRI ENTI (università, in questo caso) per lo stesso tipo di fornitura
-        double sum = DataManipulation.sumBy(appaltiList, x -> Double.parseDouble(x.importo));
-        double avg = sum / appaltiList.size();
-
-        AppaltiAdapter appaltiAdapter = new AppaltiAdapter(appaltiList, avg);
-        recyclerView.setAdapter(appaltiAdapter);
-        recyclerView.setVisibility(View.VISIBLE);
-
-        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.sum_tenders);
-        linearLayout.setVisibility(View.VISIBLE);
-
-        TextView tv = (TextView) findViewById(R.id.sum_exp);
-        tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
-    }
-
-    private void manageSoldiPubbliciCase(Intent intent) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_exp);
-
-        recyclerView.setLayoutManager(layoutManager);
-
-        Serializable soldiPubbliciSerializableList = intent.getSerializableExtra(LIST_SOLDIPUBBLICI);
-        List<SoldipubbliciParser.Data> soldiPubbliciList = (List<SoldipubbliciParser.Data>) soldiPubbliciSerializableList;
-
-        List<EntitieExpenditure> entitieExpenditureList = new ArrayList<>();
-
-        for (SoldipubbliciParser.Data x : soldiPubbliciList)
-            entitieExpenditureList.add(new EntitieExpenditure(x, "2016"));
-
-        SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(entitieExpenditureList, "1");
-        recyclerView.setAdapter(soldiPubbliciAdapter);
-        recyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private void manageCombineCase(Intent intent) {
-        manageSoldiPubbliciCase(intent);
-        manageAppaltiCase(intent);
     }
 
     //Multiple Items stuff
@@ -222,6 +174,4 @@ public class UniversityResultActivity extends AppCompatActivity {
             }
         });
     }
-
-
 }

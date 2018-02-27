@@ -1,5 +1,6 @@
 package it.unive.dais.cevid.aac.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,19 +20,23 @@ import java.util.List;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.adapter.AppaltiAdapter;
 import it.unive.dais.cevid.aac.adapter.SoldiPubbliciAdapter;
+import it.unive.dais.cevid.aac.component.UniversityResultActivity;
 import it.unive.dais.cevid.aac.util.EntitieExpenditure;
+import it.unive.dais.cevid.aac.util.URALayoutSetter;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
+import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 /**
  * Created by gianmarcocallegher on 19/02/2018.
  */
 
 public class TabFragment extends Fragment {
+    private static final String TAG = "URATabFragment";
 
-    private List<SoldipubbliciParser.Data> soldiPubbliciList;
-    private List<AppaltiParser.Data> appaltiList;
+    private static List<SoldipubbliciParser.Data> soldiPubbliciList;
+    private static List<AppaltiParser.Data> appaltiList;
     private View view;
     private static String mode;
 
@@ -51,69 +56,37 @@ public class TabFragment extends Fragment {
         }
     }
 
-    private void setMode() {
-        if ((soldiPubbliciList != null && !soldiPubbliciList.isEmpty()) &&
-                appaltiList.isEmpty() || appaltiList == null)
-            mode = "SOLDI_PUBBLICI";
-        if ((appaltiList != null && !appaltiList.isEmpty()) &&
-                soldiPubbliciList.isEmpty() || soldiPubbliciList == null)
-            mode = "APPALTI";
-        else
-            mode = "COMBINE";
+    private enum Mode {
+        APPALTI,
+        SOLDI_PUBBLICI,
+        COMBINE;
+
+        public static TabFragment.Mode getMode() {
+            if ((soldiPubbliciList != null && !soldiPubbliciList.isEmpty()) &&
+                    appaltiList.isEmpty() || appaltiList == null)
+                return SOLDI_PUBBLICI;
+            if ((appaltiList != null && !appaltiList.isEmpty()) &&
+                    soldiPubbliciList.isEmpty() || soldiPubbliciList == null)
+                return APPALTI;
+            return COMBINE;
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_university_result, container, false);
 
-        if (mode == "SOLDI_PUBBLICI")
-            manageSoldiPubbliciCase(inflater);
-        if (mode == "APPALTI")
-            manageAppaltiCase(inflater);
-        else
-            manageCombineCase(inflater);
+        URALayoutSetter uraLayoutSetter = new URALayoutSetter((Activity) inflater.getContext(), view, false);
+        if (Mode.getMode() == Mode.SOLDI_PUBBLICI) {
+            uraLayoutSetter.manageSoldiPubbliciCase(soldiPubbliciList);
+        }
+        if (Mode.getMode() == Mode.APPALTI) {
+            uraLayoutSetter.manageAppaltiCase(appaltiList);
+        }
+        if (Mode.getMode() == Mode.COMBINE) {
+            uraLayoutSetter.manageCombineCase(soldiPubbliciList, appaltiList);
+        } else throw new UnexpectedException(TAG);
 
         return view;
-    }
-
-    private void manageAppaltiCase(LayoutInflater inflater) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_tenders);
-        recyclerView.setLayoutManager(layoutManager);
-
-        // TODO: calcolare la media ANCHE DEGLI ALTRI ENTI (università, in questo caso) per lo stesso tipo di fornitura
-        double sum = DataManipulation.sumBy(appaltiList, x -> Double.parseDouble(x.importo));
-        double avg = sum / appaltiList.size();
-
-        AppaltiAdapter appaltiAdapter = new AppaltiAdapter(appaltiList, avg);
-        recyclerView.setAdapter(appaltiAdapter);
-        recyclerView.setVisibility(View.VISIBLE);
-
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.sum_tenders);
-        linearLayout.setVisibility(View.VISIBLE);
-
-        TextView tv = (TextView) view.findViewById(R.id.sum_exp);
-        tv.setText(String.format(getString(R.string.university_result_appalti_format), sum, avg));
-    }
-
-    private void manageSoldiPubbliciCase(LayoutInflater inflater) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(inflater.getContext());
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list_exp);
-
-        recyclerView.setLayoutManager(layoutManager);
-
-        List<EntitieExpenditure> entitieExpenditureList = new ArrayList<>();
-
-        for (SoldipubbliciParser.Data x : soldiPubbliciList)
-            entitieExpenditureList.add(new EntitieExpenditure(x, "2016"));
-
-        SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(entitieExpenditureList, "1");
-        recyclerView.setAdapter(soldiPubbliciAdapter);
-        recyclerView.setVisibility(View.VISIBLE);
-    }
-
-    private void manageCombineCase(LayoutInflater inflater) {
-        manageSoldiPubbliciCase(inflater);
-        manageAppaltiCase(inflater);
     }
 }
