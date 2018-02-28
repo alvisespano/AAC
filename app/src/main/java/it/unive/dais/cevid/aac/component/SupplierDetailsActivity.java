@@ -2,6 +2,7 @@ package it.unive.dais.cevid.aac.component;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import it.unive.dais.cevid.aac.R;
@@ -27,5 +28,16 @@ public class SupplierDetailsActivity extends AppCompatActivity {
         desc.setText(tender.denominazione_lotto);
         lotto.setText(tender.id_lotto);
         mass.setText(tender.getMassimale() + getString(R.string.euro_symbol));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

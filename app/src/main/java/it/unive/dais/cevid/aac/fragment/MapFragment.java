@@ -133,7 +133,6 @@ public class MapFragment extends BaseFragment
         selectedMarkers = new HashSet<>();
 
         confrontoMultiploButton = (Button) mView.findViewById(R.id.confronto_button);
-
         confrontoMultiploButton.setOnClickListener(v -> confrontoMultiplo());
 
         return mView;
@@ -214,7 +213,7 @@ public class MapFragment extends BaseFragment
     private void manageOnInfoWindowClick(Marker marker) {
         marker.hideInfoWindow();
 
-        if (selectedMarkers.size() == 1) {
+        if (selectedMarkers.size() < 2) {
             singleMarkerSelected(marker);
         }
         else {
@@ -223,15 +222,16 @@ public class MapFragment extends BaseFragment
     }
 
     private void singleMarkerSelected(Marker marker) {
-        removeSelectedMarker(marker);
         final MapItem markerTag = (MapItem) marker.getTag();
 
         if (markerTag instanceof UniversityItem) {
             if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
+                removeSelectedMarker(marker);
                 clearSelectedMarker();
                 manageUniversityItemCase(markerTag);
             }
         } else if (markerTag instanceof MunicipalityItem) {
+            removeSelectedMarker(marker);
             clearSelectedMarker();
             manageMunicipalityItemCase(markerTag);
         } else if (markerTag instanceof SupplierItem) {
@@ -289,29 +289,34 @@ public class MapFragment extends BaseFragment
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        if (!selectedMarkers.contains(marker)) {
+        MapItem mapItem = (MapItem) marker.getTag();
+        if (mapItem instanceof UniversityItem || mapItem instanceof MunicipalityItem) {
+            if (!selectedMarkers.contains(marker)) {
 
-            addSelectedMarker(marker);
+                addSelectedMarker(marker);
 
-            marker.setSnippet(manageMarkerDescription(marker));
+                marker.setSnippet(manageMarkerDescription(marker));
 
-            if (selectedMarkers.size() == 1) {
-                button_car.setVisibility(View.VISIBLE);
-                button_car.setOnClickListener(v -> {
-                    Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
-                    if (currentPosition != null) {
-                        navigate(currentPosition, marker.getPosition());
-                    }
-                });
-            }
+                if (selectedMarkers.size() == 1) {
+                    button_car.setVisibility(View.VISIBLE);
+                    button_car.setOnClickListener(v -> {
+                        Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
+                        if (currentPosition != null) {
+                            navigate(currentPosition, marker.getPosition());
+                        }
+                    });
+                }
 
-            if (selectedMarkers.size() > 1) {
-                confrontoMultiploButton.setVisibility(View.VISIBLE);
-                button_car.setVisibility(View.INVISIBLE);
+                if (selectedMarkers.size() > 1) {
+                    confrontoMultiploButton.setVisibility(View.VISIBLE);
+                    button_car.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                marker.setSnippet(manageMarkerDescription(marker));
             }
         }
-        else {
-            marker.setSnippet(manageMarkerDescription(marker));
+        else{
+            marker.showInfoWindow();
         }
         return false;
     }

@@ -54,6 +54,7 @@
     <string name="tender_ceiling">Budgetary ceiling:\u0020</string>
     <string name="notification_title">Suppliers are ready</string>
     <string name="notification_msg">Suppliers download finished</string>
+    <string name="euro_symbol">\u0020€</string>
     <string name="mun_description">Name:\u0020</string>
     <string name="mun_details_code">Institution fiscal code:\u0020</string>
     <string name="mun_details_expire">Expire date:\u0020</string>

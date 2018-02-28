@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
@@ -52,29 +53,39 @@ public class SupplierResultActivity extends AppCompatActivity {
         TenderAdapter adapter = new TenderAdapter(tenders);
         view.setAdapter(adapter);
         view.addOnItemTouchListener(
-                new RecyclerItemClickListener(getBaseContext(), view, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        try {
-                            List<TenderParser.Data> data = parsers.get(position).getAsyncTask().get();
-                            if (!(data == null || data.size() <= 0)) {
-                                TenderParser.Data tender = data.get(0);
-                                map.put(tenders.get(position), tender);
-                                Intent intent = new Intent(SupplierResultActivity.this, SupplierDetailsActivity.class);
-                                intent.putExtra(SupplierDetailsActivity.BUNDLE_BID, tender);
-                                startActivity(intent);
-                            }
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
+            new RecyclerItemClickListener(getBaseContext(), view, new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    try {
+                        List<TenderParser.Data> data = parsers.get(position).getAsyncTask().get();
+                        if (!(data == null || data.size() <= 0)) {
+                            TenderParser.Data tender = data.get(0);
+                            map.put(tenders.get(position), tender);
+                            Intent intent = new Intent(SupplierResultActivity.this, SupplierDetailsActivity.class);
+                            intent.putExtra(SupplierDetailsActivity.BUNDLE_BID, tender);
+                            startActivity(intent);
                         }
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
                     }
+                }
 
-                    @Override
-                    public void onLongItemClick(View view, int position) {
-                        // do whatever
-                    }
-                })
+                @Override
+                public void onLongItemClick(View view, int position) {
+                    // do whatever
+                }
+            })
         );
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
