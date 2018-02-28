@@ -228,9 +228,11 @@ public class MapFragment extends BaseFragment
 
         if (markerTag instanceof UniversityItem) {
             if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
+                clearSelectedMarker();
                 manageUniversityItemCase(markerTag);
             }
         } else if (markerTag instanceof MunicipalityItem) {
+            clearSelectedMarker();
             manageMunicipalityItemCase(markerTag);
         } else if (markerTag instanceof SupplierItem) {
             manageSupplierItemCase(markerTag);
@@ -466,6 +468,7 @@ public class MapFragment extends BaseFragment
             intent.putExtra("Mode", "Municipality");
         }
 
+        confrontoMultiploButton.setVisibility(View.INVISIBLE);
         clearSelectedMarker();
 
         startActivity(intent);
@@ -475,6 +478,7 @@ public class MapFragment extends BaseFragment
         Set<Marker> s = new HashSet<>(selectedMarkers);
 
         for (Marker m : s) {
+            m.hideInfoWindow();
             removeSelectedMarker(m);
         }
     }
