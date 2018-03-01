@@ -3,6 +3,7 @@ package it.unive.dais.cevid.aac.fragment;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -25,7 +26,17 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import it.unive.dais.cevid.aac.component.MainActivity;
+import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
+import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
+import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
+import it.unive.dais.cevid.aac.item.MunicipalityItem;
+import it.unive.dais.cevid.aac.item.UniversityItem;
+import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -113,4 +124,27 @@ public abstract  class BaseFragment extends Fragment {
 
     public abstract void redraw(MainActivity.Mode mode);
     public abstract Type getType();
+
+    protected void manageUniversityItemCase(MapItem markerTag) {
+        Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
+        List l = new ArrayList<UniversityItem>();
+        l.add(markerTag);
+        intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, (Serializable) (l));
+        startActivity(intent);
+    }
+
+    protected void manageMunicipalityItemCase(MapItem markerTag) {
+        MunicipalityItem item = (MunicipalityItem) markerTag;
+        Intent intent = new Intent(getContext(), MunicipalitySearchActivity.class);
+        intent.putExtra(MunicipalitySearchActivity.CODICE_ENTE, item.getId());
+        intent.putExtra(MunicipalitySearchActivity.CODICE_COMPARTO, item.getCodiceComparto());
+        intent.putExtra(MunicipalitySearchActivity.MUNICIPALITY_ITEM, item);
+        startActivity(intent);
+    }
+
+    protected void manageSupplierItemCase(MapItem markerTag) {
+        Intent intent = new Intent(getContext(), SupplierSearchActivity.class);
+        intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, markerTag);
+        startActivity(intent);
+    }
 }

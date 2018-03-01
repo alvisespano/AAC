@@ -24,11 +24,9 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.fragment.FragmentAdapter;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.util.Company;
 import it.unive.dais.cevid.aac.util.CompanyComparator;
-import it.unive.dais.cevid.datadroid.lib.parser.Parser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;

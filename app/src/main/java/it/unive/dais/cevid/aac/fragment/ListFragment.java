@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +23,7 @@ import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
 import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
 import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
+import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
 /**
@@ -83,22 +85,13 @@ public class ListFragment extends BaseFragment implements
         assert parentActivity != null;
         switch (parentActivity.getCurrentMode()) {
             case MUNICIPALITY:
-                MunicipalityItem municipalityItem = (MunicipalityItem) item;
-                intent = new Intent(getContext(), MunicipalitySearchActivity.class);
-                intent.putExtra(MunicipalitySearchActivity.CODICE_ENTE, municipalityItem.getId());
-                intent.putExtra(MunicipalitySearchActivity.CODICE_COMPARTO, municipalityItem.getCodiceComparto());
-                intent.putExtra(MunicipalitySearchActivity.MUNICIPALITY_ITEM, municipalityItem);
-                startActivity(intent);
+                manageMunicipalityItemCase(item);
                 break;
             case UNIVERSITY:
-                intent = new Intent(getContext(), UniversitySearchActivity.class);
-                intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, item);
-                startActivity(intent);
+                manageUniversityItemCase(item);
                 break;
             case SUPPLIER:
-                intent = new Intent(getContext(), SupplierSearchActivity.class);
-                intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, item);
-                startActivity(intent);
+                manageSupplierItemCase(item);
                 break;
             default:
                 break;
