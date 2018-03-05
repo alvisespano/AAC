@@ -33,7 +33,7 @@ import java.util.List;
 import it.unive.dais.cevid.aac.component.MainActivity;
 import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
 import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
-import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
+import it.unive.dais.cevid.aac.component.AISearchActivity;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
@@ -125,20 +125,11 @@ public abstract  class BaseFragment extends Fragment {
     public abstract void redraw(MainActivity.Mode mode);
     public abstract Type getType();
 
-    protected void manageUniversityItemCase(MapItem markerTag) {
-        Intent intent = new Intent(getContext(), UniversitySearchActivity.class);
+    protected void manageAICase(MapItem markerTag) {
+        Intent intent = new Intent(getContext(), AISearchActivity.class);
         List l = new ArrayList<UniversityItem>();
         l.add(markerTag);
-        intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, (Serializable) (l));
-        startActivity(intent);
-    }
-
-    protected void manageMunicipalityItemCase(MapItem markerTag) {
-        MunicipalityItem item = (MunicipalityItem) markerTag;
-        Intent intent = new Intent(getContext(), MunicipalitySearchActivity.class);
-        intent.putExtra(MunicipalitySearchActivity.CODICE_ENTE, item.getId());
-        intent.putExtra(MunicipalitySearchActivity.CODICE_COMPARTO, item.getCodiceComparto());
-        intent.putExtra(MunicipalitySearchActivity.MUNICIPALITY_ITEM, item);
+        intent.putExtra(AISearchActivity.ABSTRACT_ITEM_LIST, (Serializable) (l));
         startActivity(intent);
     }
 

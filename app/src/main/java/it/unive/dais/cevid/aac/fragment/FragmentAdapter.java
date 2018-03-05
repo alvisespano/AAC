@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-import it.unive.dais.cevid.aac.component.UniversityResultActivity;
+import it.unive.dais.cevid.aac.component.AIResultActivity;
 
 /**
  * Created by gianmarcocallegher on 19/02/2018.
@@ -17,35 +20,44 @@ import it.unive.dais.cevid.aac.component.UniversityResultActivity;
 public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     private int numOfTabs;
-    private UniversityResultActivity parentActivity;
+    private AIResultActivity parentActivity;
+    private List<Fragment> registeredFragments = new ArrayList<>();
 
     public FragmentAdapter(FragmentManager fm, int numOfTabs, Context context) {
         super(fm);
         this.numOfTabs = numOfTabs;
-        parentActivity = (UniversityResultActivity) context;
+        parentActivity = (AIResultActivity) context;
     }
 
     @Override
     public Fragment getItem(int position) {
-
-        TabFragment tab = new TabFragment();
+        TabFragment tabFragment = new TabFragment();
         Bundle bundle = new Bundle();
+        String codiceEnte = (String) parentActivity.getPositionCodiceEnteMap().get(position);
 
-        for (Object i : parentActivity.getPositionCodiceEnteMap().keySet()) {
-            if (position == (Integer) i) {
-                bundle.putSerializable(UniversityResultActivity.LIST_SOLDIPUBBLICI, (Serializable) parentActivity.getCodiceEnteExpenditureMap().
-                        get(parentActivity.getPositionCodiceEnteMap().get(position)));
-                bundle.putSerializable(UniversityResultActivity.LIST_APPALTI, (Serializable) parentActivity.getCodiceEnteTendersMap().
-                        get(parentActivity.getPositionCodiceEnteMap().get(position)));
-                tab.setArguments(bundle);
-            }
+        bundle.putSerializable(AIResultActivity.LIST_SOLDIPUBBLICI, (Serializable) parentActivity.getCodiceEnteExpenditureMap().get(codiceEnte));
+        bundle.putSerializable(AIResultActivity.LIST_APPALTI, (Serializable) parentActivity.getCodiceEnteTendersMap().get(codiceEnte));
 
-        }
-        return tab;
+        tabFragment.setArguments(bundle);
+
+        return tabFragment;
     }
 
     @Override
     public int getCount() {
         return numOfTabs;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        registeredFragments.add(position, fragment);
+        return fragment;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        registeredFragments.remove(position);
+        super.destroyItem(container, position, object);
     }
 }

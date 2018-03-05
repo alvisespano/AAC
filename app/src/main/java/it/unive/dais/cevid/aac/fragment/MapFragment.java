@@ -42,12 +42,9 @@ import java.util.List;
 import java.util.Set;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.component.ConfrontoActivity;
 import it.unive.dais.cevid.aac.component.MainActivity;
-import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
 import it.unive.dais.cevid.aac.component.SettingsActivity;
-import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
-import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
+import it.unive.dais.cevid.aac.component.AISearchActivity;
 import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
@@ -157,6 +154,10 @@ public class MapFragment extends BaseFragment
         applyGoogleMapSetting();
         applyUISetting();
 
+        setCameraFocus();
+    }
+
+    private void setCameraFocus(){
         LatLng rome = new LatLng(41.89, 12.51);
         gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(rome, 5));
     }
@@ -224,16 +225,12 @@ public class MapFragment extends BaseFragment
     private void singleMarkerSelected(Marker marker) {
         final MapItem markerTag = (MapItem) marker.getTag();
 
-        if (markerTag instanceof UniversityItem) {
+        if (markerTag instanceof UniversityItem || markerTag instanceof MunicipalityItem) {
             if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
                 removeSelectedMarker(marker);
                 clearSelectedMarker();
-                manageUniversityItemCase(markerTag);
+                manageAICase(markerTag);
             }
-        } else if (markerTag instanceof MunicipalityItem) {
-            removeSelectedMarker(marker);
-            clearSelectedMarker();
-            manageMunicipalityItemCase(markerTag);
         } else if (markerTag instanceof SupplierItem) {
             manageSupplierItemCase(markerTag);
         }
@@ -441,16 +438,11 @@ public class MapFragment extends BaseFragment
             markerTags.add(abstractItem);
         }
 
-        if (parentActivity.getCurrentMode() == MainActivity.Mode.UNIVERSITY) {
-            intent = new Intent(getContext(), UniversitySearchActivity.class);
-            intent.putExtra(UniversitySearchActivity.UNIVERSITY_LIST, (Serializable) markerTags);
-        }
-        else {
-            intent = new Intent(getContext(), ConfrontoActivity.class);
-            intent.putExtra("Mode", "Municipality");
-        }
+        intent = new Intent(getContext(), AISearchActivity.class);
+        intent.putExtra(AISearchActivity.ABSTRACT_ITEM_LIST, (Serializable) markerTags);
 
         confrontoMultiploButton.setVisibility(View.INVISIBLE);
+
         clearSelectedMarker();
 
         startActivity(intent);

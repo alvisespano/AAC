@@ -21,7 +21,7 @@ import it.unive.dais.cevid.aac.util.EntitieExpenditure;
 import it.unive.dais.cevid.aac.util.RecyclerItemClickListener;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
-public class UniversityDetailsActivity extends AppCompatActivity {
+public class AIDetailsActivity extends AppCompatActivity {
     public static ArrayList<Company> appalti;
     public static ArrayList<SoldipubbliciParser.Data> spese;
     private RecyclerItemClickListener activeListener;
@@ -38,7 +38,7 @@ public class UniversityDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentMode = Mode.APPALTI;
-        setContentView(R.layout.activity_university_details);
+        setContentView(R.layout.activity_ai_details);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView v = (RecyclerView) findViewById(R.id.list_view_uni_details);
         v.setLayoutManager(layoutManager);
@@ -58,8 +58,8 @@ public class UniversityDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         Company company = companies.get(position);
-                        Intent intent = new Intent(UniversityDetailsActivity.this, UniversityCompanyDetailsActivity.class);
-                        UniversityCompanyDetailsActivity.setItems(company.tenders);
+                        Intent intent = new Intent(AIDetailsActivity.this, AICompanyDetailsActivity.class);
+                        AICompanyDetailsActivity.setItems(company.tenders);
                         startActivity(intent);
 
                     }

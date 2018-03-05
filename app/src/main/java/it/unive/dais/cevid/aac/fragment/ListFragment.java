@@ -12,18 +12,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.component.MainActivity;
-import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
-import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
-import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
-import it.unive.dais.cevid.aac.item.MunicipalityItem;
-import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
 /**
@@ -81,21 +75,15 @@ public class ListFragment extends BaseFragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         MapItem item = (MapItem) parent.getItemAtPosition(position);
-        Intent intent;
         assert parentActivity != null;
-        switch (parentActivity.getCurrentMode()) {
-            case MUNICIPALITY:
-                manageMunicipalityItemCase(item);
-                break;
-            case UNIVERSITY:
-                manageUniversityItemCase(item);
-                break;
-            case SUPPLIER:
+
+        if ((parentActivity.getCurrentMode() == MainActivity.Mode.UNIVERSITY) ||
+                (parentActivity.getCurrentMode() == MainActivity.Mode.MUNICIPALITY))
+            manageAICase(item);
+        if (parentActivity.getCurrentMode() == MainActivity.Mode.SUPPLIER)
                 manageSupplierItemCase(item);
-                break;
-            default:
-                break;
-        }
+        else
+            throw new UnsupportedOperationException();
     }
 
     @Override

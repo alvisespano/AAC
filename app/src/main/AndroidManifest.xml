@@ -48,14 +48,14 @@
                 android:value=".component.MainActivity" />
         </activity>
         <activity
-            android:name=".component.UniversityResultActivity"
-            android:parentActivityName=".component.UniversitySearchActivity">
+            android:name=".component.AIResultActivity"
+            android:parentActivityName=".component.AISearchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".component.UniversitySearchActivity" />
+                android:value=".component.AISearchActivity" />
         </activity>
         <activity
-            android:name=".component.UniversitySearchActivity"
+            android:name=".component.AISearchActivity"
             android:clickable="true"
             android:focusableInTouchMode="true"
             android:launchMode="singleTop"
@@ -111,15 +111,8 @@
         </activity>
         <activity android:name=".component.MunicipalityDetailsActivity" />
         <activity android:name=".component.MunicipalityTenderActivity" />
-        <activity android:name=".component.UniversityDetailsActivity" />
-        <activity android:name=".component.UniversityCompanyDetailsActivity" />
-        <activity
-            android:name=".component.ConfrontoActivity"
-            android:parentActivityName=".component.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".component.MainActivity" />
-        </activity>
+        <activity android:name=".component.AIDetailsActivity" />
+        <activity android:name=".component.AICompanyDetailsActivity" />
     </application>
 
 </manifest>

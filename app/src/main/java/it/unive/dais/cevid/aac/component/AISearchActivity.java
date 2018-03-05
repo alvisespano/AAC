@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.item.UniversityItem;
+import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.util.Company;
 import it.unive.dais.cevid.aac.util.CompanyComparator;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
@@ -34,15 +34,15 @@ import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
 import it.unive.dais.cevid.datadroid.lib.util.Function;
 
-public class UniversitySearchActivity extends AppCompatActivity {
-    private static final String TAG = "UniSearchActivity";
+public class AISearchActivity extends AppCompatActivity {
+    private static final String TAG = "AISearchActivity";
 
-    public static final String UNIVERSITY_LIST = "UNI";
+    public static final String ABSTRACT_ITEM_LIST = "UNI";
     private static final String BUNDLE_LIST = "LIST";
     private static final int FISCAL_CODE_LENGTH = 11;
     private static final int SEARCH_INPUT_MIN_LENGTH = 3;
 
-    private UniversityItem universityItem;
+    private AbstractItem abstractItem;
     private SoldipubbliciParser soldiPubbliciParser;
     private AppaltiParser appaltiParser;
     private LinearLayout mainView;
@@ -50,7 +50,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private String appaltiText = " ";
     private boolean singleElement;
 
-    private List<UniversityItem> universityItems;
+    private List<AbstractItem> abstractItems;
     private Map<String, SoldipubbliciParser> codiceEnteSoldiPubbliciParserMap;
     private Map<String, AppaltiParser> codiceEnteAppaltiParserMap;
 
@@ -59,7 +59,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putSerializable(UNIVERSITY_LIST, (Serializable) universityItems);
+        savedInstanceState.putSerializable(ABSTRACT_ITEM_LIST, (Serializable) abstractItems);
 //        saveParserState(savedInstanceState, appaltiParser);
 //        saveParserState(savedInstanceState, soldiPubbliciParser);
         super.onSaveInstanceState(savedInstanceState);
@@ -92,12 +92,12 @@ public class UniversitySearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_university_search);
+        setContentView(R.layout.activity_ai_search);
 
         mainView = (LinearLayout) findViewById(R.id.search_activity);
         mainView.requestFocus();
 
-        ProgressBarManager progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_university_search));
+        ProgressBarManager progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_ai_search));
 
         checkSavedInstanceState(savedInstanceState);
 
@@ -132,19 +132,19 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private void checkSavedInstanceState(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             // crea l'activity da zero
-            Serializable l = getIntent().getSerializableExtra(UNIVERSITY_LIST);
-            universityItems = (List<UniversityItem>) l;
+            Serializable l = getIntent().getSerializableExtra(ABSTRACT_ITEM_LIST);
+            abstractItems = (List<AbstractItem>) l;
 
-            if (universityItems.size() == 1) {
+            if (abstractItems.size() == 1) {
                 singleElement = true;
-                universityItem = universityItems.get(0);
+                abstractItem = abstractItems.get(0);
             }
             else {
                 singleElement = false;
             }
         } else {
             // ricrea l'activity deserializzando alcuni dati dal bundle
-            universityItems = (List<UniversityItem>) savedInstanceState.getSerializable(UNIVERSITY_LIST);
+            abstractItems = (List<AbstractItem>) savedInstanceState.getSerializable(ABSTRACT_ITEM_LIST);
         }
     }
 
@@ -166,7 +166,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap = new HashMap<>();
         SoldipubbliciParser soldiPubbliciParser;
 
-        for (UniversityItem item : universityItems) {
+        for (AbstractItem item : abstractItems) {
             soldiPubbliciParser = codiceEnteSoldiPubbliciParserMap.get(item.getId());
             codiceEnteExpenditureMap.put(item.getId(), processQuery(soldiPubbliciParser, soldiPubbliciText, Soldipubblici_getText, Soldipubblici_getCode));
         }
@@ -178,7 +178,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         Map<String, List<AppaltiParser.Data>> codiceTendersMap = new HashMap<>();
         AppaltiParser appaltiParser;
 
-        for (UniversityItem item : universityItems) {
+        for (AbstractItem item : abstractItems) {
             appaltiParser = codiceEnteAppaltiParserMap.get(item.getId());
             codiceTendersMap.put(item.getId(), processQuery(appaltiParser, appaltiText, Appalti_getText, Appalti_getCode));
         }
@@ -216,10 +216,10 @@ public class UniversitySearchActivity extends AppCompatActivity {
         expenditureFilteredList = processQuery(soldiPubbliciParser, soldiPubbliciText, Soldipubblici_getText, Soldipubblici_getCode);
 
         if (expenditureFilteredList != null && tendersFilteredList != null) {
-            Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
+            Intent intent = new Intent(AISearchActivity.this, AIResultActivity.class);
 
-            intent.putExtra(UniversityResultActivity.LIST_SOLDIPUBBLICI, (Serializable) expenditureFilteredList);
-            intent.putExtra(UniversityResultActivity.LIST_APPALTI, (Serializable) tendersFilteredList);
+            intent.putExtra(AIResultActivity.LIST_SOLDIPUBBLICI, (Serializable) expenditureFilteredList);
+            intent.putExtra(AIResultActivity.LIST_APPALTI, (Serializable) tendersFilteredList);
 
             startActivity(intent);
         }
@@ -231,13 +231,13 @@ public class UniversitySearchActivity extends AppCompatActivity {
     private void manageCombineButtonMultipleElements() {
         Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap = populateCodiceEnteExpenditureMap();
         Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap = populateCodiceEnteTendersMap();
-        Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
+        Intent intent = new Intent(AISearchActivity.this, AIResultActivity.class);
 
-        intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
-        UniversityResultActivity.setCodiceEnteExpenditureMap(codiceEnteExpenditureMap);
-        UniversityResultActivity.setCodiceEnteTendersMap(codiceEnteTendersMap);
+        intent.putExtra(AIResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
+        AIResultActivity.setCodiceEnteExpenditureMap(codiceEnteExpenditureMap);
+        AIResultActivity.setCodiceEnteTendersMap(codiceEnteTendersMap);
 
-        intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
+        intent.putExtra(AIResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
 
         startActivity(intent);
     }
@@ -246,17 +246,20 @@ public class UniversitySearchActivity extends AppCompatActivity {
     //Title stuff
 
     private void setTitleSingleElement() {
-        TextView title = (TextView) findViewById(R.id.univeristy_name);
-        title.setText(universityItem.getTitle());
+        TextView title = (TextView) findViewById(R.id.ai_name);
+        title.setText(abstractItem.getTitle());
     }
 
     private void setTitleMultipleElements(){
-        TextView title = (TextView) findViewById(R.id.univeristy_name);
+        TextView title = (TextView) findViewById(R.id.ai_name);
 
-        String s = "Confronto: ";
+        String start = "Confronto: ";
+        String s = start;
 
-        for (UniversityItem item : universityItems) {
-            s += item.getTitle() + ", ";
+        for (AbstractItem item : abstractItems) {
+            if (!s.equals(start))
+                s += ", " + item.getTitle();
+            else s += item.getTitle();
         }
 
         title.setText(s);
@@ -267,8 +270,8 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
     private void launchParsersSingleElement(ProgressBarManager progressBarManager) {
         // TODO: salvare lo stato dei parser con un proxy serializzabile
-        soldiPubbliciParser = new SoldipubbliciParser(universityItem.getCodiceComparto(), universityItem.getId(), progressBarManager);
-        appaltiParser = new AppaltiParser(universityItem.getUrls(), progressBarManager);
+        soldiPubbliciParser = new SoldipubbliciParser(abstractItem.getCodiceComparto(), abstractItem.getId(), progressBarManager);
+        appaltiParser = new AppaltiParser(abstractItem.getUrls(), progressBarManager);
         soldiPubbliciParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         appaltiParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -277,7 +280,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         codiceEnteSoldiPubbliciParserMap = new HashMap<>();
         codiceEnteAppaltiParserMap = new HashMap<>();
 
-        for (UniversityItem item : universityItems) {
+        for (AbstractItem item : abstractItems) {
             SoldipubbliciParser soldiPubbliciParser = new SoldipubbliciParser(item.getCodiceComparto(), item.getId(), progressBarManager);
             AppaltiParser appaltiParser = new AppaltiParser(item.getUrls(), progressBarManager);
 
@@ -297,15 +300,15 @@ public class UniversitySearchActivity extends AppCompatActivity {
         SearchView soldiPubbliciSearch = initializeSearchView(R.id.search_exp);
 
         if (singleElement) {
-            setSingleListenerSingleElement(appaltiSearch, appaltiParser, UniversityResultActivity.LIST_APPALTI,
+            setSingleListenerSingleElement(appaltiSearch, appaltiParser, AIResultActivity.LIST_APPALTI,
                     Appalti_getText, Appalti_getCode, x -> {
-                        UniversitySearchActivity.this.appaltiText = x;
+                        AISearchActivity.this.appaltiText = x;
                         return null;
                     });
 
-            setSingleListenerSingleElement(soldiPubbliciSearch, soldiPubbliciParser, UniversityResultActivity.LIST_SOLDIPUBBLICI,
+            setSingleListenerSingleElement(soldiPubbliciSearch, soldiPubbliciParser, AIResultActivity.LIST_SOLDIPUBBLICI,
                     Soldipubblici_getText, Soldipubblici_getCode, x -> {
-                        UniversitySearchActivity.this.soldiPubbliciText = x;
+                        AISearchActivity.this.soldiPubbliciText = x;
                         return null;
                     });
         }
@@ -315,13 +318,13 @@ public class UniversitySearchActivity extends AppCompatActivity {
         SearchView appaltiSearch = initializeSearchView(R.id.search_tenders);
         SearchView soldiPubbliciSearch = initializeSearchView(R.id.search_exp);
 
-        setSingleListenerMultipleElements(appaltiSearch, UniversityResultActivity.LIST_APPALTI, x -> {
-            UniversitySearchActivity.this.appaltiText = x;
+        setSingleListenerMultipleElements(appaltiSearch, AIResultActivity.LIST_APPALTI, x -> {
+            AISearchActivity.this.appaltiText = x;
             return null;
         });
 
-        setSingleListenerMultipleElements(soldiPubbliciSearch, UniversityResultActivity.LIST_SOLDIPUBBLICI, x -> {
-            UniversitySearchActivity.this.soldiPubbliciText = x;
+        setSingleListenerMultipleElements(soldiPubbliciSearch, AIResultActivity.LIST_SOLDIPUBBLICI, x -> {
+            AISearchActivity.this.soldiPubbliciText = x;
             return null;
         });
     }
@@ -338,7 +341,7 @@ public class UniversitySearchActivity extends AppCompatActivity {
         v.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String text) {
-                Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
+                Intent intent = new Intent(AISearchActivity.this, AIResultActivity.class);
 
                 List <T> l = processQuery(parser, text, getText, getCode);
 
@@ -366,18 +369,18 @@ public class UniversitySearchActivity extends AppCompatActivity {
         v.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String text) {
-                Intent intent = new Intent(UniversitySearchActivity.this, UniversityResultActivity.class);
+                Intent intent = new Intent(AISearchActivity.this, AIResultActivity.class);
                 Map m;
 
-                intent.putExtra(UniversityResultActivity.LIST_UNIVERSITY_ITEMS, (Serializable) universityItems);
+                intent.putExtra(AIResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
 
-                if (label == UniversityResultActivity.LIST_SOLDIPUBBLICI) {
+                if (label == AIResultActivity.LIST_SOLDIPUBBLICI) {
                     m = populateCodiceEnteExpenditureMap();
-                    UniversityResultActivity.setCodiceEnteExpenditureMap(m);
+                    AIResultActivity.setCodiceEnteExpenditureMap(m);
                 }
                 else {
                     m = populateCodiceEnteTendersMap();
-                    UniversityResultActivity.setCodiceEnteTendersMap(m);
+                    AIResultActivity.setCodiceEnteTendersMap(m);
                 }
 
                 v.clearFocus();
@@ -417,24 +420,24 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
     //Tenders (Company) and Expenditure stuff
 
-    private void setTendersUniversityDetailsActivity(Map<String, Company> stringCompanyMap) {
+    private void setTendersAIDetailsActivity(Map<String, Company> stringCompanyMap) {
         ArrayList<Company> values = new ArrayList<>(stringCompanyMap.values());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             values.sort(new CompanyComparator());
         }
 
-        UniversityDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
+        AIDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
     }
 
-    private void setExpenditureUniversityDetailsActivity() {
+    private void setExpenditureAIDetailsActivity() {
         List<SoldipubbliciParser.Data> spese = new ArrayList<>();
         try {
             spese = soldiPubbliciParser.getAsyncTask().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        UniversityDetailsActivity.setSpese(spese);
+        AIDetailsActivity.setSpese(spese);
     }
 
     private void populateStringCompanyMap(Map<String, Company> stringCompanyMap) {
@@ -462,10 +465,10 @@ public class UniversitySearchActivity extends AppCompatActivity {
 
                 populateStringCompanyMap(stringCompanyMap);
 
-                setTendersUniversityDetailsActivity(stringCompanyMap);
-                setExpenditureUniversityDetailsActivity();
+                setTendersAIDetailsActivity(stringCompanyMap);
+                setExpenditureAIDetailsActivity();
 
-                Intent intent = new Intent(UniversitySearchActivity.this, UniversityDetailsActivity.class);
+                Intent intent = new Intent(AISearchActivity.this, AIDetailsActivity.class);
                 startActivity(intent);
             });
         }

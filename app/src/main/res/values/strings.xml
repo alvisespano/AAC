@@ -70,12 +70,12 @@
     <string name="university_tender_paid">Paid:\u0020</string>
     <string name="university_tender_cost">Cost:\u0020</string>
     <string name="university_tender_cig">CIG:\u0020</string>
-    <string name="university_tender_total">Difference between budget and actual cost:\u0020</string>
+    <string name="ai_tender_total">Difference between budget and actual cost:\u0020</string>
     <string name="warning_msg">Warning sent</string>
     <string name="exp_cost">Cost:\u0020</string>
     <string name="exp_desc">Description:\u0020</string>
     <string name="exp_siope">SIOPE:\u0020</string>
-    <string name="university_result_appalti_format">%g€ (sum)\n%g€ (avg))</string>
+    <string name="university_result_appalti_format">%g€ (sum)\n%g€ (avg)</string>
     <string name="company_adapter_wins_format">%d (%d dirette)</string>
     <!-- Compilare entrambi i campi di testo con stringhe di almeno 3 caratteri
     Assicurarsi che entrambi i campi diano un risultato per richiedere una ricerca combinata-->

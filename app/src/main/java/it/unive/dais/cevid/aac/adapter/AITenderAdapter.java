@@ -15,17 +15,17 @@ import it.unive.dais.cevid.aac.util.Company;
  * Created by Francesco on 09/01/2018.
  */
 
-public class UniversityTenderAdapter extends RecyclerView.Adapter<UniversityTenderAdapter.Item> {
+public class AITenderAdapter extends RecyclerView.Adapter<AITenderAdapter.Item> {
 
     List<Company.Tender> items;
 
-    public UniversityTenderAdapter(List<Company.Tender> data){
+    public AITenderAdapter(List<Company.Tender> data){
         this.items = data;
     }
     @Override
     public Item onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.element_university_tender, parent, false);
+                .inflate(R.layout.element_ai_tender, parent, false);
         return new Item(itemView);
     }
 

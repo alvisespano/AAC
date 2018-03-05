@@ -8,27 +8,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.fragment.FragmentAdapter;
-import it.unive.dais.cevid.aac.item.UniversityItem;
+import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.util.URALayoutSetter;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
-public class UniversityResultActivity extends AppCompatActivity {
-    private static final String TAG = "UniResultActivity";
+public class AIResultActivity extends AppCompatActivity {
+    private static final String TAG = "AIResultActivity";
 
     public static final String LIST_APPALTI = "LIST_APPALTI";
     public static final String LIST_SOLDIPUBBLICI = "LIST_SOLDIPUBBLICI";
-    public static final String LIST_UNIVERSITY_ITEMS = "UNIVERSITY_ITEMS";
+    public static final String ABSTRACT_ITEMS = "ABSTRACT_ITEMS";
 
-    private static Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap;
-    private static Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap;
-    private Map positionCodiceEnteMap;
+    private static Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap = Collections.EMPTY_MAP;
+    private static Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap = Collections.EMPTY_MAP;
+    private Map<Integer, String> positionCodiceEnteMap;
     private FragmentAdapter fragmentAdapter;
 
     private enum Mode {
@@ -53,11 +54,13 @@ public class UniversityResultActivity extends AppCompatActivity {
         Mode mode = Mode.ofIntent(intent);
 
         if (mode == Mode.APPALTI || mode == Mode.SOLDI_PUBBLICI || mode == Mode.COMBINE) {
-            setContentView(R.layout.activity_university_result);
+            setContentView(R.layout.activity_ai_result);
         } else {
             setContentView(R.layout.fragment_layout);
         }
+
         URALayoutSetter uraLayoutSetter = new URALayoutSetter(this, getCurrentFocus(), true);
+
         switch (mode) {
             case APPALTI: {
                 uraLayoutSetter.manageAppaltiCase((List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI));
@@ -116,21 +119,23 @@ public class UniversityResultActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        Serializable sl = intent.getSerializableExtra(LIST_UNIVERSITY_ITEMS);
-        List<UniversityItem> universityItems = (List<UniversityItem>) sl;
+        Serializable sl = intent.getSerializableExtra(ABSTRACT_ITEMS);
+        List<AbstractItem> abstractItems = (List<AbstractItem>) sl;
 
-        if (universityItems.size() > 2)
+        if (abstractItems.size() > 2)
             tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
-        positionCodiceEnteMap = new HashMap<Integer, String>();
+        positionCodiceEnteMap = new HashMap<>();
 
         int i = 0;
 
-        for (UniversityItem universityItem : universityItems) {
-            tabLayout.addTab(tabLayout.newTab().setText(universityItem.getTitle()), i);
-            positionCodiceEnteMap.put(i, universityItem.getId());
+        for (AbstractItem abstractItem : abstractItems) {
+            tabLayout.addTab(tabLayout.newTab().setText(abstractItem.getTitle()), i);
+            positionCodiceEnteMap.put(i, abstractItem.getId());
             i++;
         }
+
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         return tabLayout;
     }
@@ -146,6 +151,7 @@ public class UniversityResultActivity extends AppCompatActivity {
 
         viewPager.setAdapter(fragmentAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
