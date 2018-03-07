@@ -23,7 +23,12 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,19 +37,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.fragment.BaseFragment;
 import it.unive.dais.cevid.aac.fragment.ListFragment;
+import it.unive.dais.cevid.aac.item.HealthItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
+import it.unive.dais.cevid.aac.parser.HealthParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
+import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
+import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.Handle;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
+import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 public class MainActivity extends AppCompatActivity
@@ -64,7 +75,8 @@ public class MainActivity extends AppCompatActivity
     public enum Mode {
         UNIVERSITY,
         MUNICIPALITY,
-        SUPPLIER
+        SUPPLIER,
+        HEALTH
     }
 
     @NonNull
@@ -73,13 +85,15 @@ public class MainActivity extends AppCompatActivity
     private final Collection<MunicipalityItem> municipalityItems = new ConcurrentLinkedQueue<>();
     @NonNull
     private final Collection<SupplierItem> supplierItems = new ConcurrentLinkedQueue<>();
+    @NonNull
+    private final Collection<HealthItem> healthItems = new ConcurrentLinkedQueue<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
-        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
+        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3),(ProgressBar) findViewById(R.id.progress_bar_main_4)});
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -87,7 +101,10 @@ public class MainActivity extends AppCompatActivity
         setupMunicipalityItems();
         setupSupplierItems();
         setupUniversityItems();
+        setupHealthItems();
+
     }
+
 
     private void setContentFragment(int container, @NonNull BaseFragment fragment) {
         fragmentManager.beginTransaction()
@@ -270,6 +287,31 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    //setting up the Health and Regions, integration of ST
+    private void setupHealthItems() {
+
+        HealthParser p = new HealthParser(progressBarManager) {
+
+            @NonNull
+            @Override
+            public List<Data> onPostParse(@NonNull List<Data> r) {
+                for (Data x : r) {
+                    HealthItem h = new HealthItem(x);
+                    healthItems.add(h);
+                    Log.d("Angelko", String.valueOf(h.getLatitude()+" "+h.getLongitude()));
+                }
+                return r;
+            }
+
+            @Override
+            public void onPostExecute(@NonNull List<Data> r) {
+                if (getCurrentMode() == Mode.HEALTH) currentMapFragment.redraw(Mode.HEALTH);
+            }
+        };
+        p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -414,6 +456,8 @@ public class MainActivity extends AppCompatActivity
                 return Mode.MUNICIPALITY;
             case R.id.menu_suppliers:
                 return Mode.SUPPLIER;
+            case R.id.menu_health:
+                return Mode.HEALTH;
             default:
                 throw new UnexpectedException(String.format("invalid menu item id: %d", id));
         }
@@ -433,6 +477,8 @@ public class MainActivity extends AppCompatActivity
     public Collection<SupplierItem> getSupplierItems() {
         return supplierItems;
     }
+
+    public Collection<HealthItem> getHealthItems() { return healthItems; }
 
     @NonNull
     public Collection<MunicipalityItem> getMunicipalityItems() {
@@ -460,7 +506,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void testProgressBarManager() {
-        ProgressBarManager m = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
+        ProgressBarManager m = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3),  (ProgressBar) findViewById(R.id.progress_bar_main_4)});
 
         runOnUiThread(() -> {
             Handle<ProgressBar> h1 = m.acquire();

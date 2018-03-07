@@ -344,6 +344,9 @@ public class MapFragment extends BaseFragment
                     case SUPPLIER:
                         putMarkers(parentActivity.getSupplierItems(), BitmapDescriptorFactory.HUE_YELLOW);
                         break;
+                    case HEALTH:
+                        putMarkers(parentActivity.getHealthItems(), BitmapDescriptorFactory.HUE_MAGENTA);
+                        break;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

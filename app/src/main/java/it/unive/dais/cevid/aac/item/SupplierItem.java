@@ -31,6 +31,7 @@ public class SupplierItem implements MapItem, Serializable {
         this.position = new Position(ll.latitude, ll.longitude);
     }
 
+    @NonNull
     private LatLng getLatLngFromAddress(Context context, String address) {
         Geocoder geocode = new Geocoder(context, Locale.getDefault());
         List<Address> names = new ArrayList<>();

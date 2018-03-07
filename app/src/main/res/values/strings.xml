@@ -76,4 +76,5 @@
     <string name="exp_siope">SIOPE:\u0020</string>
     <string name="university_result_appalti_format">%g€ (sum)\n%g€ (avg))</string>
     <string name="company_adapter_wins_format">%d (%d dirette)</string>
+    <string name="bottom_menu_health">Health</string>
 </resources>

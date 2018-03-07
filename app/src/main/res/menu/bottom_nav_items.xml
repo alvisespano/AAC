@@ -13,4 +13,8 @@
         android:id="@+id/menu_suppliers"
         android:title="@string/bottom_menu_supplier"
         android:icon="@drawable/ic_supplier" />
+    <item
+        android:id="@+id/menu_health"
+        android:title="@string/bottom_menu_health"
+        android:icon="@drawable/ic_hospitals" />
 </menu>
