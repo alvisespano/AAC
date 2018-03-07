@@ -65,8 +65,15 @@
         android:layout_height="wrap_content"
         android:text="@string/button_show_companies"
         android:layout_gravity="end"
+        android:visibility="invisible"
         />
 
-
+    <Button
+        android:id="@+id/button_expenditure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/expenditure_button"
+        android:layout_gravity="end"
+        android:visibility="invisible"/>
 
 </LinearLayout>

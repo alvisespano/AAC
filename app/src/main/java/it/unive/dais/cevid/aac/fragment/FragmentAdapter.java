@@ -31,16 +31,16 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        TabFragment tabFragment = new TabFragment();
+        ComparsionFragment comparsionFragment = new ComparsionFragment();
         Bundle bundle = new Bundle();
         String codiceEnte = (String) parentActivity.getPositionCodiceEnteMap().get(position);
 
         bundle.putSerializable(AIResultActivity.LIST_SOLDIPUBBLICI, (Serializable) parentActivity.getCodiceEnteExpenditureMap().get(codiceEnte));
         bundle.putSerializable(AIResultActivity.LIST_APPALTI, (Serializable) parentActivity.getCodiceEnteTendersMap().get(codiceEnte));
 
-        tabFragment.setArguments(bundle);
+        comparsionFragment.setArguments(bundle);
 
-        return tabFragment;
+        return comparsionFragment;
     }
 
     @Override

@@ -6,6 +6,7 @@
         android:title=""
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_changhe"
+        android:visible="false"
         />
     <item
         android:id="@+id/menu_details_money"

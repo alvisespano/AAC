@@ -59,7 +59,6 @@ public class AICompanyDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.company_warning:
-                //doSomething();
                 Toast.makeText(this,this.getResources().getText(R.string.warning_msg), Toast.LENGTH_LONG).show();//codice temporaneo
                 return true;
             default:

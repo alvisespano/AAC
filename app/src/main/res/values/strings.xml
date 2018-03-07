@@ -77,8 +77,7 @@
     <string name="exp_siope">SIOPE:\u0020</string>
     <string name="university_result_appalti_format">%g€ (sum)\n%g€ (avg)</string>
     <string name="company_adapter_wins_format">%d (%d dirette)</string>
-    <!-- Compilare entrambi i campi di testo con stringhe di almeno 3 caratteri
-    Assicurarsi che entrambi i campi diano un risultato per richiedere una ricerca combinata-->
     <string name="combine_button_alert">"Compile both fields with three characters strings or more"</string>
     <string name="combine_button_single_element_alert">"Make sure that both filelds give a result for a combine search"</string>
+    <string name="expenditure_button">"Show Expenditure"</string>
 </resources>

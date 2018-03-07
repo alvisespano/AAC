@@ -21,12 +21,12 @@ import it.unive.dais.cevid.datadroid.lib.util.DataManipulation;
  * Created by gianmarcocallegher on 27/02/2018.
  */
 
-public class URALayoutSetter {
+public class AILayoutSetter {
     private boolean singleElement;
     private Activity activity;
     private View view;
 
-    public URALayoutSetter(Activity activity, View view, boolean singleElement) {
+    public AILayoutSetter(Activity activity, View view, boolean singleElement) {
         this.activity = activity;
         this.view = view;
         this.singleElement = singleElement;
@@ -52,7 +52,7 @@ public class URALayoutSetter {
         tv.setText(String.format(activity.getString(R.string.university_result_appalti_format), sum, avg));
     }
 
-    public void manageSoldiPubbliciCase(List<SoldipubbliciParser.Data> soldiPubbliciList) {
+    public void manageSoldiPubbliciCase(List<SoldipubbliciParser.Data> soldiPubbliciList, String year) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_exp);
         recyclerView.setLayoutManager(layoutManager);
@@ -60,15 +60,15 @@ public class URALayoutSetter {
         List<EntitieExpenditure> entitieExpenditureList = new ArrayList<>();
 
         for (SoldipubbliciParser.Data x : soldiPubbliciList)
-            entitieExpenditureList.add(new EntitieExpenditure(x, "2016"));
+            entitieExpenditureList.add(new EntitieExpenditure(x, year));
 
         SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(entitieExpenditureList, "1");
         recyclerView.setAdapter(soldiPubbliciAdapter);
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-    public void manageCombineCase(List<SoldipubbliciParser.Data> soldiPubbliciList, List<AppaltiParser.Data> appaltiList) {
-        manageSoldiPubbliciCase(soldiPubbliciList);
+    public void manageCombineCase(List<SoldipubbliciParser.Data> soldiPubbliciList, List<AppaltiParser.Data> appaltiList, String year) {
+        manageSoldiPubbliciCase(soldiPubbliciList, year);
         manageAppaltiCase(appaltiList);
     }
 

@@ -1,7 +1,6 @@
 package it.unive.dais.cevid.aac.fragment;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.component.AIResultActivity;
-import it.unive.dais.cevid.aac.util.URALayoutSetter;
+import it.unive.dais.cevid.aac.util.AILayoutSetter;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
@@ -23,11 +22,8 @@ import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
  * Created by gianmarcocallegher on 19/02/2018.
  */
 
-public class TabFragment extends Fragment {
+public class ComparsionFragment extends Fragment {
     private static final String TAG = "AITabFragment";
-    private static final String SOLDIPUBBLICI_MODE = "SOLDI_PUBBLICI";
-    private static final String APPALTI_MODE = "APPALTI";
-    private static final String COMBINE_MODE = "COMBINE";
 
     private List<SoldipubbliciParser.Data> soldiPubbliciList;
     private List<AppaltiParser.Data> appaltiList;
@@ -62,7 +58,7 @@ public class TabFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(AIResultActivity.LIST_SOLDIPUBBLICI, (Serializable) soldiPubbliciList);
-        outState.putString(AIResultActivity.LIST_APPALTI, String.valueOf(appaltiList));
+        outState.putSerializable(AIResultActivity.LIST_APPALTI, (Serializable) appaltiList);
     }
 
     public void onCreate(Bundle fragmentBundle) {
@@ -87,16 +83,16 @@ public class TabFragment extends Fragment {
 
         Mode mode = Mode.getMode(soldiPubbliciList, appaltiList);
 
-        URALayoutSetter uraLayoutSetter = new URALayoutSetter((Activity) inflater.getContext(), view, false);
+        AILayoutSetter aiLayoutSetter = new AILayoutSetter((Activity) inflater.getContext(), view, false);
 
         if (mode == Mode.SOLDI_PUBBLICI) {
-            uraLayoutSetter.manageSoldiPubbliciCase(soldiPubbliciList);
+            aiLayoutSetter.manageSoldiPubbliciCase(soldiPubbliciList, "2016");
         }
         if (mode == Mode.APPALTI) {
-            uraLayoutSetter.manageAppaltiCase(appaltiList);
+            aiLayoutSetter.manageAppaltiCase(appaltiList);
         }
         if (mode == Mode.COMBINE) {
-            uraLayoutSetter.manageCombineCase(soldiPubbliciList, appaltiList);
+            aiLayoutSetter.manageCombineCase(soldiPubbliciList, appaltiList, "2016");
         } else throw new UnexpectedException(TAG);
 
         return view;

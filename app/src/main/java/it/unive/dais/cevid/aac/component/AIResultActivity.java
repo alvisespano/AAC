@@ -16,7 +16,7 @@ import java.util.Map;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.fragment.FragmentAdapter;
 import it.unive.dais.cevid.aac.item.AbstractItem;
-import it.unive.dais.cevid.aac.util.URALayoutSetter;
+import it.unive.dais.cevid.aac.util.AILayoutSetter;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
@@ -59,20 +59,20 @@ public class AIResultActivity extends AppCompatActivity {
             setContentView(R.layout.fragment_layout);
         }
 
-        URALayoutSetter uraLayoutSetter = new URALayoutSetter(this, getCurrentFocus(), true);
+        AILayoutSetter aiLayoutSetter = new AILayoutSetter(this, getCurrentFocus(), true);
 
         switch (mode) {
             case APPALTI: {
-                uraLayoutSetter.manageAppaltiCase((List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI));
+                aiLayoutSetter.manageAppaltiCase((List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI));
                 break;
             }
             case SOLDI_PUBBLICI: {
-                uraLayoutSetter.manageSoldiPubbliciCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI));
+                aiLayoutSetter.manageSoldiPubbliciCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI), "2016");
                 break;
             }
             case COMBINE: {
-                uraLayoutSetter.manageCombineCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI),
-                        (List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI));
+                aiLayoutSetter.manageCombineCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI),
+                        (List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI), "2016");
                 break;
             }
             case MULTIPLE_ELEMENTS: {

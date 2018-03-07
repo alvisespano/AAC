@@ -108,8 +108,6 @@ public class AISearchActivity extends AppCompatActivity {
             manageMutipleElements(progressBarManager);
         }
 
-        manageTendersButton();
-
         mainView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 hideKeyboard(v);
@@ -152,6 +150,8 @@ public class AISearchActivity extends AppCompatActivity {
         launchParsersSingleElement(progressBarManager);
         setSearchViewsSingleElement();
         manageCombineButton();
+        manageTendersButton();
+        manageExpenditureButton();
         setTitleSingleElement();
     }
 
@@ -438,6 +438,7 @@ public class AISearchActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         AIDetailsActivity.setSpese(spese);
+        startActivity(new Intent(AISearchActivity.this, AIExpenditureActivity.class));
     }
 
     private void populateStringCompanyMap(Map<String, Company> stringCompanyMap) {
@@ -457,26 +458,39 @@ public class AISearchActivity extends AppCompatActivity {
         }
     }
 
+    //Single Element Button stuff
+
     private void manageTendersButton () {
         Button tendersButton = (Button) findViewById(R.id.button_view_tenders);
-        if (singleElement) {
-            tendersButton.setOnClickListener(v -> {
-                Map<String, Company> stringCompanyMap = new HashMap<>();
+        tendersButton.setVisibility(View.VISIBLE);
 
-                populateStringCompanyMap(stringCompanyMap);
+        tendersButton.setOnClickListener(v -> {
+            Map<String, Company> stringCompanyMap = new HashMap<>();
 
-                setTendersAIDetailsActivity(stringCompanyMap);
-                setExpenditureAIDetailsActivity();
+            populateStringCompanyMap(stringCompanyMap);
 
-                Intent intent = new Intent(AISearchActivity.this, AIDetailsActivity.class);
-                startActivity(intent);
-            });
-        }
-        else {
-            tendersButton.setVisibility(View.INVISIBLE);
-        }
+            setTendersAIDetailsActivity(stringCompanyMap);
+            setExpenditureAIDetailsActivity();
+
+            Intent intent = new Intent(AISearchActivity.this, AIDetailsActivity.class);
+            startActivity(intent);
+        });
+
     }
 
+    private void manageExpenditureButton() {
+        Button expenditureButton = (Button) findViewById(R.id.button_expenditure);
+        expenditureButton.setVisibility(View.VISIBLE);
+        expenditureButton.setOnClickListener(view -> {
+            Intent intent = new Intent(AISearchActivity.this, AIExpenditureActivity.class);
+            try {
+                AIExpenditureActivity.setSpeseEnte(soldiPubbliciParser.getAsyncTask().get());
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+            startActivity(intent);
+        });
+    }
 
     //High order functions
 
