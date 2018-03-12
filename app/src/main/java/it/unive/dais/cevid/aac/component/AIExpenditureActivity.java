@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
 public class AIExpenditureActivity extends AppCompatActivity {
     private static List<SoldipubbliciParser.Data> speseEnte;
+    private Menu optionsMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,5 +69,17 @@ public class AIExpenditureActivity extends AppCompatActivity {
 
     public static List<SoldipubbliciParser.Data> getSpeseEnte() {
         return speseEnte;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_options_details, menu);
+
+        menu.findItem(R.id.menu_details_swap).setVisible(true);
+
+        this.optionsMenu = menu;
+
+        return true;
     }
 }

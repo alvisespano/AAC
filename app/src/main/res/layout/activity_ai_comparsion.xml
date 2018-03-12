@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    android:id="@+id/search_activity"
+    android:id="@+id/comparsion_activity"
     android:focusableInTouchMode="true"
     >
 
@@ -24,6 +24,31 @@
         android:textSize="@dimen/text_title"
         android:textAlignment="center"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_expense"
+        android:textAlignment="center"/>
+
+
+    <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:id="@+id/search_exp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/search_tenders"
+        android:textAlignment="center"/>
+
+    <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:id="@+id/search_tenders"/>
 
     <Button
         android:id="@+id/button_combine_data"
@@ -32,22 +57,5 @@
         android:text="@string/license_software"
         android:layout_gravity="end"
         />
-
-    <Button
-        android:id="@+id/button_view_tenders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_show_companies"
-        android:layout_gravity="end"
-        android:visibility="invisible"
-        />
-
-    <Button
-        android:id="@+id/button_expenditure"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/expenditure_button"
-        android:layout_gravity="end"
-        android:visibility="invisible"/>
 
 </LinearLayout>

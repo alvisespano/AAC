@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,7 +13,6 @@ import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -114,13 +111,12 @@ public abstract  class BaseFragment extends Fragment {
     }
 
     public abstract void redraw(MainActivity.Mode mode);
+
     public abstract Type getType();
 
     protected void manageAICase(MapItem markerTag) {
         Intent intent = new Intent(getContext(), AISearchActivity.class);
-        List l = new ArrayList<UniversityItem>();
-        l.add(markerTag);
-        intent.putExtra(AISearchActivity.ABSTRACT_ITEM_LIST, (Serializable) (l));
+        intent.putExtra(AISearchActivity.ABSTRACT_ITEM, markerTag);
         startActivity(intent);
     }
 

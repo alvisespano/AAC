@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Set;
 
 import it.unive.dais.cevid.aac.R;
+import it.unive.dais.cevid.aac.component.AIComparsionActivity;
 import it.unive.dais.cevid.aac.component.MainActivity;
 import it.unive.dais.cevid.aac.component.SettingsActivity;
 import it.unive.dais.cevid.aac.component.AISearchActivity;
@@ -438,8 +439,9 @@ public class MapFragment extends BaseFragment
             markerTags.add(abstractItem);
         }
 
-        intent = new Intent(getContext(), AISearchActivity.class);
-        intent.putExtra(AISearchActivity.ABSTRACT_ITEM_LIST, (Serializable) markerTags);
+        intent = new Intent(getContext(), AIComparsionActivity.class);
+        intent.putExtra(AIComparsionActivity.SINGLE_ELEMENT, false);
+        intent.putExtra(AIComparsionActivity.ABSTRACT_ITEMS, (Serializable) markerTags);
 
         confrontoMultiploButton.setVisibility(View.INVISIBLE);
 

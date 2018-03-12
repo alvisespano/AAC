@@ -42,7 +42,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".component.AISearchActivity"
             android:clickable="true"
@@ -54,31 +53,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.MainActivity" />
         </activity>
-
         <activity
             android:name=".component.AIResultActivity"
+            android:parentActivityName=".component.AIComparsionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".component.AIComparsionActivity" />
+        </activity>
+        <activity
+            android:name=".component.AIDetailsActivity"
             android:parentActivityName=".component.AISearchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.AISearchActivity" />
         </activity>
-
-        <activity
-            android:name=".component.AIDetailsActivity"
-            android:parentActivityName=".component.AISearchActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".component.AISearchActivity" />
-        </activity>
-
         <activity
             android:name=".component.AICompanyDetailsActivity"
-            android:parentActivityName=".component.AIDetailsActivity" >
+            android:parentActivityName=".component.AIDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.AIDetailsActivity" />
         </activity>
-
         <activity
             android:name=".component.AIExpenditureActivity"
             android:parentActivityName=".component.AISearchActivity">
@@ -86,7 +81,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.AISearchActivity" />
         </activity>
-
         <activity
             android:name=".component.SupplierSearchActivity"
             android:parentActivityName=".component.MainActivity">
@@ -94,7 +88,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.MainActivity" />
         </activity>
-
         <activity
             android:name=".component.SupplierResultActivity"
             android:parentActivityName=".component.SupplierSearchActivity">
@@ -102,7 +95,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.SupplierSearchActivity" />
         </activity>
-
         <activity
             android:name=".component.SupplierDetailsActivity"
             android:parentActivityName=".component.SupplierResultActivity">
@@ -110,7 +102,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.SupplierResultActivity" />
         </activity>
-
         <activity
             android:name=".component.SettingsActivity"
             android:parentActivityName=".component.MainActivity">
@@ -118,7 +109,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.MainActivity" />
         </activity>
-
         <activity
             android:name=".component.AboutActivity"
             android:parentActivityName=".component.MainActivity">
@@ -126,7 +116,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.MainActivity" />
         </activity>
-
+        <activity android:name=".component.AIComparsionActivity"></activity>
     </application>
 
 </manifest>
