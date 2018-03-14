@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@android:color/white">
+
+    <ProgressBar
+        android:id="@+id/progress_bar_ai_search"
+        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ai_name"
+        android:layout_margin="10dp"
+        android:textSize="@dimen/text_title"
+        android:textAlignment="center"
+        android:layout_below="@+id/progress_bar_ai_search" />
+
+    <GridView
+        android:id="@+id/dashboard_grid"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:listSelector="@android:color/transparent"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="20.0dip"
+        android:layout_centerInParent="true"
+        style="@style/dashboard" />
+
+</RelativeLayout>
+<!--<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -50,4 +85,4 @@
         android:layout_gravity="end"
         android:visibility="invisible"/>
 
-</LinearLayout>
+</LinearLayout>-->

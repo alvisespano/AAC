@@ -1,15 +1,21 @@
 package it.unive.dais.cevid.aac.component;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,7 +36,7 @@ import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 
-public class AISearchActivity extends AppCompatActivity {
+public class AISearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private static final String TAG = "AISearchActivity";
 
     public static final String ABSTRACT_ITEM = "UNI";
@@ -40,7 +46,9 @@ public class AISearchActivity extends AppCompatActivity {
     private AbstractItem abstractItem;
     private SoldipubbliciParser soldiPubbliciParser;
     private AppaltiParser appaltiParser;
-    private LinearLayout mainView;
+
+    private String[] iconNameArray;
+    private TypedArray iconTypedArray;
 
     // wrappers for parsers
     //
@@ -72,8 +80,6 @@ public class AISearchActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mainView = (LinearLayout) findViewById(R.id.search_activity);
-        mainView.requestFocus();
     }
 
     @Override
@@ -82,10 +88,12 @@ public class AISearchActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_ai_search);
 
-        mainView = (LinearLayout) findViewById(R.id.search_activity);
-        mainView.requestFocus();
+        iconNameArray = getResources().getStringArray(R.array.iconNameArray);
+        iconTypedArray = getResources().obtainTypedArray(R.array.iconArray);
 
         checkSavedInstanceState(savedInstanceState);
+
+        setUpLayout();
 
         manageFunctionality();
     }
@@ -102,13 +110,16 @@ public class AISearchActivity extends AppCompatActivity {
         }
     }
 
+    private void setUpLayout() {
+        GridView gridView = (GridView) findViewById(R.id.dashboard_grid);
+        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setOnItemClickListener(this);
+    }
+
     private void manageFunctionality() {
         ProgressBarManager progressBarManager =
                 new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_ai_search));
         launchParsers(progressBarManager);
-        manageSearchButton();
-        manageTendersButton();
-        manageExpenditureButton();
         setTitle();
     }
 
@@ -144,11 +155,13 @@ public class AISearchActivity extends AppCompatActivity {
 
     private void setExpenditureAIDetailsActivity() {
         List<SoldipubbliciParser.Data> spese = new ArrayList<>();
+
         try {
             spese = soldiPubbliciParser.getAsyncTask().get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+
         AIDetailsActivity.setSpese(spese);
         startActivity(new Intent(AISearchActivity.this, AIExpenditureActivity.class));
     }
@@ -156,8 +169,10 @@ public class AISearchActivity extends AppCompatActivity {
     private void populateStringCompanyMap(Map<String, Company> stringCompanyMap) {
         try {
             List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
+
             for (AppaltiParser.Data appalto : appalti) {
                 String cfAgg = appalto.codiceFiscaleAgg;
+
                 if (cfAgg.length() == FISCAL_CODE_LENGTH) { //TODO: segnalare i dati incompleti/errati magari
                     if (!stringCompanyMap.containsKey(cfAgg)) {
                         stringCompanyMap.put(cfAgg, new Company(cfAgg, appalto.aggiudicatario));
@@ -173,53 +188,108 @@ public class AISearchActivity extends AppCompatActivity {
 
     //Button stuff
 
-    private void manageSearchButton() {
-        Button searchButton = (Button) findViewById(R.id.button_combine_data);
-        searchButton.setOnClickListener(v -> {
-            try {
-                Intent intent =  new Intent(AISearchActivity.this, AIComparsionActivity.class);
+    private void manageComparsion() {
+        try {
+            Intent intent =  new Intent(AISearchActivity.this, AIComparsionActivity.class);
 
-                intent.putExtra(AIComparsionActivity.ABSTRACT_ITEMS, abstractItem);
-                intent.putExtra(AIComparsionActivity.SINGLE_ELEMENT, true);
+            intent.putExtra(AIComparsionActivity.ABSTRACT_ITEMS, abstractItem);
+            intent.putExtra(AIComparsionActivity.SINGLE_ELEMENT, true);
 
-                AIComparsionActivity.setSoldiPubbliciList(soldiPubbliciParser.getAsyncTask().get());
-                AIComparsionActivity.setAppaltiList(appaltiParser.getAsyncTask().get());
+            AIComparsionActivity.setSoldiPubbliciList(soldiPubbliciParser.getAsyncTask().get());
+            AIComparsionActivity.setAppaltiList(appaltiParser.getAsyncTask().get());
 
-                startActivity(intent);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        });
+            startActivity(intent);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void manageTendersButton () {
-        Button tendersButton = (Button) findViewById(R.id.button_view_tenders);
-        tendersButton.setVisibility(View.VISIBLE);
+    private void manageCompanies() {
+        Map<String, Company> stringCompanyMap = new HashMap<>();
 
-        tendersButton.setOnClickListener(v -> {
-            Map<String, Company> stringCompanyMap = new HashMap<>();
+        populateStringCompanyMap(stringCompanyMap);
 
-            populateStringCompanyMap(stringCompanyMap);
+        setTendersAIDetailsActivity(stringCompanyMap);
+        setExpenditureAIDetailsActivity();
 
-            setTendersAIDetailsActivity(stringCompanyMap);
-            setExpenditureAIDetailsActivity();
-
-            Intent intent = new Intent(AISearchActivity.this, AIDetailsActivity.class);
-            startActivity(intent);
-        });
+        Intent intent = new Intent(AISearchActivity.this, AIDetailsActivity.class);
+        startActivity(intent);
     }
 
-    private void manageExpenditureButton() {
-        Button expenditureButton = (Button) findViewById(R.id.button_expenditure);
-        expenditureButton.setVisibility(View.VISIBLE);
-        expenditureButton.setOnClickListener(view -> {
-            Intent intent = new Intent(AISearchActivity.this, AIExpenditureActivity.class);
-            try {
-                AIExpenditureActivity.setSpeseEnte(soldiPubbliciParser.getAsyncTask().get());
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+    private void manageExpenditure() {
+        Intent intent = new Intent(AISearchActivity.this, AIExpenditureActivity.class);
+        try {
+            AIExpenditureActivity.setSpeseEnte(soldiPubbliciParser.getAsyncTask().get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String nameClicked = iconNameArray[position];
+
+        if(nameClicked.equals(getString(R.string.combine_icon))) {
+            manageComparsion();
+        }
+        else if(nameClicked.equals(getString(R.string.expenditure_icon))) {
+            manageExpenditure();
+        }
+        else if(nameClicked.equals(getString(R.string.companies_icon))) {
+            manageCompanies();
+        }
+    }
+
+    private class ImageAdapter extends BaseAdapter {
+        private Context mContext;
+
+        public ImageAdapter(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        public int getCount() {
+            return iconNameArray.length;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        private class ViewHolder {
+            public ImageView icon;
+            public TextView text;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        // Create a new ImageView for each item referenced by the Adapter
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View v = convertView;
+            ViewHolder holder;
+            if (v == null) {
+                LayoutInflater vi = (LayoutInflater) mContext.getSystemService(
+                        Context.LAYOUT_INFLATER_SERVICE);
+
+                v = vi.inflate(R.layout.dashboard_icon, null);
+                holder = new ViewHolder();
+                holder.text = (TextView) v.findViewById(R.id.dashboard_icon_text);
+                holder.icon = (ImageView) v.findViewById(R.id.dashboard_icon_img);
+                v.setTag(holder);
+            } else {
+                holder = (ViewHolder) v.getTag();
             }
-            startActivity(intent);
-        });
+
+            holder.icon.setImageResource(iconTypedArray.getResourceId(position, -1));
+            holder.text.setText(iconNameArray[position]);
+
+            return v;
+        }
     }
 }

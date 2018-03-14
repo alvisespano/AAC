@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -31,10 +30,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import it.unive.dais.cevid.aac.R;
@@ -44,7 +41,6 @@ import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
-import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
 import it.unive.dais.cevid.aac.parser.TendersLinkParser;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.Handle;
@@ -90,15 +86,7 @@ public class MainActivity extends AppCompatActivity
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
-        try {
-            setupTendersLink();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        setupMunicipalityItems();
-        setupSupplierItems();
-        setupUniversityItems();
+        setUpItems();
     }
 
     private void setContentFragment(int container, @NonNull BaseFragment fragment) {
@@ -128,7 +116,19 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void setupSupplierItems() {
+    private void setUpItems() {
+        try {
+            setUpTendersLink();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        setUpMunicipalityItems();
+        setUpSupplierItems();
+        setUpUniversityItems();
+    }
+
+    private void setUpSupplierItems() {
         SupplierParser p = new SupplierParser(progressBarManager) {
             @NonNull
             @Override
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
-    private void setupUniversityItems() {
+    private void setUpUniversityItems() {
         //add Ca Foscari
         universityItems.add(new UniversityItem("000704968000000", "Università Ca' Foscari", "Università degli studi di Venezia", "1", 45.437576, 12.3289554, codiceEnteAppaltiURLMap.get("000704968000000")));
 
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void setupMunicipalityItems() {
+    private void setUpMunicipalityItems() {
         //add Roma
         municipalityItems.add(new MunicipalityItem("800000047", "Roma", "COMUNE DI ROMA", "1", 41.9102411, 12.3955688, codiceEnteAppaltiURLMap.get("800000047")));
     }
@@ -334,14 +334,14 @@ public class MainActivity extends AppCompatActivity
         return municipalityItems;
     }
 
-    private void setupTendersLink() throws IOException {
+    private void setUpTendersLink() throws IOException {
         InputStreamReader reader = new InputStreamReader(getResources().openRawResource(R.raw.tenders));
         TendersLinkParser tendersLinkParser = new TendersLinkParser(reader, true, ",", progressBarManager);
         List<TendersLinkParser.Data> dataList = tendersLinkParser.parse();
-        setupCodiceEnteAppaltiURLMap(dataList);
+        setUpCodiceEnteAppaltiURLMap(dataList);
     }
 
-    private void setupCodiceEnteAppaltiURLMap(List<TendersLinkParser.Data> dataList) throws MalformedURLException {
+    private void setUpCodiceEnteAppaltiURLMap(List<TendersLinkParser.Data> dataList) throws MalformedURLException {
         codiceEnteAppaltiURLMap = new HashMap<>();
 
         for (TendersLinkParser.Data d : dataList) {

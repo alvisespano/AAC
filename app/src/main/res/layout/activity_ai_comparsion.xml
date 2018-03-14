@@ -54,7 +54,7 @@
         android:id="@+id/button_combine_data"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/license_software"
+        android:text="@string/combine_icon"
         android:layout_gravity="end"
         />
 

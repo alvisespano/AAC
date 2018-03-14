@@ -49,7 +49,7 @@ public class AILayoutSetter {
         linearLayout.setVisibility(View.VISIBLE);
 
         TextView tv = (TextView) findViewById(R.id.sum_exp);
-        tv.setText(String.format(activity.getString(R.string.university_result_appalti_format), sum, avg));
+        tv.setText(String.format(activity.getString(R.string.ai_result_appalti_format), sum, avg));
     }
 
     public void manageSoldiPubbliciCase(List<SoldipubbliciParser.Data> soldiPubbliciList, String year) {

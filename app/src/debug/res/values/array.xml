@@ -6,20 +6,38 @@
         <item>@string/menu_mapStyle_terrain</item>
         <item>@string/menu_mapStyle_hybrid</item>
     </string-array>
+
     <string-array name="mapStyleValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
     </string-array>
+
     <string-array name="zoomThresholdArray">
         <item>@string/menu_zoomThreshold_low</item>
         <item>@string/menu_zoomThreshold_mid</item>
         <item>@string/menu_zoomThreshold_high</item>
     </string-array>
+
     <string-array name="zoomThresholdValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <array name="iconArray">
+        <item>@drawable/ic_shopping_cart_black_24dp</item>
+        <item>@drawable/ic_list_black_24dp</item>
+        <item>@drawable/ic_compare_arrows_black_24dp</item>
+        <item>@drawable/ic_info_black_24dp</item>
+    </array>
+
+    <string-array name="iconNameArray">
+        <item>@string/expenditure_icon</item>
+        <item>@string/companies_icon</item>
+        <item>@string/combine_icon</item>
+        <item>@string/info_icon</item>
+    </string-array>
+
 </resources>

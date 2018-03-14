@@ -45,7 +45,6 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.component.AIComparsionActivity;
 import it.unive.dais.cevid.aac.component.MainActivity;
 import it.unive.dais.cevid.aac.component.SettingsActivity;
-import it.unive.dais.cevid.aac.component.AISearchActivity;
 import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
@@ -409,8 +408,8 @@ public class MapFragment extends BaseFragment
 
     private String manageMarkerDescription(Marker marker) {
         if (selectedMarkers.contains(marker) && selectedMarkers.size() > 1)
-            return "Clicca per rimuovere dalla selezione";
-        return "Clicca per maggiori informazioni";
+            return getContext().getResources().getString(R.string.ai_popup_remove);;
+        return getContext().getResources().getString(R.string.ai_popup_info);
 
     }
 
