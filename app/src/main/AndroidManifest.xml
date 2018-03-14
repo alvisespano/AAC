@@ -68,14 +68,22 @@
                 android:value=".component.AISearchActivity" />
         </activity>
         <activity
+            android:name=".component.AIExpenditureActivity"
+            android:parentActivityName=".component.AISearchActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".component.AISearchActivity" />
+        </activity>
+        <activity
             android:name=".component.AICompanyDetailsActivity"
             android:parentActivityName=".component.AIDetailsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.AIDetailsActivity" />
         </activity>
+        <activity android:name=".component.AIComparsionActivity"></activity>
         <activity
-            android:name=".component.AIExpenditureActivity"
+            android:name=".component.AIInfoActivity"
             android:parentActivityName=".component.AISearchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -116,7 +124,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".component.MainActivity" />
         </activity>
-        <activity android:name=".component.AIComparsionActivity"></activity>
     </application>
 
 </manifest>

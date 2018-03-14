@@ -74,4 +74,8 @@
     <string name="ai_popup_remove">Clicca per rimuovere dalla selezione</string>
     <string name="info_icon">Info</string>
     <string name="compare_button">Confronta</string>
+    <string name="ai_siope_code">Codice Siope Ente: </string>
+    <string name="ai_description">Descrizione: </string>
+    <string name="ai_capite">Capite: </string>
+    <string name="ai_coordinates">Coordinate: </string>
 </resources>

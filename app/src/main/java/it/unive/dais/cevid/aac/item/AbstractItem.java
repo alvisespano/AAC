@@ -66,5 +66,4 @@ public abstract class AbstractItem implements MapItem, Serializable {
         return this.title;
     }
 
-
 }

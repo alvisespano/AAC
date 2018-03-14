@@ -13,10 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -226,6 +224,12 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
         startActivity(intent);
     }
 
+    private void manageInfo() {
+        Intent intent = new Intent(AISearchActivity.this, AIInfoActivity.class);
+        intent.putExtra(AIInfoActivity.ABSTRACT_ITEM, abstractItem);
+        startActivity(intent);
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String nameClicked = iconNameArray[position];
@@ -238,6 +242,12 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
         }
         else if(nameClicked.equals(getString(R.string.companies_icon))) {
             manageCompanies();
+        }
+        else if (nameClicked.equals(getString(R.string.info_icon))){
+            manageInfo();
+        }
+        else {
+            throw new UnsupportedOperationException();
         }
     }
 
