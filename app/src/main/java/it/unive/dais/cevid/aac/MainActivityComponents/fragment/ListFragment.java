@@ -1,7 +1,6 @@
-package it.unive.dais.cevid.aac.fragment;
+package it.unive.dais.cevid.aac.MainActivityComponents.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.component.MainActivity;
+import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
 /**

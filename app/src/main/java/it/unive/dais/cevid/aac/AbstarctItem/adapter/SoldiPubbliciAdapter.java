@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.adapter;
+package it.unive.dais.cevid.aac.AbstarctItem.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

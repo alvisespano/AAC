@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.fragment;
+package it.unive.dais.cevid.aac.MainActivityComponents.fragment;
 
 
 import android.Manifest;
@@ -22,8 +22,8 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.model.LatLng;
 
-import it.unive.dais.cevid.aac.component.MainActivity;
-import it.unive.dais.cevid.aac.Suppliers.SupplierSearchActivity;
+import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
+import it.unive.dais.cevid.aac.Suppliers.Activities.SupplierSearchActivity;
 import it.unive.dais.cevid.aac.AbstarctItem.AISearchActivity;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 

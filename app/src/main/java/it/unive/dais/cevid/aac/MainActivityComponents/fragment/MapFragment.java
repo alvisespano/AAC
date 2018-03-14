@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.fragment;
+package it.unive.dais.cevid.aac.MainActivityComponents.fragment;
 
 
 import android.Manifest;
@@ -42,12 +42,12 @@ import java.util.List;
 import java.util.Set;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.AbstarctItem.AIComparsionActivity;
-import it.unive.dais.cevid.aac.component.MainActivity;
-import it.unive.dais.cevid.aac.component.SettingsActivity;
+import it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Activities.AIComparsionActivity;
+import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
+import it.unive.dais.cevid.aac.MenuActivities.SettingsActivity;
 import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
-import it.unive.dais.cevid.aac.item.SupplierItem;
+import it.unive.dais.cevid.aac.Suppliers.util.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
