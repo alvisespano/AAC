@@ -15,20 +15,26 @@ import java.util.List;
 public abstract class AppCompatActivityWithProgressBar extends AppCompatActivity{
     protected ProgressBar progressBar;
     private List<AsyncTaskWithProgressBar> tasks = new ArrayList<>();
+
     public abstract void setProgressBar();
+
     public ProgressBar getProgressBar(){
         return progressBar;
     };
+
     public void requestProgressBar(AsyncTaskWithProgressBar requester){
         this.tasks.add(requester);
+
         if(this.tasks.size() > 0){
             progressBar.setVisibility(View.VISIBLE);
         }
     }
+
     public void releaseProgressBar(AsyncTaskWithProgressBar requester){
         this.tasks.remove(requester);
+
         if( (this.tasks.size() == 0)){
             this.progressBar.setVisibility(View.GONE);
         }
-    };
+    }
 }

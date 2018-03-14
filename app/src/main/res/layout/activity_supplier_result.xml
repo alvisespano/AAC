@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="it.unive.dais.cevid.aac.component.SupplierResultActivity">
+    tools:context=".Suppliers.Activities.SupplierResultActivity">
     <ProgressBar
         android:id="@+id/progress_bar_supplier_result"
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
