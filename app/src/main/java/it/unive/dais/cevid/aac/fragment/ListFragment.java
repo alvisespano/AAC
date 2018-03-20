@@ -19,8 +19,10 @@ import java.util.List;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.component.MainActivity;
 import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
+import it.unive.dais.cevid.aac.component.PieChartActivity;
 import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
 import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
+import it.unive.dais.cevid.aac.item.HealthItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
@@ -55,6 +57,7 @@ public class ListFragment extends BaseFragment implements
     public void redraw(MainActivity.Mode mode) {
         assert parentActivity != null;
         Collection<? extends MapItem> c = null;
+
         switch (mode) {
             case SUPPLIER:
                 c = parentActivity.getSupplierItems();
@@ -64,6 +67,9 @@ public class ListFragment extends BaseFragment implements
                 break;
             case MUNICIPALITY:
                 c = parentActivity.getMunicipalityItems();
+                break;
+            case HEALTH:
+                c = parentActivity.getHealthItems();
                 break;
         }
         List<MapItem> r = new ArrayList<>();
@@ -98,6 +104,11 @@ public class ListFragment extends BaseFragment implements
             case SUPPLIER:
                 intent = new Intent(getContext(), SupplierSearchActivity.class);
                 intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, item);
+                startActivity(intent);
+                break;
+            case HEALTH:
+                intent = new Intent(getContext(), PieChartActivity.class);
+                //intent.putExtra(PieChartActivity.Health, item);
                 startActivity(intent);
                 break;
             default:

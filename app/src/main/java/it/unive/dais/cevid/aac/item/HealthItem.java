@@ -80,7 +80,7 @@ public class HealthItem implements MapItem, Serializable {
 
     @Override
     public String getTitle() throws Exception {
-        return name;
+        return id;
     }
 
     @Override
@@ -94,6 +94,10 @@ public class HealthItem implements MapItem, Serializable {
 
     public void setCapoluogo(String capoluogo) {
         this.capoluogo = capoluogo;
+    }
+
+    public String toString(){
+        return this.getName();
     }
 
 
