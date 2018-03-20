@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity
     //setting up the Health and Regions, integration of ST
     private void setupHealthItems() {
 
-        HealthParser p = new HealthParser(progressBarManager) {
+        HealthParser p = new HealthParser(progressBarManager,getBaseContext()) {
 
             @NonNull
             @Override
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity
                 for (Data x : r) {
                     HealthItem h = new HealthItem(x);
                     healthItems.add(h);
-                    Log.d("Angelko", String.valueOf(h.getLatitude()+" "+h.getLongitude()));
+                    //Log.d("Angelko", String.valueOf(h.getLatitude()+" "+h.getLongitude()));
                 }
                 return r;
             }

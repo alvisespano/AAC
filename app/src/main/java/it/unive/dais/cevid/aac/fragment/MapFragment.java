@@ -5,6 +5,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,13 +34,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.component.ConfrontoActivity;
@@ -52,7 +57,13 @@ import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
+import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
+import it.unive.dais.cevid.datadroid.lib.parser.ParserException;
+import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
+import it.unive.dais.cevid.aac.item.IncassiSanita;
+import it.unive.dais.cevid.aac.item.HealthItem;
+import it.unive.dais.cevid.aac.component.PieChartActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +76,7 @@ public class MapFragment extends BaseFragment
         GoogleMap.OnMarkerClickListener,
         BottomNavigationView.OnNavigationItemSelectedListener {
 
+    private List<IncassiSanita.DataRegione> incassiSanitaData = null;
 
     private static final String TAG = "MapFragment";
     /**
@@ -209,6 +221,30 @@ public class MapFragment extends BaseFragment
                     } else if (markerTag instanceof SupplierItem) {
                         Intent intent = new Intent(getContext(), SupplierSearchActivity.class);
                         intent.putExtra(SupplierSearchActivity.SUPPLIER_ITEM, markerTag);
+                        startActivity(intent);
+                    }
+                    else if (markerTag instanceof HealthItem) {
+                        try {
+                            ProgressBarManager progman = null;
+                            InputStream incassiStream = getContext().getResources().openRawResource(R.raw.incassi_sanita);
+                            CsvRowParser pIncassi = new CsvRowParser(new InputStreamReader(incassiStream), true, ",", progman);
+                            List<CsvRowParser.Row> rows = pIncassi.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
+                            List<IncassiSanita.DataRegione> l = new ArrayList<>();
+                            for (final CsvRowParser.Row r : rows) {
+                                l.add(new IncassiSanita.DataRegione(r.get("Id"), r.get("Regione"), r.get("Titolo"), r.get("Codice"), r.get("Descrizione"), Float.parseFloat(r.get("Importo"))));
+                            }
+                            incassiSanitaData = l;
+                        }
+                     catch (InterruptedException | ExecutionException | ParserException e) {
+                        e.printStackTrace();
+                    }
+
+                        IncassiSanita incassiSanita = new IncassiSanita(incassiSanitaData);
+                        Gson gson = new Gson();
+                        List<IncassiSanita.DataRegione> regionData = incassiSanita.getDataByIdRegione(marker.getTitle());
+                        Intent intent = new Intent(getContext(), PieChartActivity.class);
+                        intent.putExtra("regionId", marker.getTitle());
+                        intent.putExtra("regionData", gson.toJson(regionData));
                         startActivity(intent);
                     }
                 }

@@ -37,6 +37,8 @@ public class HealthItem implements MapItem, Serializable {
         this.capoluogo = data.capoluogo;
     }
 
+    public HealthItem(){}
+
 
     public String getId() {
         return id;
@@ -93,6 +95,8 @@ public class HealthItem implements MapItem, Serializable {
     public void setCapoluogo(String capoluogo) {
         this.capoluogo = capoluogo;
     }
+
+
 
 
 }
