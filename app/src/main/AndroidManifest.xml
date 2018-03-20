@@ -48,19 +48,19 @@
             android:clickable="true"
             android:focusableInTouchMode="true"
             android:launchMode="singleTop"
-            android:windowSoftInputMode="adjustResize">
-            <!--android:parentActivityName=".MainActivityComponents.MainActivity"-->
-            <!--<meta-data
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".MainActivityComponents.MainActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivityComponents.MainActivity" />-->
+                android:value=".MainActivityComponents.MainActivity" />
         </activity>
 
         <activity
-            android:name=".AbstarctItemSearch.Expenditure.Activities.AIExpenditureActivity">
-            <!--android:parentActivityName=".AbstarctItemSearch.AISearchActivity">-->
-            <!--<meta-data
+            android:name=".AbstarctItemSearch.Expenditure.Activities.AIExpenditureActivity"
+            android:parentActivityName=".AbstarctItemSearch.AISearchActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AbstarctItemSearch.AISearchActivity" />-->
+                android:value=".AbstarctItemSearch.AISearchActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -69,77 +69,79 @@
 
         <activity android:name=".AbstarctItemSearch.Expenditure.Activities.AIExpenditureDetailsActivity"></activity>
 
-        <activity android:name=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity">
+        <activity
+            android:name=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity"
+            android:parentActivityName=".AbstarctItemSearch.AISearchActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".AbstarctItemSearch.AISearchActivity" />
         </activity>
 
         <activity
-            android:name=".AbstarctItemSearch.CompaniesTenders.Activities.AICompanyDetailsActivity">
-            <!--android:parentActivityName=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity">-->
-            <!--<meta-data
+            android:name=".AbstarctItemSearch.CompaniesTenders.Activities.AICompanyDetailsActivity"
+            android:parentActivityName=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity" />-->
+                android:value=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity" />
         </activity>
 
         <activity android:name=".AbstarctItemSearch.Comparsion.Activities.AIComparsionActivity" />
 
         <activity
-            android:name=".AbstarctItemSearch.Comparsion.Activities.AIComparsionResultActivity">
-            <!--android:parentActivityName=".AbstarctItemSearch.Comparsion.Activities.AIComparsionActivity">-->
-            <!--<meta-data
+            android:name=".AbstarctItemSearch.Comparsion.Activities.AIComparsionResultActivity"
+            android:parentActivityName=".AbstarctItemSearch.Comparsion.Activities.AIComparsionActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AbstarctItemSearch.Comparsion.Activities.AIComparsionActivity" />-->
+                android:value=".AbstarctItemSearch.Comparsion.Activities.AIComparsionActivity" />
         </activity>
 
         <activity
-            android:name=".AbstarctItemSearch.AIInfoActivity">
-            <!--android:parentActivityName=".AbstarctItemSearch.AISearchActivity">-->
-            <!--<meta-data
+            android:name=".AbstarctItemSearch.AIInfoActivity"
+            android:parentActivityName=".AbstarctItemSearch.AISearchActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".AbstarctItemSearch.AISearchActivity" />-->
+                android:value=".AbstarctItemSearch.AISearchActivity" />
         </activity>
 
         <activity
-            android:name=".Suppliers.Activities.SupplierSearchActivity">
-            <!--android:parentActivityName=".MainActivityComponents.MainActivity">-->
-            <!--<meta-data
+            android:name=".Suppliers.Activities.SupplierSearchActivity"
+            android:parentActivityName=".MainActivityComponents.MainActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivityComponents.MainActivity" />-->
+                android:value=".MainActivityComponents.MainActivity" />
         </activity>
 
         <activity
-            android:name=".Suppliers.Activities.SupplierResultActivity">
-            <!--android:parentActivityName=".Suppliers.Activities.SupplierSearchActivity">-->
-            <!--<meta-data
+            android:name=".Suppliers.Activities.SupplierResultActivity"
+            android:parentActivityName=".Suppliers.Activities.SupplierSearchActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Suppliers.Activities.SupplierSearchActivity" />-->
+                android:value=".Suppliers.Activities.SupplierSearchActivity" />
         </activity>
 
         <activity
-            android:name=".Suppliers.Activities.SupplierDetailsActivity">
-            <!--android:parentActivityName=".Suppliers.Activities.SupplierResultActivity">-->
-            <!--<meta-data
+            android:name=".Suppliers.Activities.SupplierDetailsActivity"
+            android:parentActivityName=".Suppliers.Activities.SupplierResultActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Suppliers.Activities.SupplierResultActivity" />-->
+                android:value=".Suppliers.Activities.SupplierResultActivity" />
         </activity>
 
         <activity
-            android:name=".MenuActivities.SettingsActivity">
-            <!--android:parentActivityName=".MainActivityComponents.MainActivity">-->
+            android:name=".MenuActivities.SettingsActivity"
+            android:parentActivityName=".MainActivityComponents.MainActivity">
 
-            <!--<meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivityComponents.MainActivity" />-->
+                android:value=".MainActivityComponents.MainActivity" />
         </activity>
 
         <activity
-            android:name=".MenuActivities.AboutActivity">
-            <!--android:parentActivityName=".MainActivityComponents.MainActivity">-->
-            <!--<meta-data
+            android:name=".MenuActivities.AboutActivity"
+            android:parentActivityName=".MainActivityComponents.MainActivity">
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivityComponents.MainActivity" />-->
+                android:value=".MainActivityComponents.MainActivity" />
         </activity>
 
     </application>

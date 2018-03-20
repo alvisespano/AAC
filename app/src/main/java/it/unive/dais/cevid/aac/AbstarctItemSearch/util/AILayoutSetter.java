@@ -8,10 +8,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity;
 import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils.RecyclerItemClickListener;
 import it.unive.dais.cevid.aac.AbstarctItemSearch.Expenditure.Activities.AIExpenditureDetailsActivity;
 import it.unive.dais.cevid.aac.R;

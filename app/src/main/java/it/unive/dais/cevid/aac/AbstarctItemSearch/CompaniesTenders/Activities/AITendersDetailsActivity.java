@@ -1,6 +1,7 @@
 package it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Activities;
 
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -251,5 +252,11 @@ public class AITendersDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(AITendersDetailsActivity.this, AICompanyDetailsActivity.class);
         AICompanyDetailsActivity.setItems(company.tenders);
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        NavUtils.navigateUpFromSameTask(this);
+        super.onBackPressed();
     }
 }
