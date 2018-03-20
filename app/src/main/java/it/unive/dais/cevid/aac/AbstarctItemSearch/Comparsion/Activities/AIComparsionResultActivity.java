@@ -210,7 +210,6 @@ public class AIComparsionResultActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //NavUtils.navigateUpFromSameTask(this);
         finish();
     }
 }

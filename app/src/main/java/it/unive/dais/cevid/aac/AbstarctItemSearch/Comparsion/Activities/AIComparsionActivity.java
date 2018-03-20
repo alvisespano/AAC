@@ -64,7 +64,7 @@ public class AIComparsionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ai_comparsion);
 
         mainView = (LinearLayout) findViewById(R.id.comparsion_activity);
-        mainView.requestFocus();
+        //mainView.requestFocus();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -84,28 +84,11 @@ public class AIComparsionActivity extends AppCompatActivity {
 
         manageCombineButton();
 
-        mainView.setOnFocusChangeListener((v, hasFocus) -> {
+        /*mainView.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 hideKeyboard(v);
             }
-        });
-    }
-
-    private void setItemsField() {
-        if (getIntent().getStringExtra(TYPE).equals("UNI")) {
-            MainActivity.setUniversityCapite();
-            if (singleElement) {
-                abstractItem.setCapite(MainActivity.getUniversityCapiteMap().get(abstractItem.getId()));
-            } else {
-                for (AbstractItem abstractItem : abstractItems) {
-                    abstractItem.setCapite(MainActivity.getUniversityCapiteMap().get(abstractItem.getId()));
-                }
-            }
-        }
-
-        for (AbstractItem abstractItem :abstractItems) {
-            abstractItem.setUrls(MainActivity.getCodiceEnteAppaltiURLMap().get(abstractItem.getId()));
-        }
+        });*/
     }
 
     @Override
@@ -127,8 +110,6 @@ public class AIComparsionActivity extends AppCompatActivity {
                 Serializable l = getIntent().getSerializableExtra(ABSTRACT_ITEMS);
                 abstractItems = (List<AbstractItem>) l;
             }
-            if (getIntent().hasExtra(TYPE))
-                setItemsField();
         }
         else {
             singleElement = savedInstanceState.getBoolean(SINGLE_ELEMENT);

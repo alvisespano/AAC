@@ -2,6 +2,7 @@ package it.unive.dais.cevid.aac.AbstarctItemSearch.Expenditure.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import it.unive.dais.cevid.aac.R;
@@ -14,16 +15,23 @@ public class AIExpenditureDetailsActivity extends AppCompatActivity {
     public static final String YEAR = "YEAR";
     private SoldipubbliciParser.Data expenditure;
     private String year;
+    private int capite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ai_expenditure_details);
 
-        int capite = getIntent().getIntExtra(CAPITE, 1);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        capite = getIntent().getIntExtra(CAPITE, 1);
         year = getIntent().getStringExtra(YEAR);
         expenditure = (SoldipubbliciParser.Data) getIntent().getSerializableExtra(DATA);
 
+        setTextViews();
+    }
+
+    private void setTextViews() {
         ((TextView)findViewById(R.id.ai_exp_details_title)).setText(expenditure.descrizione_ente);
         ((TextView)findViewById(R.id.exp_siope_code)).setText(expenditure.codice_siope);
         ((TextView)findViewById(R.id.exp_desc)).setText(expenditure.descrizione_codice);
@@ -41,5 +49,21 @@ public class AIExpenditureDetailsActivity extends AppCompatActivity {
             case "2013": return expenditure.importo_2013;
             default: return null;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

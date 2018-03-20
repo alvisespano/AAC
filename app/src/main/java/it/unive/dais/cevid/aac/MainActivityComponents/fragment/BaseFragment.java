@@ -22,6 +22,8 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Collections;
+
 import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
 import it.unive.dais.cevid.aac.Suppliers.Activities.SupplierSearchActivity;
 import it.unive.dais.cevid.aac.AbstarctItemSearch.AISearchActivity;
@@ -114,7 +116,18 @@ public abstract  class BaseFragment extends Fragment {
     protected void manageAICase(MapItem markerTag) {
         Intent intent = new Intent(getContext(), AISearchActivity.class);
         intent.putExtra(AISearchActivity.ABSTRACT_ITEM, markerTag);
-        intent.putExtra(AISearchActivity.TYPE, ((AbstractItem) markerTag).getCodiceComparto());
+
+        if (MainActivity.getUniversityCapiteMap() == Collections.EMPTY_MAP) {
+            MainActivity.setUpTendersLink();
+            MainActivity.setUpUniversityCapite();
+        }
+
+        ((AbstractItem) markerTag).setUrls(MainActivity.getCodiceEnteAppaltiURLMap().get(((AbstractItem) markerTag).getId()));
+
+        if (markerTag instanceof UniversityItem) {
+            ((UniversityItem) markerTag).setCapite(MainActivity.getUniversityCapiteMap().get(((UniversityItem) markerTag).getId()));
+        }
+
         startActivity(intent);
     }
 

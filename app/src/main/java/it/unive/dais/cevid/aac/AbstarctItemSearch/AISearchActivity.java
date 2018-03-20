@@ -43,7 +43,6 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
     private static final String TAG = "AISearchActivity";
 
     public static final String ABSTRACT_ITEM = "UNI";
-    public static final String TYPE = "TYPE";
     private static final String BUNDLE_LIST = "LIST";
     private static final int FISCAL_CODE_LENGTH = 11;
 
@@ -108,20 +107,10 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
             Serializable si = getIntent().getSerializableExtra(ABSTRACT_ITEM);
             abstractItem = (AbstractItem) si;
 
-            setItemField();
-
         }else {
             // ricrea l'activity deserializzando alcuni dati dal bundle
             abstractItem = (AbstractItem) savedInstanceState.getSerializable(ABSTRACT_ITEM);
         }
-    }
-
-    private void setItemField() {
-        if (getIntent().getStringExtra(TYPE).equals("UNI")) {
-            MainActivity.setUniversityCapite();
-            abstractItem.setCapite(MainActivity.getUniversityCapiteMap().get(abstractItem.getId()));
-        }
-        abstractItem.setUrls(MainActivity.getCodiceEnteAppaltiURLMap().get(abstractItem.getId()));
     }
 
     private void setUpLayout() {

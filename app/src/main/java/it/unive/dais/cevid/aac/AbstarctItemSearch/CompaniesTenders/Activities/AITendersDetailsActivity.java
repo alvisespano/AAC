@@ -156,6 +156,8 @@ public class AITendersDetailsActivity extends AppCompatActivity {
                 }
 
                 return true;
+            case android.R.id.home:
+                finish();
 
             default:
                 return super.onOptionsItemSelected(item);

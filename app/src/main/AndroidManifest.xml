@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AbstarctItemSearch.Expenditure.Activities.AIExpenditureDetailsActivity"></activity>
+        <activity android:name=".AbstarctItemSearch.Expenditure.Activities.AIExpenditureDetailsActivity" />
 
         <activity
             android:name=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity"

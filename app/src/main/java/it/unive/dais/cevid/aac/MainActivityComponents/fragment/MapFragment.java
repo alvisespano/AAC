@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -383,7 +384,6 @@ public class MapFragment extends BaseFragment
     }
 
     public <I extends MapItem> void putMarkers(@NonNull Collection<I> c, float hue) throws Exception {
-        //denominazioneCodiceEnte = new HashMap<>();
         for (I i : c) {
             putMarker(hue, i);
         }
@@ -428,17 +428,28 @@ public class MapFragment extends BaseFragment
     }
 
     private void confrontoMultiplo() {
-        Intent intent;
-
         List<AbstractItem> markerTags = new ArrayList<>();
 
+        if (MainActivity.getUniversityCapiteMap() == Collections.EMPTY_MAP) {
+            MainActivity.setUpTendersLink();
+            MainActivity.setUpUniversityCapite();
+        }
+
         for (Marker m : selectedMarkers) {
-            final MapItem markerTag = (MapItem) m.getTag();
+            MapItem markerTag = (MapItem) m.getTag();
             AbstractItem abstractItem = (AbstractItem) markerTag;
             markerTags.add(abstractItem);
         }
 
-        intent = new Intent(getContext(), AIComparsionActivity.class);
+        for (AbstractItem abstractItem : markerTags) {
+            abstractItem.setUrls(MainActivity.getCodiceEnteAppaltiURLMap().get(abstractItem.getId()));
+
+            if (abstractItem instanceof UniversityItem) {
+                abstractItem.setCapite(MainActivity.getUniversityCapiteMap().get(abstractItem.getId()));
+            }
+        }
+
+        Intent intent = new Intent(getContext(), AIComparsionActivity.class);
         intent.putExtra(AIComparsionActivity.SINGLE_ELEMENT, false);
         intent.putExtra(AIComparsionActivity.ABSTRACT_ITEMS, (Serializable) markerTags);
         intent.putExtra(AIComparsionActivity.TYPE, markerTags.get(0).getCodiceComparto());

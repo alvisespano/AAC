@@ -11,8 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
@@ -37,10 +39,14 @@ public class ListFragment extends BaseFragment implements
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_list, container, false);
+
         assert parentActivity != null;
+
         listView = (ListView) rootView.findViewById(R.id.fragment_list_view);
         listView.setOnItemClickListener(this);
+
         ((SwipeRefreshLayout) rootView.findViewById(R.id.refresh)).setOnRefreshListener(this);
+
         redraw(parentActivity.getCurrentMode());
         return rootView;
 

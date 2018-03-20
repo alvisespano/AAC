@@ -29,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,10 +67,10 @@ public class MainActivity extends AppCompatActivity
     private BottomNavigationView bottomNavigation;
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private ProgressBarManager progressBarManager;  // TODO: provare a mettere qui la findViewById e vedere se funziona
-    private static Map<String, List<URL>> codiceEnteAppaltiURLMap;
-    private static Map<String, Integer> universityCapiteMap;
+    private static Map<String, List<URL>> codiceEnteAppaltiURLMap = Collections.EMPTY_MAP;
+    private static Map<String, Integer> universityCapiteMap = Collections.EMPTY_MAP;
 
-    private TendersLinkParser tendersLinkParser;
+    private static TendersLinkParser tendersLinkParser;
     private static GraduatedParser graduatedParser;
     private static EnrolledParser enrolledParser1516;
     private static EnrolledParser enrolledParser1617;
@@ -94,8 +95,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
 
-        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main)});
-
+        //progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main)});
+        progressBarManager = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_main));
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
@@ -153,12 +154,6 @@ public class MainActivity extends AppCompatActivity
 
     private void setUpItems() {
         launchParsers();
-        try {
-            setUpTendersLink();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         setUpMunicipalityItems();
         setUpSupplierItems();
         setUpUniversityItems();
@@ -376,18 +371,18 @@ public class MainActivity extends AppCompatActivity
         return municipalityItems;
     }
 
-    private void setUpTendersLink() throws IOException {
+    public static void setUpTendersLink() {
         List<TendersLinkParser.Data> dataList;
 
         try {
             dataList = tendersLinkParser.getAsyncTask().get();
             setUpCodiceEnteAppaltiURLMap(dataList);
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (InterruptedException | ExecutionException | MalformedURLException e) {
             e.printStackTrace();
         }
     }
 
-    private void setUpCodiceEnteAppaltiURLMap(List<TendersLinkParser.Data> dataList) throws MalformedURLException {
+    private static void setUpCodiceEnteAppaltiURLMap(List<TendersLinkParser.Data> dataList) throws MalformedURLException {
         codiceEnteAppaltiURLMap = new HashMap<>();
 
         for (TendersLinkParser.Data d : dataList) {
@@ -424,7 +419,7 @@ public class MainActivity extends AppCompatActivity
         return graduatedMap;
     }
 
-    public static void setUniversityCapite() {
+    public static void setUpUniversityCapite() {
         Map<String, Integer> enrolledMap = parseEnrolled();
         Map<String, Integer> graduatedMap = parseGraduated();
 
@@ -487,6 +482,7 @@ public class MainActivity extends AppCompatActivity
     public static Map<String, List<URL>> getCodiceEnteAppaltiURLMap() {
         return codiceEnteAppaltiURLMap;
     }
+
 
     // test stuff
     //
