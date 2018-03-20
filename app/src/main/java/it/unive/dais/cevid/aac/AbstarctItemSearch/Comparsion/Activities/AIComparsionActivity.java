@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -125,7 +127,8 @@ public class AIComparsionActivity extends AppCompatActivity {
                 Serializable l = getIntent().getSerializableExtra(ABSTRACT_ITEMS);
                 abstractItems = (List<AbstractItem>) l;
             }
-            setItemsField();
+            if (getIntent().hasExtra(TYPE))
+                setItemsField();
         }
         else {
             singleElement = savedInstanceState.getBoolean(SINGLE_ELEMENT);
@@ -368,7 +371,7 @@ public class AIComparsionActivity extends AppCompatActivity {
 
             intent.putExtra(AIComparsionResultActivity.LIST_SOLDIPUBBLICI, (Serializable) expenditureFilteredList);
             intent.putExtra(AIComparsionResultActivity.LIST_APPALTI, (Serializable) tendersFilteredList);
-            intent.putExtra(AIComparsionResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
+            intent.putExtra(AIComparsionResultActivity.ABSTRACT_ITEM, abstractItem);
 
             startActivity(intent);
         }
@@ -432,14 +435,7 @@ public class AIComparsionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (singleElement) {
-                    Intent intent = new Intent(AIComparsionActivity.this, AISearchActivity.class);
-                    //intent.putExtra(AISearchActivity.ABSTRACT_ITEM, abstractItem);
-                    startActivity(intent);
-                }
-                else {
-                    startActivity(new Intent(AIComparsionActivity.this, MainActivity.class));
-                }
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

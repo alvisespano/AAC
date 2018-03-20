@@ -3,9 +3,11 @@ package it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
 import java.io.Serializable;
 import java.util.Collections;
@@ -64,10 +66,6 @@ public class AIComparsionResultActivity extends AppCompatActivity {
         }
         if (intent.hasExtra(ABSTRACT_ITEM)) {
             abstractItem = (AbstractItem) intent.getSerializableExtra(ABSTRACT_ITEM);
-        }
-
-        if (abstractItems.size() == 1) {
-            abstractItem = abstractItems.get(0);
         }
 
         if (mode == Mode.APPALTI || mode == Mode.SOLDI_PUBBLICI || mode == Mode.COMBINE) {
@@ -197,5 +195,22 @@ public class AIComparsionResultActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        //NavUtils.navigateUpFromSameTask(this);
+        finish();
     }
 }
