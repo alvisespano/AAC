@@ -24,7 +24,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
 import it.unive.dais.cevid.aac.Suppliers.Activities.SupplierSearchActivity;
-import it.unive.dais.cevid.aac.AbstarctItem.AISearchActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.AISearchActivity;
+import it.unive.dais.cevid.aac.item.AbstractItem;
+import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
 /**
@@ -112,6 +114,7 @@ public abstract  class BaseFragment extends Fragment {
     protected void manageAICase(MapItem markerTag) {
         Intent intent = new Intent(getContext(), AISearchActivity.class);
         intent.putExtra(AISearchActivity.ABSTRACT_ITEM, markerTag);
+        intent.putExtra(AISearchActivity.TYPE, ((AbstractItem) markerTag).getCodiceComparto());
         startActivity(intent);
     }
 

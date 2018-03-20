@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".AbstarctItem.CompaniesTenders.Activities.AIDetailsActivity">
+    tools:context=".AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity">
 
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/list_view_uni_details"
+                android:id="@+id/list_view_ai_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"

@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Activities;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,24 +13,29 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.unive.dais.cevid.aac.AbstarctItem.util.AILayoutSetter;
-import it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Fragment.FragmentAdapter;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.util.AILayoutSetter;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Fragment.FragmentAdapter;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
-public class AIResultActivity extends AppCompatActivity {
-    private static final String TAG = "AIResultActivity";
+public class AIComparsionResultActivity extends AppCompatActivity {
+    private static final String TAG = "AIComparsionResult";
 
     public static final String LIST_APPALTI = "LIST_APPALTI";
     public static final String LIST_SOLDIPUBBLICI = "LIST_SOLDIPUBBLICI";
     public static final String ABSTRACT_ITEMS = "ABSTRACT_ITEMS";
+    public static final String ABSTRACT_ITEM = "ABSTRACT_ITEM";
 
     private static Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap = Collections.EMPTY_MAP;
     private static Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap = Collections.EMPTY_MAP;
     private Map<Integer, String> positionCodiceEnteMap;
+    private Map<Integer, Integer> positionCapiteMap;
     private FragmentAdapter fragmentAdapter;
+
+    private static List<AbstractItem> abstractItems;
+    private AbstractItem abstractItem;
 
     private enum Mode {
         APPALTI,
@@ -53,8 +58,20 @@ public class AIResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Mode mode = Mode.ofIntent(intent);
 
+        if (intent.hasExtra(ABSTRACT_ITEMS)) {
+            Serializable sl = intent.getSerializableExtra(ABSTRACT_ITEMS);
+            abstractItems = (List<AbstractItem>) sl;
+        }
+        if (intent.hasExtra(ABSTRACT_ITEM)) {
+            abstractItem = (AbstractItem) intent.getSerializableExtra(ABSTRACT_ITEM);
+        }
+
+        if (abstractItems.size() == 1) {
+            abstractItem = abstractItems.get(0);
+        }
+
         if (mode == Mode.APPALTI || mode == Mode.SOLDI_PUBBLICI || mode == Mode.COMBINE) {
-            setContentView(R.layout.activity_ai_result);
+            setContentView(R.layout.activity_ai_comparsion_result);
         } else {
             setContentView(R.layout.fragment_layout);
         }
@@ -67,12 +84,12 @@ public class AIResultActivity extends AppCompatActivity {
                 break;
             }
             case SOLDI_PUBBLICI: {
-                aiLayoutSetter.manageSoldiPubbliciCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI), "2016");
+                aiLayoutSetter.manageSoldiPubbliciCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI), "2016", abstractItem.getCapite());
                 break;
             }
             case COMBINE: {
                 aiLayoutSetter.manageCombineCase((List<SoldipubbliciParser.Data>) intent.getSerializableExtra(LIST_SOLDIPUBBLICI),
-                        (List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI), "2016");
+                        (List<AppaltiParser.Data>) intent.getSerializableExtra(LIST_APPALTI), "2016", abstractItem.getCapite());
                 break;
             }
             case MULTIPLE_ELEMENTS: {
@@ -110,6 +127,14 @@ public class AIResultActivity extends AppCompatActivity {
         return positionCodiceEnteMap;
     }
 
+    public Map getPositionCapiteMap() {
+        return positionCapiteMap;
+    }
+
+    public static List<AbstractItem> getAbstractItems() {
+        return abstractItems;
+    }
+
     private void manageMultipleElements(Intent intent) {
         TabLayout tabLayout = setTabLayout(intent);
         setViewPager(tabLayout);
@@ -126,12 +151,16 @@ public class AIResultActivity extends AppCompatActivity {
             tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         positionCodiceEnteMap = new HashMap<>();
+        positionCapiteMap = new HashMap<>();
 
-        int i = 0;
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.leadboard)), 0);
+
+        int i = 1;
 
         for (AbstractItem abstractItem : abstractItems) {
             tabLayout.addTab(tabLayout.newTab().setText(abstractItem.getTitle()), i);
             positionCodiceEnteMap.put(i, abstractItem.getId());
+            positionCapiteMap.put(i, abstractItem.getCapite());
             i++;
         }
 

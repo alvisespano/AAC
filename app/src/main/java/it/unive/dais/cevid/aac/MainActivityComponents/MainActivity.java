@@ -33,7 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutionException;
 
+import it.unive.dais.cevid.aac.MainActivityComponents.parser.EnrolledParser;
+import it.unive.dais.cevid.aac.MainActivityComponents.parser.GraduatedParser;
 import it.unive.dais.cevid.aac.MenuActivities.AboutActivity;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.MenuActivities.SettingsActivity;
@@ -63,7 +66,13 @@ public class MainActivity extends AppCompatActivity
     private BottomNavigationView bottomNavigation;
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private ProgressBarManager progressBarManager;  // TODO: provare a mettere qui la findViewById e vedere se funziona
-    private Map<String, List<URL>> codiceEnteAppaltiURLMap;
+    private static Map<String, List<URL>> codiceEnteAppaltiURLMap;
+    private static Map<String, Integer> universityCapiteMap;
+
+    private TendersLinkParser tendersLinkParser;
+    private static GraduatedParser graduatedParser;
+    private static EnrolledParser enrolledParser1516;
+    private static EnrolledParser enrolledParser1617;
 
     public enum Mode {
         UNIVERSITY,
@@ -81,14 +90,38 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
-        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
+
+        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main)});
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
 
         setUpItems();
+    }
+
+    private void launchParsers() {
+        InputStreamReader tendersReader = new InputStreamReader(getResources().openRawResource(R.raw.tenders));
+        tendersLinkParser = new TendersLinkParser(tendersReader, true, ",", progressBarManager);
+        tendersLinkParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        InputStreamReader graduatedReader = new InputStreamReader(getResources().openRawResource(R.raw.laureati_16));
+        graduatedParser = new GraduatedParser(graduatedReader, true, ";", progressBarManager);
+        graduatedParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        enrolledParser1516 = launchEnrolledParser(R.raw.iscritti_15_16);
+        enrolledParser1617 = launchEnrolledParser(R.raw.iscritti_16_17);
+
+    }
+
+    private EnrolledParser launchEnrolledParser(int resource) {
+        InputStreamReader enrolledReader = new InputStreamReader(getResources().openRawResource(resource));
+        EnrolledParser enrolledParser = new EnrolledParser(enrolledReader, true, ";", progressBarManager);
+        enrolledParser.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        return enrolledParser;
     }
 
     private void setContentFragment(int container, @NonNull BaseFragment fragment) {
@@ -119,6 +152,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpItems() {
+        launchParsers();
         try {
             setUpTendersLink();
         } catch (IOException e) {
@@ -150,21 +184,27 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpUniversityItems() {
+
+        //setUniversityCapite();
+
         //add Ca Foscari
-        universityItems.add(new UniversityItem("000704968000000", "Università Ca' Foscari", "Università degli studi di Venezia", "1", 45.437576, 12.3289554, codiceEnteAppaltiURLMap.get("000704968000000")));
+        universityItems.add(new UniversityItem("000704968000000", "Università Ca' Foscari",
+                "Università degli studi di Venezia", 45.437576, 12.3289554));
 
         //add Padova
-        universityItems.add(new UniversityItem("000058546000000", "Università di Padova", "Università degli studi di Padova", "1", 45.406766, 11.8774462, codiceEnteAppaltiURLMap.get("000058546000000")));
+        universityItems.add(new UniversityItem("000058546000000", "Università di Padova",
+                "Università degli studi di Padova", 45.406766, 11.8774462));
 
         //add Trento
-        universityItems.add(new UniversityItem("000067046000000", "Università di Trento", "Università degli studi di Trento", "1", 46.0694828, 11.1188738, codiceEnteAppaltiURLMap.get("000067046000000")));
+        universityItems.add(new UniversityItem("000067046000000", "Università di Trento",
+                "Università degli studi di Trento", 46.0694828, 11.1188738));
 
     }
 
 
     private void setUpMunicipalityItems() {
         //add Roma
-        municipalityItems.add(new MunicipalityItem("800000047", "Roma", "COMUNE DI ROMA", "1", 41.9102411, 12.3955688, codiceEnteAppaltiURLMap.get("800000047")));
+        municipalityItems.add(new MunicipalityItem("800000047", "Roma", "COMUNE DI ROMA", 2873494, 41.9102411, 12.3955688));
     }
 
 
@@ -337,10 +377,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpTendersLink() throws IOException {
-        InputStreamReader reader = new InputStreamReader(getResources().openRawResource(R.raw.tenders));
-        TendersLinkParser tendersLinkParser = new TendersLinkParser(reader, true, ",", progressBarManager);
-        List<TendersLinkParser.Data> dataList = tendersLinkParser.parse();
-        setUpCodiceEnteAppaltiURLMap(dataList);
+        List<TendersLinkParser.Data> dataList;
+
+        try {
+            dataList = tendersLinkParser.getAsyncTask().get();
+            setUpCodiceEnteAppaltiURLMap(dataList);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setUpCodiceEnteAppaltiURLMap(List<TendersLinkParser.Data> dataList) throws MalformedURLException {
@@ -356,6 +400,92 @@ public class MainActivity extends AppCompatActivity
                 codiceEnteAppaltiURLMap.put(d.codiceEnte, urls);
             }
         }
+    }
+
+    private static Map<String, Integer> parseGraduated() {
+        Map<String, Integer> graduatedMap = new HashMap<>();
+
+        try {
+            for (GraduatedParser.Data gd : graduatedParser.getAsyncTask().get()) {
+                if (gd.nome_ateneo.contains("Foscari")) {
+                    graduatedMap.put("000704968000000", Integer.parseInt(gd.laureati));
+                }
+                if (gd.nome_ateneo.contains("Padova")) {
+                    graduatedMap.put("000058546000000", Integer.parseInt(gd.laureati));
+                }
+                if (gd.nome_ateneo.contains("Trento")) {
+                    graduatedMap.put("000067046000000", Integer.parseInt(gd.laureati));
+                }
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return graduatedMap;
+    }
+
+    public static void setUniversityCapite() {
+        Map<String, Integer> enrolledMap = parseEnrolled();
+        Map<String, Integer> graduatedMap = parseGraduated();
+
+        universityCapiteMap = new HashMap<>();
+
+        for (String codiceEnte : enrolledMap.keySet()) {
+            universityCapiteMap.put(codiceEnte, enrolledMap.get(codiceEnte) - graduatedMap.get(codiceEnte));
+        }
+    }
+
+
+    private static Map<String, Integer> parseEnrolled() {
+        Map<String, Integer> enrolledMap1516 = parseEnrolled(enrolledParser1516);
+        Map<String, Integer> enrolledMap1617 = parseEnrolled(enrolledParser1617);
+
+        Map<String, Integer> enrolledMap = new HashMap<>();
+
+        for (String codiceEnte : enrolledMap1516.keySet()) {
+            enrolledMap.put(codiceEnte, enrolledMap1516.get(codiceEnte) + enrolledMap1617.get(codiceEnte));
+        }
+
+        return enrolledMap;
+    }
+
+    private static Map<String, Integer> parseEnrolled(EnrolledParser enrolledParser) {
+        Map<String, Integer> enrolledMap = new HashMap<>();
+
+        try {
+            for (EnrolledParser.Data ed : enrolledParser.getAsyncTask().get()) {
+                if (ed.nome_ateneo.contains("Foscari")) {
+                    if (!enrolledMap.containsKey("000704968000000"))
+                        enrolledMap.put("000704968000000", Integer.parseInt(ed.numero_studenti));
+                    else
+                        enrolledMap.put("000704968000000", enrolledMap.get("000704968000000") + Integer.parseInt(ed.numero_studenti));
+                }
+                if (ed.nome_ateneo.contains("Padova")) {
+                    if (!enrolledMap.containsKey("000058546000000"))
+                        enrolledMap.put("000058546000000", Integer.parseInt(ed.numero_studenti));
+                    else
+                        enrolledMap.put("000058546000000", enrolledMap.get("000058546000000") + Integer.parseInt(ed.numero_studenti));
+                }
+                if (ed.nome_ateneo.contains("Trento")) {
+                    if (!enrolledMap.containsKey("000067046000000"))
+                        enrolledMap.put("000067046000000", Integer.parseInt(ed.numero_studenti));
+                    else
+                        enrolledMap.put("000067046000000", enrolledMap.get("000067046000000") + Integer.parseInt(ed.numero_studenti));
+                }
+            }
+
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return enrolledMap;
+    }
+
+    public static Map<String, Integer> getUniversityCapiteMap() {
+        return universityCapiteMap;
+    }
+
+    public static Map<String, List<URL>> getCodiceEnteAppaltiURLMap() {
+        return codiceEnteAppaltiURLMap;
     }
 
     // test stuff
@@ -377,7 +507,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void testProgressBarManager() {
-        ProgressBarManager m = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
+        ProgressBarManager m = new ProgressBarManager(this, (ProgressBar) findViewById(R.id.progress_bar_main));
 
         runOnUiThread(() -> {
             Handle<ProgressBar> h1 = m.acquire();

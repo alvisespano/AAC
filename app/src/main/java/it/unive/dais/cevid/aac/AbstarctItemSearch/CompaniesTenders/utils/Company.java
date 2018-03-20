@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;

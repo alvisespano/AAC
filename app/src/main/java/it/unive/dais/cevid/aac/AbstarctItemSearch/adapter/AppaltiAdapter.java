@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.adapter;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;
@@ -24,10 +24,6 @@ public class AppaltiAdapter extends RecyclerView.Adapter<AppaltiAdapter.AppaltoI
     public AppaltiAdapter(List<AppaltiParser.Data> dataList, Double avg) {
         this.dataList = dataList;
         this.avg = avg;
-    }
-
-    public AppaltiAdapter(List<AppaltiParser.Data> dataList) {
-        this(dataList, null);
     }
 
     @Override
@@ -65,7 +61,7 @@ public class AppaltiAdapter extends RecyclerView.Adapter<AppaltiAdapter.AppaltoI
 
         public void setImporto(String s) {
             double x = Double.parseDouble(s);
-            importo.setText(String.format("%s€", s));
+            importo.setText(String.format("%.2f€", x));
             if (avg != null)
                 importo.setBackgroundColor(x <= avg ? Color.GREEN : Color.RED);
         }

@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.Adapters;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils.Company;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils.Company;
 import it.unive.dais.cevid.aac.R;
 
 /**
@@ -71,8 +71,8 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.Item> {
 
         public Item(View itemView) {
             super(itemView);
-            this.name = (TextView) itemView.findViewById(R.id.company_name);
             this.iva = (TextView) itemView.findViewById(R.id.company_iva);
+            this.name = (TextView) itemView.findViewById(R.id.company_name);
             this.wins = (TextView) itemView.findViewById(R.id.company_wins);
         }
     }

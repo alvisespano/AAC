@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem;
+package it.unive.dais.cevid.aac.AbstarctItemSearch;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,13 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Activities.AIComparsionActivity;
-import it.unive.dais.cevid.aac.AbstarctItem.Expenditure.Activities.AIExpenditureActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Activities.AIComparsionActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.Expenditure.Activities.AIExpenditureActivity;
+import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.Activities.AIDetailsActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Activities.AITendersDetailsActivity;
 import it.unive.dais.cevid.aac.item.AbstractItem;
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils.Company;
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils.CompanyComparator;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils.Company;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils.CompanyComparator;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
@@ -41,6 +42,7 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
     private static final String TAG = "AISearchActivity";
 
     public static final String ABSTRACT_ITEM = "UNI";
+    public static final String TYPE = "TYPE";
     private static final String BUNDLE_LIST = "LIST";
     private static final int FISCAL_CODE_LENGTH = 11;
 
@@ -105,10 +107,20 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
             Serializable si = getIntent().getSerializableExtra(ABSTRACT_ITEM);
             abstractItem = (AbstractItem) si;
 
+            setItemField();
+
         }else {
             // ricrea l'activity deserializzando alcuni dati dal bundle
             abstractItem = (AbstractItem) savedInstanceState.getSerializable(ABSTRACT_ITEM);
         }
+    }
+
+    private void setItemField() {
+        if (getIntent().getStringExtra(TYPE).equals("UNI")) {
+            MainActivity.setUniversityCapite();
+            abstractItem.setCapite(MainActivity.getUniversityCapiteMap().get(abstractItem.getId()));
+        }
+        abstractItem.setUrls(MainActivity.getCodiceEnteAppaltiURLMap().get(abstractItem.getId()));
     }
 
     private void setUpLayout() {
@@ -151,7 +163,7 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
             values.sort(new CompanyComparator());
         }
 
-        AIDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
+        AITendersDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
     }
 
     private void setExpenditureAIDetailsActivity() {
@@ -163,7 +175,7 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
             e.printStackTrace();
         }
 
-        AIDetailsActivity.setSpese(spese);
+        AITendersDetailsActivity.setSpese(spese);
         startActivity(new Intent(AISearchActivity.this, AIExpenditureActivity.class));
     }
 
@@ -193,7 +205,7 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
         try {
             Intent intent =  new Intent(AISearchActivity.this, AIComparsionActivity.class);
 
-            intent.putExtra(AIComparsionActivity.ABSTRACT_ITEMS, abstractItem);
+            intent.putExtra(AIComparsionActivity.ABSTRACT_ITEM, abstractItem);
             intent.putExtra(AIComparsionActivity.SINGLE_ELEMENT, true);
 
             AIComparsionActivity.setSoldiPubbliciList(soldiPubbliciParser.getAsyncTask().get());
@@ -213,12 +225,14 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
         setTendersAIDetailsActivity(stringCompanyMap);
         setExpenditureAIDetailsActivity();
 
-        Intent intent = new Intent(AISearchActivity.this, AIDetailsActivity.class);
+        Intent intent = new Intent(AISearchActivity.this, AITendersDetailsActivity.class);
+        intent.putExtra(AITendersDetailsActivity.ABSTRACTITEM, abstractItem);
         startActivity(intent);
     }
 
     private void manageExpenditure() {
         Intent intent = new Intent(AISearchActivity.this, AIExpenditureActivity.class);
+        intent.putExtra(AIExpenditureActivity.ABSTRACT_ITEM, abstractItem);
         try {
             AIExpenditureActivity.setSpeseEnte(soldiPubbliciParser.getAsyncTask().get());
         } catch (InterruptedException | ExecutionException e) {

@@ -1,11 +1,10 @@
-
 <RelativeLayout
     android:id="@+id/main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AbstarctItem.AIExpenditureActivity">
+    tools:context=".AbstarctItemSearch.Expenditure.Activities.AIExpenditureActivity">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"

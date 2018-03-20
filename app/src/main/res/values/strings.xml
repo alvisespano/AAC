@@ -2,83 +2,120 @@
     <!-- Customize your app's name here. -->
     <string name="app_name">AAC</string>
     <string name="title_activity_maps">AAC - Map</string>
-    <!-- -->
 
-    <string name="gps_disabled">GPS deactivated</string>
-    <string name="gps_enabled">GPS activated</string>
+    <!--MainActivity-->
+    <string name="msg_permissions_not_granted">Denied permissions will disable some features of the app</string>
     <string name="conn_failed">Connection failed</string>
     <string name="conn_suspended">Connection suspended</string>
 
+    <string name="button_menu_university">Universities</string>
+    <string name="button_menu_supplier">Suppliers</string>
+    <string name="button_menu_municipality">Municipalities</string>
+    <string name="ai_popup_info">Click for more info</string>
+    <string name="ai_popup_remove">Click to remove from selection</string>
+    <string name="compare_button">Compare</string>
 
+    <string name="action_info">Info</string>
+    <string name="action_settings">Settings</string>
+
+    <!--MapFragment-->
+    <string name="msg_button_car">Button pushed</string>
+    <string name="marker_title">You are here</string>
+
+    <!--AISearchActivity-->
+    <string name="expenditure_icon">Show Expenditure</string>
+    <string name="companies_icon">Suppliers and tenders Info</string>
+    <string name="combine_icon">Combine data</string>
+    <string name="info_icon">Info</string>
+
+    <!--ExpenditureDetailsActivity-->
+    <string name="exp_siope_code">SIOPE:\u0020</string>
+    <string name="exp_desc">Description:\u0020</string>
+    <string name="exp_cost">Cost:\u0020</string>
+    <string name="exp_procapite">ProCapite expenditure:\u0020</string>
+    <string name="exp_end_validity">End of validity date:\u0020</string>
+
+    <!--AITendersDetailsActivity-->
+    <string name="company_name">Name:\u0020</string>
+    <string name="company_fc">Fiscal Code:\u0020</string>
+    <string name="company_wins">Aggiudications:\u0020</string>
+    <string name="company_adapter_wins_format">%d (%d directs)</string>
+
+    <!--AICompanyDetailsActivity-->
+    <string name="ai_tender_cig">CIG:\u0020</string>
+    <string name="ai_tender_cost">Cost:\u0020</string>
+    <string name="ai_tender_paid">Paid:\u0020</string>
+    <string name="ai_tender_total">Difference between budget and actual cost:\u0020</string>
+    <string name="warning_msg">Warning sent</string>
+
+    <!--AIComparsionActivity-->
+    <string name="search_expense">Search for public expenditure in 2016</string>
+    <string name="search_tenders">Search for public tenders contracted in 2016</string>
+    <string name="combine_button_alert">"Compile both fields with 3 characters strings or more"</string>
+    <string name="combine_button_single_element_alert">"Make sure that both filelds give a result for a combine search"</string>
+    <string name="comparsion_text">Comparsion: </string>
+
+    <!--AIComparsionResultActivityvity-->
+    <string name="public_expense">Expenditure taken from the Bank of Italy about: </string>
+    <string name="total_expense">Total expenditure for the searched tenders (in euros): </string>
+    <string name="ai_result_appalti_format">%.2f€ (sum)\n%.2f€ (avg)</string>
+    <string name="leadboard">Leadboard</string>
+    <string name="difference">Difference: </string>
+
+    <!--AIInfoActivity-->
+    <string name="ai_siope_code">Entitie Siope Code: </string>
+    <string name="ai_description">Description: </string>
+    <string name="ai_capite">Capite: </string>
+    <string name="ai_coordinates">Coordinates: </string>
+
+    <!--SupplierSearchActivity-->
+    <string name="supply_iva">VAT registration number: \u0020</string>
+    <string name="supply_name">Type: \u0020</string>
+    <string name="supply_adrr">Registered office: \u0020</string>
+    <string name="supply_button">Show tenders</string>
+
+    <!--SupplierDetailsActivity-->
+    <string name="tender_description">Description: \u0020</string>
+    <string name="tender_plot">Plot number: \u0020</string>
+    <string name="tender_ceiling">Budgetary ceiling: \u0020</string>
+    <string name="euro_symbol">\u0020€</string>
+
+    <!--SettingsActivity-->
+
+    <!--Preferences-->
     <string name="menu_mapStyle_title">Map style</string>
     <string name="menu_mapStyle_summary">Choose Google Maps\' style</string>
+
     <string name="menu_zoomThreshold_title">Zoom threshold</string>
     <string name="menu_zoomThreshold_summary">Threshold for marker button auto hide</string>
-    <string name="menu_checkBox_title">Auto updates</string>
-    <string name="menu_checkBox_summary">Check for updates</string>
 
     <string name="menu_zoomThreshold_low">Low</string>
     <string name="menu_zoomThreshold_mid">Medium</string>
     <string name="menu_zoomThreshold_high">High</string>
+
     <string name="menu_mapStyle_normal">Standard</string>
     <string name="menu_mapStyle_satellite">Satellite</string>
     <string name="menu_mapStyle_terrain">Terrain</string>
     <string name="menu_mapStyle_hybrid">Hybrid</string>
 
+    <!--AboutActivity-->
     <string name="credits_year">2017</string>
     <string name="credits_project">CEVID</string>
     <string name="credits_company">Università Ca\' Foscari Venezia</string>
     <string name="credits_authors">Alvise Spanò</string>
 
-    <string name="action_info">Info</string>
-    <string name="action_settings">Settings</string>
+    <!--Unused-->
+    <!--<string name="menu_checkBox_title">Auto updates</string>
+    <string name="menu_checkBox_summary">Check for updates</string>-->
 
-    <string name="msg_loading">Loading&#830;</string>
-    <string name="msg_button_car">Button pushed</string>
-    <string name="msg_permissions_not_granted">Denied permissions will disable some features of the app</string>
-    <string name="marker_title">You are here</string>
-    <string name="public_expense">Expenditure taken from the Bank of Italy about:</string>
-    <string name="search_expense">Search for public expenditure in 2016</string>
-    <string name="search_tenders">Search for public tenders contracted in 2016</string>
-    <string name="combine_icon">Combine data</string>
-    <string name="total_expense">Total expenditure for the searched tenders (in euros):</string>
-    <string name="bottom_menu_university">Universities</string>
-    <string name="bottom_menu_supplier">Suppliers</string>
-    <string name="bottom_menu_municipality">Municipalities</string>
-    <string name="supply_name">Type:\u0020</string>
-    <string name="supply_iva">VAT registration number:\u0020</string>
-    <string name="supply_adrr">Registered office:\u0020</string>
-    <string name="supply_button">Show tenders</string>
-    <string name="tender_description">Description:\u0020</string>
-    <string name="tender_plot">Plot number:\u0020</string>
-    <string name="tender_ceiling">Budgetary ceiling:\u0020</string>
-    <string name="notification_title">Suppliers are ready</string>
-    <string name="notification_msg">Suppliers download finished</string>
-    <string name="euro_symbol">\u0020€</string>
-    <string name="year_search_hint">Filter by expenditure item\'s name</string>
-    <string name="companies_icon">Suppliers and tenders Info</string>
-    <string name="company_name">Name:\u0020</string>
-    <string name="company_fc">Fiscal Code:\u0020</string>
-    <string name="company_wins">Aggiudications:\u0020</string>
-    <string name="ai_tender_paid">Paid:\u0020</string>
-    <string name="ai_tender_cost">Cost:\u0020</string>
-    <string name="ai_tender_cig">CIG:\u0020</string>
-    <string name="ai_tender_total">Difference between budget and actual cost:\u0020</string>
-    <string name="warning_msg">Warning sent</string>
-    <string name="exp_cost">Cost:\u0020</string>
-    <string name="exp_desc">Description:\u0020</string>
-    <string name="exp_siope">SIOPE:\u0020</string>
-    <string name="ai_result_appalti_format">%g€ (sum)\n%g€ (avg)</string>
-    <string name="company_adapter_wins_format">%d (%d dirette)</string>
-    <string name="combine_button_alert">"Compile both fields with three characters strings or more"</string>
-    <string name="combine_button_single_element_alert">"Make sure that both filelds give a result for a combine search"</string>
-    <string name="expenditure_icon">"Show Expenditure"</string>
-    <string name="ai_popup_info">Click for more info</string>
-    <string name="ai_popup_remove">Click to remove from selection</string>
-    <string name="info_icon">Info</string>
-    <string name="compare_button">Compare</string>
-    <string name="ai_siope_code">Entitie Siope Code: </string>
-    <string name="ai_description">Description: </string>
-    <string name="ai_capite">Capite: </string>
-    <string name="ai_coordinates">Coordinates: </string>
+    <!--<string name="gps_enabled">GPS activated</string>
+    <string name="gps_disabled">GPS deactivated</string>-->
+
+    <!--<string name="notification_msg">Suppliers download finished</string>
+    <string name="notification_title">Suppliers are ready</string>-->
+
+    <!-- <string name="year_search_hint">Filter by expenditure item\'s name</string>-->
+
+    <!--<string name="msg_loading">Loading&#830;</string>-->
+
 </resources>

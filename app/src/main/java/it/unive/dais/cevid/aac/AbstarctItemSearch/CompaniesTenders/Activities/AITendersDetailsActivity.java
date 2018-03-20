@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.Activities;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,25 +13,37 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.Adapters.CompanyAdapter;
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils.Company;
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils.RecyclerItemClickListener;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Adapters.CompanyAdapter;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils.Company;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils.RecyclerItemClickListener;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.Expenditure.Activities.AIExpenditureDetailsActivity;
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.AbstarctItem.adapter.SoldiPubbliciAdapter;
-import it.unive.dais.cevid.aac.AbstarctItem.util.EntitieExpenditure;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.adapter.SoldiPubbliciAdapter;
+import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
 
-public class AIDetailsActivity extends AppCompatActivity {
+public class AITendersDetailsActivity extends AppCompatActivity {
+    private static final String TAG = "AITendersDetailsActivity";
+    public static final String ABSTRACTITEM = "ABSTRACTITEM";
     public static ArrayList<Company> appalti;
     public static ArrayList<SoldipubbliciParser.Data> spese;
     private RecyclerItemClickListener activeListener;
 
+    private AbstractItem abstractItem;
+
     public enum Mode {
         SPESE,
-        APPALTI;
+        APPALTI
+    }
+
+    private enum ZeroMode{
+        TRUE,
+        FALSE,
+        UNDEFINED
     }
 
     private Mode currentMode;
+    private ZeroMode currentZeroMode;
     private Menu optionsMenu;
 
     @Override
@@ -39,11 +51,14 @@ public class AIDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         currentMode = Mode.APPALTI;
+        currentZeroMode = ZeroMode.UNDEFINED;
 
-        setContentView(R.layout.activity_ai_details);
+        abstractItem = (AbstractItem) getIntent().getSerializableExtra(ABSTRACTITEM);
+
+        setContentView(R.layout.activity_ai_tenders_details);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        RecyclerView v = (RecyclerView) findViewById(R.id.list_view_uni_details);
+        RecyclerView v = (RecyclerView) findViewById(R.id.list_view_ai_details);
         v.setLayoutManager(layoutManager);
 
         if (appalti == null) appalti = new ArrayList<>();
@@ -74,7 +89,7 @@ public class AIDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_options_details, menu);
+        inflater.inflate(R.menu.menu_options_companies_details, menu);
         setActiveItems(menu, currentMode);
 
         menu.findItem(R.id.menu_details_swap).setVisible(true);
@@ -106,7 +121,7 @@ public class AIDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        RecyclerView view = (RecyclerView) findViewById(R.id.list_view_uni_details);
+        RecyclerView view = (RecyclerView) findViewById(R.id.list_view_ai_details);
         view.invalidate();
 
         switch (item.getItemId()) {
@@ -125,6 +140,7 @@ public class AIDetailsActivity extends AppCompatActivity {
 
             case R.id.menu_details_money:
                 if (currentMode == Mode.SPESE) {
+                    currentZeroMode = ZeroMode.FALSE;
                     setVisualizationMode(currentMode, filterExpenditure(spese, false), view);
                 }
 
@@ -134,6 +150,7 @@ public class AIDetailsActivity extends AppCompatActivity {
 
             case R.id.menu_details_no_money:
                 if (currentMode == Mode.SPESE) {
+                    currentZeroMode = ZeroMode.TRUE;
                     setVisualizationMode(currentMode, filterExpenditure(spese, true), view);
                 }
 
@@ -144,7 +161,7 @@ public class AIDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList filterExpenditure(ArrayList<SoldipubbliciParser.Data> data, boolean zero) {
+    private ArrayList<SoldipubbliciParser.Data> filterExpenditure(ArrayList<SoldipubbliciParser.Data> data, boolean zero) {
         ArrayList<SoldipubbliciParser.Data> result = new ArrayList<>();
 
         for (SoldipubbliciParser.Data d : data) {
@@ -169,12 +186,8 @@ public class AIDetailsActivity extends AppCompatActivity {
 
     private void manageSpeseCase(RecyclerView view, ArrayList data) {
         ArrayList<SoldipubbliciParser.Data> expenditures = (ArrayList<SoldipubbliciParser.Data>) data;
-        List<EntitieExpenditure> el = new ArrayList<>();
 
-        for (SoldipubbliciParser.Data x : expenditures)
-            el.add(new EntitieExpenditure(x, "2016"));
-
-        setSpeseLayout(view, el);
+        setSpeseLayout(view, expenditures);
     }
 
     private void setAppaltiLayout(RecyclerView view, ArrayList<Company> companies) {
@@ -198,14 +211,31 @@ public class AIDetailsActivity extends AppCompatActivity {
         view.addOnItemTouchListener(activeListener);
     }
 
-    private void setSpeseLayout(RecyclerView view, List<EntitieExpenditure> el) {
-        SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(el, "1");
+    private void setSpeseLayout(RecyclerView view, List<SoldipubbliciParser.Data> el) {
+        SoldiPubbliciAdapter soldiPubbliciAdapter = new SoldiPubbliciAdapter(el, "2016", abstractItem.getCapite());
         view.setAdapter(soldiPubbliciAdapter);
         view.removeOnItemTouchListener(activeListener);
 
         activeListener = new RecyclerItemClickListener(getBaseContext(), view, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Intent intent = new Intent(AITendersDetailsActivity.this, AIExpenditureDetailsActivity.class);
+                if (currentZeroMode == ZeroMode.UNDEFINED)
+                    intent.putExtra(AIExpenditureDetailsActivity.DATA, spese.get(position));
+                else {
+                    List<SoldipubbliciParser.Data> filteredExpenditure;
+                    if (currentZeroMode == ZeroMode.FALSE) {
+                        filteredExpenditure = filterExpenditure(spese, false);
+                        intent.putExtra(AIExpenditureDetailsActivity.DATA, filteredExpenditure.get(position));
+                    } else {
+                        filteredExpenditure = filterExpenditure(spese, true);
+                        intent.putExtra(AIExpenditureDetailsActivity.DATA, filteredExpenditure.get(position));
+                    }
+                }
+                intent.putExtra(AIExpenditureDetailsActivity.YEAR, "2016");
+                intent.putExtra(AIExpenditureDetailsActivity.CAPITE, abstractItem.getCapite());
+
+                startActivity(intent);
             }
 
             @Override
@@ -218,7 +248,7 @@ public class AIDetailsActivity extends AppCompatActivity {
 
     private void manageAppaltiItemClick(ArrayList<Company> companies, int position) {
         Company company = companies.get(position);
-        Intent intent = new Intent(AIDetailsActivity.this, AICompanyDetailsActivity.class);
+        Intent intent = new Intent(AITendersDetailsActivity.this, AICompanyDetailsActivity.class);
         AICompanyDetailsActivity.setItems(company.tenders);
         startActivity(intent);
     }

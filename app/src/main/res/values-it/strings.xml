@@ -1,81 +1,122 @@
 <resources>
-    <!-- -->
+    <!-- Customize your app's name here. -->
+    <string name="app_name">AAC</string>
+    <string name="title_activity_maps">AAC - Map</string>
 
-    <string name="gps_disabled">GPS disattivato</string>
-    <string name="gps_enabled">GPS attivato</string>
+    <!--MainActivity-->
+    <string name="msg_permissions_not_granted">I permessi appena negati dall\'utente sono necessari per alcune funzionalità dell\'app. Il supporto delle funzionalità sarà ridotto.</string>
     <string name="conn_failed">Connessione fallita</string>
     <string name="conn_suspended">Connessione sospesa</string>
 
+    <string name="button_menu_university">Università</string>
+    <string name="button_menu_supplier">Fornitori</string>
+    <string name="button_menu_municipality">Comuni</string>
+    <string name="ai_popup_info">Clicca per maggiori informazioni</string>
+    <string name="ai_popup_remove">Clicca per rimuovere dalla selezione</string>
+    <string name="compare_button">Confronta</string>
 
+    <string name="action_info">Info</string>
+    <string name="action_settings">Impostazioni</string>
+
+    <!--MapFragment-->
+    <string name="msg_button_car">Pulsante premuto</string>
+    <string name="marker_title">Tu sei qui</string>
+
+    <!--AISearchActivity-->
+    <string name="expenditure_icon">"Mostra Dati di Bilancio"</string>
+    <string name="companies_icon">Mostra elenco aziende con appalti</string>
+    <string name="combine_icon">Visualizza dati combinati</string>
+    <string name="info_icon">Info</string>
+
+    <!--AIExpenditureDetailsActivity-->
+    <string name="exp_siope">SIOPE:\u0020</string>
+    <string name="exp_desc">Descrizione:\u0020</string>
+    <string name="exp_cost">Costo:\u0020</string>
+    <string name="exp_procapite">Spesa ProCapite:\u0020</string>
+    <string name="exp_end_validity">Data di fine validità:\u0020</string>
+
+    <!--AITendersDetailsActivity-->
+    <string name="company_fc">Codice Fiscale:\u0020</string>
+    <string name="company_name">Nome:\u0020</string>
+    <string name="company_wins">Aggiudicazioni:\u0020</string>
+    <string name="company_adapter_wins_format">%d (%d dirette)</string>
+
+    <!--AICompanyDetailsActivity-->
+    <string name="ai_tender_cig">CIG:\u0020</string>
+    <string name="ai_tender_cost">Importo:\u0020</string>
+    <string name="ai_tender_paid">Liquidato:\u0020</string>
+    <string name="ai_tender_total">Differenza tra budget e costo reale:\u0020</string>
+    <string name="warning_msg">Anomalia segnalata</string>
+
+    <!--AIComparsionActivity-->
+    <string name="search_expense">Ricerca libera nelle spese 2016 di soldipubblici.gov.it</string>
+    <string name="search_tenders">Ricerca libera tra gli appalti stipulati nel 2016 dall\'ente</string>
+    <string name="combine_button_alert">"Compile entrambi i campi con stringhe da 3 o più caratteri"</string>
+    <string name="combine_button_single_element_alert">"Assicurarsi che entrambi i campi diano un risultato per richiedere una ricerca combinata"</string>
+    <string name="comparsion_text">Confronto: </string>
+
+    <!--AIComparsionResultActivityvity-->
+    <string name="public_expense">Spesa dai dati della Banca di Italia riguardante: </string>
+    <string name="total_expense">Somma totale degli importi degli appalti ricercati espressa in euro: </string>
+    <string name="ai_result_appalti_format">%.2f€ (totale)\n%.2f€ (media)</string>
+    <string name="leadboard">Classifica</string>
+    <string name="difference">Differenza: </string>
+
+    <!--AIInfoActivity-->
+    <string name="ai_siope_code">Codice Siope Ente: </string>
+    <string name="ai_description">Descrizione: </string>
+    <string name="ai_capite">Capite: </string>
+    <string name="ai_coordinates">Coordinate: </string>
+
+    <!--SupplierSearchActivity-->
+    <string name="supply_iva">Partita IVA: \u0020</string>
+    <string name="supply_name">Tipo Società: \u0020</string>
+    <string name="supply_adrr">Sede Legale: \u0020</string>
+    <string name="supply_button">Mostra gli appalti</string>
+
+    <!--SupplierDetailsActivity-->
+    <string name="tender_plot">Codice Lotto: \u0020</string>
+    <string name="tender_description">Descrizione: \u0020</string>
+    <string name="tender_ceiling">Importo Massimale :\u0020</string>
+    <string name="euro_symbol">\u0020€</string>
+
+    <!--SettingsActivity-->
+
+    <!--Preferences-->
     <string name="menu_mapStyle_title">Stile Mappa</string>
     <string name="menu_mapStyle_summary">Scegli il tipo di mappa di Google Maps</string>
+
     <string name="menu_zoomThreshold_title">Soglia di Zoom</string>
     <string name="menu_zoomThreshold_summary">Soglia oltre la quale scompare il pulsante per impostare il marker</string>
-    <string name="menu_checkBox_title">Aggiornamento Automatico</string>
-    <string name="menu_checkBox_summary">Verifica la presenza di versioni più recenti.</string>
 
     <string name="menu_zoomThreshold_low">Basso</string>
     <string name="menu_zoomThreshold_mid">Medio</string>
     <string name="menu_zoomThreshold_high">Alto</string>
+
     <string name="menu_mapStyle_normal">Standard</string>
     <string name="menu_mapStyle_satellite">Satellite</string>
     <string name="menu_mapStyle_terrain">Terreno</string>
     <string name="menu_mapStyle_hybrid">Ibrido</string>
 
+    <!--AboutActivity-->
     <string name="credits_year">2017</string>
     <string name="credits_project">CEVID</string>
     <string name="credits_company">Università Ca\' Foscari Venezia</string>
     <string name="credits_authors">Alvise Spanò</string>
 
-    <string name="action_info">Info</string>
-    <string name="action_settings">Impostazioni</string>
+    <!--Unused-->
 
-    <string name="msg_loading">Caricamento&#830;</string>
-    <string name="msg_button_car">Pulsante premuto</string>
-    <string name="msg_permissions_not_granted">I permessi appena negati dall\'utente sono necessari per alcune funzionalità dell\'app. Il supporto delle funzionalità sarà ridotto.</string>
-    <string name="marker_title">tu sei qui</string>
-    <string name="public_expense">Spesa dai dati della Banca di Italia riguardante:</string>
-    <string name="search_expense">Ricerca libera nelle spese 2016 di soldipubblici.gov.it</string>
-    <string name="search_tenders">Ricerca libera tra gli appalti stipulati nel 2016 dall\'ente</string>
-    <string name="combine_icon">Visualizza dati combinati</string>
-    <string name="total_expense">Somma totale degli importi degli appalti ricercati espressa in euro:</string>
-    <string name="bottom_menu_university">Università</string>
-    <string name="bottom_menu_supplier">Fornitori</string>
-    <string name="bottom_menu_municipality">Comuni</string>
-    <string name="supply_name">Tipo Società:\u0020</string>
-    <string name="supply_iva">Partita IVA:\u0020</string>
-    <string name="supply_adrr">Sede Legale:\u0020</string>
-    <string name="supply_button">Mostra gli appalti</string>
-    <string name="tender_description">Descrizione:\u0020</string>
-    <string name="tender_plot">Codice Lotto:\u0020</string>
-    <string name="tender_ceiling">Importo Massimale:\u0020</string>
-    <string name="notification_title">Fornitori pronti</string>
-    <string name="notification_msg">Completato download fornitori</string>
-    <string name="euro_symbol">\u0020€</string>
-    <string name="year_search_hint">Inserisci una voce di spesa da cercare</string>
-    <string name="companies_icon">Mostra elenco aziende con appalti</string>
-    <string name="company_name">Nome:\u0020</string>
-    <string name="company_fc">Codice Fiscale:\u0020</string>
-    <string name="company_wins">Aggiudicazioni:\u0020</string>
-    <string name="ai_tender_paid">Liquidato:\u0020</string>
-    <string name="ai_tender_cost">Importo:\u0020</string>
-    <string name="ai_tender_cig">CIG:\u0020</string>
-    <string name="ai_tender_total">Differenza tra budget e costo reale:\u0020</string>
-    <string name="warning_msg">Anomalia segnalata</string>
-    <string name="exp_cost">Costo:\u0020</string>
-    <string name="exp_desc">Descrizione:\u0020</string>
-    <string name="exp_siope">SIOPE:\u0020</string>
-    <string name="ai_result_appalti_format">%g€ (totale)\n%g€ (media)</string>
-    <string name="company_adapter_wins_format">%d (%d dirette)</string>
-    <string name="combine_button_aler">Compilare entrambi i campi di testo con stringhe di almeno 3 caratteri</string>
-    <string name="combine_button_single_element_alert">"Assicurarsi che entrambi i campi diano un risultato per richiedere una ricerca combinata"</string>
-    <string name="expenditure_icon">"Mostra Dati di Bilancio"</string>
-    <string name="ai_popup_info">Clicca per maggiori informazioni</string>
-    <string name="ai_popup_remove">Clicca per rimuovere dalla selezione</string>
-    <string name="info_icon">Info</string>
-    <string name="compare_button">Confronta</string>
-    <string name="ai_siope_code">Codice Siope Ente: </string>
-    <string name="ai_description">Descrizione: </string>
-    <string name="ai_capite">Capite: </string>
-    <string name="ai_coordinates">Coordinate: </string>
+    <!--<string name="menu_checkBox_title">Aggiornamento Automatico</string>
+    <string name="menu_checkBox_summary">Verifica la presenza di versioni più recenti.</string>-->
+
+    <!--<string name="gps_enabled">GPS attivato</string>
+    <string name="gps_disabled">GPS disattivato</string>-->
+
+    <!--<string name="notification_msg">Completato download fornitori</string>
+    <string name="notification_title">Fornitori pronti</string>-->
+
+    <!--<string name="year_search_hint">Inserisci una voce di spesa da cercare</string>-->
+
+    <!--<string name="msg_loading">Caricamento&#830;</string>-->
+
 </resources>

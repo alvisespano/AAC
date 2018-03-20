@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils;
 
 /**
  * Created by Francesco on 08/01/2018.

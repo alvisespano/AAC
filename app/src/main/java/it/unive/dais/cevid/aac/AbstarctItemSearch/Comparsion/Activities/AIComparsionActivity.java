@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Activities;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import it.unive.dais.cevid.aac.AbstarctItem.AISearchActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.AISearchActivity;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
 import it.unive.dais.cevid.aac.item.AbstractItem;
@@ -35,8 +35,9 @@ import it.unive.dais.cevid.datadroid.lib.util.Function;
 public class AIComparsionActivity extends AppCompatActivity {
     private static final String TAG = "AIComparsionActivity";
 
-    public static final String ABSTRACT_ITEMS = "AI";
-    //private static final String BUNDLE_LIST = "LIST";
+    public static final String ABSTRACT_ITEMS = "ABSTRACT_ITEMS";
+    public static final String ABSTRACT_ITEM = "ABSTRACT_ITEM";
+    public static final String TYPE = "TYPE";
     private static final int SEARCH_INPUT_MIN_LENGTH = 3;
     public static final String SINGLE_ELEMENT = "SINGLE_ELEMENT";
 
@@ -88,16 +89,27 @@ public class AIComparsionActivity extends AppCompatActivity {
         });
     }
 
+    private void setItemsField() {
+        if (getIntent().getStringExtra(TYPE).equals("UNI")) {
+            MainActivity.setUniversityCapite();
+            if (singleElement) {
+                abstractItem.setCapite(MainActivity.getUniversityCapiteMap().get(abstractItem.getId()));
+            } else {
+                for (AbstractItem abstractItem : abstractItems) {
+                    abstractItem.setCapite(MainActivity.getUniversityCapiteMap().get(abstractItem.getId()));
+                }
+            }
+        }
+
+        for (AbstractItem abstractItem :abstractItems) {
+            abstractItem.setUrls(MainActivity.getCodiceEnteAppaltiURLMap().get(abstractItem.getId()));
+        }
+    }
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean(SINGLE_ELEMENT, singleElement);
-
-        if (singleElement) {
-            savedInstanceState.putSerializable(ABSTRACT_ITEMS, abstractItem);
-        }
-        else {
-            savedInstanceState.putSerializable(ABSTRACT_ITEMS, (Serializable) abstractItems);
-        }
+        savedInstanceState.putSerializable(ABSTRACT_ITEMS, (Serializable) abstractItems);
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -107,16 +119,17 @@ public class AIComparsionActivity extends AppCompatActivity {
             singleElement = getIntent().getBooleanExtra(SINGLE_ELEMENT, false);
 
             if (singleElement) {
-                Serializable se = getIntent().getSerializableExtra(ABSTRACT_ITEMS);
-                abstractItem = (AbstractItem) se;
+                abstractItem = (AbstractItem) getIntent().getSerializableExtra(ABSTRACT_ITEM);
             }
             else {
                 Serializable l = getIntent().getSerializableExtra(ABSTRACT_ITEMS);
                 abstractItems = (List<AbstractItem>) l;
             }
+            setItemsField();
         }
         else {
             singleElement = savedInstanceState.getBoolean(SINGLE_ELEMENT);
+
             if (singleElement) {
                 abstractItem = (AbstractItem) savedInstanceState.getSerializable(ABSTRACT_ITEMS);
             }
@@ -180,7 +193,7 @@ public class AIComparsionActivity extends AppCompatActivity {
     private void setTitleMultipleElements(){
         TextView title = (TextView) findViewById(R.id.ai_name);
 
-        String start = "Confronto: ";
+        String start = getString(R.string.comparsion_text);
         String s = start;
 
         for (AbstractItem item : abstractItems) {
@@ -196,13 +209,13 @@ public class AIComparsionActivity extends AppCompatActivity {
     //SearchViews stuff
 
     private void setSearchViewsSingleElement() {
-        setSingleListenerSingleElement(appaltiSearch, AIResultActivity.LIST_APPALTI,
+        setSingleListenerSingleElement(appaltiSearch, AIComparsionResultActivity.LIST_APPALTI,
                 Appalti_getText, Appalti_getCode, x -> {
                     AIComparsionActivity.this.appaltiText = x;
                     return null;
                 });
 
-        setSingleListenerSingleElement(soldiPubbliciSearch, AIResultActivity.LIST_SOLDIPUBBLICI,
+        setSingleListenerSingleElement(soldiPubbliciSearch, AIComparsionResultActivity.LIST_SOLDIPUBBLICI,
                 Soldipubblici_getText, Soldipubblici_getCode, x -> {
                     AIComparsionActivity.this.soldiPubbliciText = x;
                     return null;
@@ -211,12 +224,12 @@ public class AIComparsionActivity extends AppCompatActivity {
 
     private void setSearchViewsMultipleElements() {
 
-        setSingleListenerMultipleElements(appaltiSearch, AIResultActivity.LIST_APPALTI, x -> {
+        setSingleListenerMultipleElements(appaltiSearch, AIComparsionResultActivity.LIST_APPALTI, x -> {
             AIComparsionActivity.this.appaltiText = x;
             return null;
         });
 
-        setSingleListenerMultipleElements(soldiPubbliciSearch, AIResultActivity.LIST_SOLDIPUBBLICI, x -> {
+        setSingleListenerMultipleElements(soldiPubbliciSearch, AIComparsionResultActivity.LIST_SOLDIPUBBLICI, x -> {
             AIComparsionActivity.this.soldiPubbliciText = x;
             return null;
         });
@@ -234,17 +247,18 @@ public class AIComparsionActivity extends AppCompatActivity {
         v.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String text) {
-                Intent intent = new Intent(AIComparsionActivity.this, AIResultActivity.class);
+                Intent intent = new Intent(AIComparsionActivity.this, AIComparsionResultActivity.class);
 
                 List <T> l;
 
-                if (label == AIResultActivity.LIST_SOLDIPUBBLICI)
+                if (label == AIComparsionResultActivity.LIST_SOLDIPUBBLICI)
                     l = processQuery((List<T>) soldiPubbliciList, text, getText, getCode);
                 else
                     l = processQuery((List<T>) appaltiList, text, getText, getCode);
 
                 if (l != null && !l.isEmpty()) {
                     intent.putExtra(label, (Serializable) l);
+                    intent.putExtra(AIComparsionResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
                     startActivity(intent);
                 }
                 else
@@ -267,15 +281,15 @@ public class AIComparsionActivity extends AppCompatActivity {
         v.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String text) {
-                Intent intent = new Intent(AIComparsionActivity.this, AIResultActivity.class);
+                Intent intent = new Intent(AIComparsionActivity.this, AIComparsionResultActivity.class);
                 Map m;
 
-                intent.putExtra(AIResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
+                intent.putExtra(AIComparsionResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
 
-                if (label == AIResultActivity.LIST_SOLDIPUBBLICI) {
+                if (label == AIComparsionResultActivity.LIST_SOLDIPUBBLICI) {
                     try {
                         m = populateCodiceEnteExpenditureMap();
-                        AIResultActivity.setCodiceEnteExpenditureMap(m);
+                        AIComparsionResultActivity.setCodiceEnteExpenditureMap(m);
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -283,7 +297,7 @@ public class AIComparsionActivity extends AppCompatActivity {
                 else {
                     try {
                         m = populateCodiceEnteTendersMap();
-                        AIResultActivity.setCodiceEnteTendersMap(m);
+                        AIComparsionResultActivity.setCodiceEnteTendersMap(m);
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -350,10 +364,11 @@ public class AIComparsionActivity extends AppCompatActivity {
         tendersFilteredList = processQuery(appaltiList, appaltiText, Appalti_getText, Appalti_getCode);
 
         if (expenditureFilteredList != null && tendersFilteredList != null) {
-            Intent intent = new Intent(AIComparsionActivity.this, AIResultActivity.class);
+            Intent intent = new Intent(AIComparsionActivity.this, AIComparsionResultActivity.class);
 
-            intent.putExtra(AIResultActivity.LIST_SOLDIPUBBLICI, (Serializable) expenditureFilteredList);
-            intent.putExtra(AIResultActivity.LIST_APPALTI, (Serializable) tendersFilteredList);
+            intent.putExtra(AIComparsionResultActivity.LIST_SOLDIPUBBLICI, (Serializable) expenditureFilteredList);
+            intent.putExtra(AIComparsionResultActivity.LIST_APPALTI, (Serializable) tendersFilteredList);
+            intent.putExtra(AIComparsionResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
 
             startActivity(intent);
         }
@@ -366,13 +381,13 @@ public class AIComparsionActivity extends AppCompatActivity {
         Map<String, List<SoldipubbliciParser.Data>> codiceEnteExpenditureMap = populateCodiceEnteExpenditureMap();
         Map<String, List<AppaltiParser.Data>> codiceEnteTendersMap = populateCodiceEnteTendersMap();
 
-        Intent intent = new Intent(AIComparsionActivity.this, AIResultActivity.class);
+        Intent intent = new Intent(AIComparsionActivity.this, AIComparsionResultActivity.class);
 
-        intent.putExtra(AIResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
-        AIResultActivity.setCodiceEnteExpenditureMap(codiceEnteExpenditureMap);
-        AIResultActivity.setCodiceEnteTendersMap(codiceEnteTendersMap);
+        intent.putExtra(AIComparsionResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
+        AIComparsionResultActivity.setCodiceEnteExpenditureMap(codiceEnteExpenditureMap);
+        AIComparsionResultActivity.setCodiceEnteTendersMap(codiceEnteTendersMap);
 
-        intent.putExtra(AIResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
+        intent.putExtra(AIComparsionResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
 
         startActivity(intent);
     }

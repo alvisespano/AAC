@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Fragment;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,8 +11,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.aac.AbstarctItem.util.AILayoutSetter;
-import it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Activities.AIResultActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Activities.AIComparsionResultActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.util.AILayoutSetter;
 import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.datadroid.lib.parser.AppaltiParser;
 import it.unive.dais.cevid.datadroid.lib.parser.SoldipubbliciParser;
@@ -24,10 +24,12 @@ import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
 
 public class ComparsionFragment extends Fragment {
     private static final String TAG = "AITabFragment";
+    public static final String CAPITE = "CAPITE";
 
     private List<SoldipubbliciParser.Data> soldiPubbliciList;
     private List<AppaltiParser.Data> appaltiList;
     private View view;
+    private int capite;
 
     private enum  Mode {
         SOLDI_PUBBLICI,
@@ -49,16 +51,17 @@ public class ComparsionFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         if (savedInstanceState != null) {
-            soldiPubbliciList = (List<SoldipubbliciParser.Data>) savedInstanceState.getSerializable(AIResultActivity.LIST_SOLDIPUBBLICI);
-            appaltiList = (List<AppaltiParser.Data>) savedInstanceState.getSerializable(AIResultActivity.LIST_APPALTI);
+            soldiPubbliciList = (List<SoldipubbliciParser.Data>) savedInstanceState.getSerializable(AIComparsionResultActivity.LIST_SOLDIPUBBLICI);
+            appaltiList = (List<AppaltiParser.Data>) savedInstanceState.getSerializable(AIComparsionResultActivity.LIST_APPALTI);
+            capite = savedInstanceState.getInt(CAPITE);
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(AIResultActivity.LIST_SOLDIPUBBLICI, (Serializable) soldiPubbliciList);
-        outState.putSerializable(AIResultActivity.LIST_APPALTI, (Serializable) appaltiList);
+        outState.putSerializable(AIComparsionResultActivity.LIST_SOLDIPUBBLICI, (Serializable) soldiPubbliciList);
+        outState.putSerializable(AIComparsionResultActivity.LIST_APPALTI, (Serializable) appaltiList);
     }
 
     public void onCreate(Bundle fragmentBundle) {
@@ -66,8 +69,8 @@ public class ComparsionFragment extends Fragment {
         Bundle bundle = this.getArguments();
 
         if (bundle != null) {
-            Serializable es = bundle.getSerializable(AIResultActivity.LIST_SOLDIPUBBLICI);
-            Serializable ts = bundle.getSerializable(AIResultActivity.LIST_APPALTI);
+            Serializable es = bundle.getSerializable(AIComparsionResultActivity.LIST_SOLDIPUBBLICI);
+            Serializable ts = bundle.getSerializable(AIComparsionResultActivity.LIST_APPALTI);
 
             soldiPubbliciList = new ArrayList<>();
             appaltiList = new ArrayList<>();
@@ -79,20 +82,20 @@ public class ComparsionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.activity_ai_result, container, false);
+        view = inflater.inflate(R.layout.activity_ai_comparsion_result, container, false);
 
         Mode mode = Mode.getMode(soldiPubbliciList, appaltiList);
 
         AILayoutSetter aiLayoutSetter = new AILayoutSetter((Activity) inflater.getContext(), view, false);
 
         if (mode == Mode.SOLDI_PUBBLICI) {
-            aiLayoutSetter.manageSoldiPubbliciCase(soldiPubbliciList, "2016");
+            aiLayoutSetter.manageSoldiPubbliciCase(soldiPubbliciList, "2016", capite);
         }
         if (mode == Mode.APPALTI) {
             aiLayoutSetter.manageAppaltiCase(appaltiList);
         }
         if (mode == Mode.COMBINE) {
-            aiLayoutSetter.manageCombineCase(soldiPubbliciList, appaltiList, "2016");
+            aiLayoutSetter.manageCombineCase(soldiPubbliciList, appaltiList, "2016", capite);
         } else throw new UnexpectedException(TAG);
 
         return view;

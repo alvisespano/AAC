@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Fragment;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Activities.AIResultActivity;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Activities.AIComparsionResultActivity;
 
 /**
  * Created by gianmarcocallegher on 19/02/2018.
@@ -20,27 +20,33 @@ import it.unive.dais.cevid.aac.AbstarctItem.Comparsion.Activities.AIResultActivi
 public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     private int numOfTabs;
-    private AIResultActivity parentActivity;
+    private AIComparsionResultActivity parentActivity;
     private List<Fragment> registeredFragments = new ArrayList<>();
 
     public FragmentAdapter(FragmentManager fm, int numOfTabs, Context context) {
         super(fm);
         this.numOfTabs = numOfTabs;
-        parentActivity = (AIResultActivity) context;
+        parentActivity = (AIComparsionResultActivity) context;
     }
 
     @Override
     public Fragment getItem(int position) {
-        ComparsionFragment comparsionFragment = new ComparsionFragment();
-        Bundle bundle = new Bundle();
-        String codiceEnte = (String) parentActivity.getPositionCodiceEnteMap().get(position);
+        if (position != 0) {
+            ComparsionFragment comparsionFragment = new ComparsionFragment();
+            Bundle bundle = new Bundle();
+            String codiceEnte = (String) parentActivity.getPositionCodiceEnteMap().get(position);
 
-        bundle.putSerializable(AIResultActivity.LIST_SOLDIPUBBLICI, (Serializable) parentActivity.getCodiceEnteExpenditureMap().get(codiceEnte));
-        bundle.putSerializable(AIResultActivity.LIST_APPALTI, (Serializable) parentActivity.getCodiceEnteTendersMap().get(codiceEnte));
+            bundle.putSerializable(AIComparsionResultActivity.LIST_SOLDIPUBBLICI, (Serializable) parentActivity.getCodiceEnteExpenditureMap().get(codiceEnte));
+            bundle.putSerializable(AIComparsionResultActivity.LIST_APPALTI, (Serializable) parentActivity.getCodiceEnteTendersMap().get(codiceEnte));
+            bundle.putInt(ComparsionFragment.CAPITE, (Integer) parentActivity.getPositionCapiteMap().get(position));
 
-        comparsionFragment.setArguments(bundle);
+            comparsionFragment.setArguments(bundle);
 
-        return comparsionFragment;
+            return comparsionFragment;
+        }
+        else {
+            return new LeadboardFragment();
+        }
     }
 
     @Override

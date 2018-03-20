@@ -63,7 +63,7 @@ public class ListFragment extends BaseFragment implements
         }
         List<MapItem> r = new ArrayList<>();
         r.addAll(c);
-        listView.setAdapter(new ArrayAdapter<MapItem>(getContext(), R.layout.list_fragment, R.id.list_object, r));
+        listView.setAdapter(new ArrayAdapter(getContext(), R.layout.list_fragment, R.id.list_object, r));
     }
 
     @Override
@@ -81,8 +81,6 @@ public class ListFragment extends BaseFragment implements
             manageAICase(item);
         if (parentActivity.getCurrentMode() == MainActivity.Mode.SUPPLIER)
                 manageSupplierItemCase(item);
-        else
-            throw new UnsupportedOperationException();
     }
 
     @Override

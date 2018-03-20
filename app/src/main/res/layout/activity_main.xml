@@ -41,7 +41,7 @@
             android:layout_gravity="bottom"
             android:indeterminate="false" />
 
-        <ProgressBar
+        <!--<ProgressBar
             android:id="@+id/progress_bar_main_2"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
@@ -54,7 +54,7 @@
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indeterminate="false" />
+            android:indeterminate="false" />-->
 
     </LinearLayout>
 

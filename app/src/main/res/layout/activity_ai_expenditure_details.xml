@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".AbstarctItemSearch.AIInfoActivity"
-    android:id="@+id/ai_info">
+    tools:context=".AbstarctItemSearch.Expenditure.Activities.AIExpenditureDetailsActivity"
+    android:id="@+id/municipality_details">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/ai_title"
+            android:id="@+id/ai_exp_details_title"
             style ="@style/Field.Title"/>
         <View style="@style/Divider"/>
 
@@ -25,11 +25,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ai_siope_code"/>
+                android:text="@string/exp_siope_code"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ai_id_siope_code"/>
+                android:id="@+id/exp_siope_code"/>
         </LinearLayout>
 
         <LinearLayout
@@ -40,11 +40,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ai_description"/>
+                android:text="@string/exp_desc"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ai_description"/>
+                android:id="@+id/exp_desc"/>
         </LinearLayout>
 
         <LinearLayout
@@ -55,11 +55,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ai_capite"/>
+                android:text="@string/exp_cost"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ai_capite"/>
+                android:id="@+id/exp_cost"/>
         </LinearLayout>
 
         <LinearLayout
@@ -70,11 +70,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ai_coordinates"/>
+                android:text="@string/exp_procapite"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ai_coordinates"/>
+                android:id="@+id/exp_procapite"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/Field">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exp_end_validity"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/exp_end_validity"/>
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

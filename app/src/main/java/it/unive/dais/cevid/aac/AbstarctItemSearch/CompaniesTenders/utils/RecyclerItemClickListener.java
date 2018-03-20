@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem;
+package it.unive.dais.cevid.aac.AbstarctItemSearch;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -33,7 +33,7 @@ public class AIInfoActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.ai_title)).setText(abstractItem.getTitle());
         ((TextView)findViewById(R.id.ai_id_siope_code)).setText(abstractItem.getId());
         ((TextView)findViewById(R.id.ai_description)).setText(abstractItem.getDescription());
-        ((TextView)findViewById(R.id.ai_capite)).setText(abstractItem.getCapite());
+        ((TextView) findViewById(R.id.ai_capite)).setText(String.valueOf(abstractItem.getCapite()));
         ((TextView)findViewById(R.id.ai_coordinates)).setText(String.valueOf(abstractItem.getPosition()));
     }
 }

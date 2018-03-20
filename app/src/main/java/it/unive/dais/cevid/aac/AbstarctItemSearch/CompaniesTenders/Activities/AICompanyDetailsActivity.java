@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.Activities;
+package it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Activities;
 
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +14,8 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.Adapters.AITenderAdapter;
-import it.unive.dais.cevid.aac.AbstarctItem.CompaniesTenders.utils.Company;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.Adapters.AITenderAdapter;
+import it.unive.dais.cevid.aac.AbstarctItemSearch.CompaniesTenders.utils.Company;
 import it.unive.dais.cevid.aac.R;
 
 public class AICompanyDetailsActivity extends AppCompatActivity {
