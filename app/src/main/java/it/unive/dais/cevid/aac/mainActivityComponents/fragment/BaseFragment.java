@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.MainActivityComponents.fragment;
+package it.unive.dais.cevid.aac.mainActivityComponents.fragment;
 
 
 import android.Manifest;
@@ -24,9 +24,9 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Collections;
 
-import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
-import it.unive.dais.cevid.aac.Suppliers.Activities.SupplierSearchActivity;
-import it.unive.dais.cevid.aac.AbstarctItemSearch.AISearchActivity;
+import it.unive.dais.cevid.aac.mainActivityComponents.MainActivity;
+import it.unive.dais.cevid.aac.suppliers.activities.SupplierSearchActivity;
+import it.unive.dais.cevid.aac.abstarctItemSearch.AISearchActivity;
 import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;

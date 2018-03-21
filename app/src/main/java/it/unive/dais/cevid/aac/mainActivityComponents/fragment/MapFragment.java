@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.MainActivityComponents.fragment;
+package it.unive.dais.cevid.aac.mainActivityComponents.fragment;
 
 
 import android.Manifest;
@@ -42,13 +42,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import it.unive.dais.cevid.aac.abstarctItemSearch.comparison.activities.AIComparisonActivity;
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.AbstarctItemSearch.Comparsion.Activities.AIComparsionActivity;
-import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
-import it.unive.dais.cevid.aac.MenuActivities.SettingsActivity;
+import it.unive.dais.cevid.aac.mainActivityComponents.MainActivity;
+import it.unive.dais.cevid.aac.menuActivities.SettingsActivity;
 import it.unive.dais.cevid.aac.item.AbstractItem;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
-import it.unive.dais.cevid.aac.Suppliers.util.SupplierItem;
+import it.unive.dais.cevid.aac.suppliers.util.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
@@ -228,7 +228,6 @@ public class MapFragment extends BaseFragment
 
         if (markerTag instanceof UniversityItem || markerTag instanceof MunicipalityItem) {
             if (hereMarker == null || (hereMarker.getPosition() != marker.getPosition())) {
-                removeSelectedMarker(marker);
                 clearSelectedMarker();
                 manageAICase(markerTag);
             }
@@ -242,7 +241,8 @@ public class MapFragment extends BaseFragment
         removeSelectedMarker(marker);
 
         if (selectedMarkers.size() == 1)
-            selectedMarkers.stream().forEach(x -> x.showInfoWindow());
+            selectedMarkers.stream().forEach(x -> x.setSnippet(getContext().getString(R.string.ai_popup_info)));
+        selectedMarkers.stream().forEach(x -> x.showInfoWindow());
 
         if (selectedMarkers.size() < 2)
             confrontoMultiploButton.setVisibility(View.INVISIBLE);
@@ -408,8 +408,8 @@ public class MapFragment extends BaseFragment
 
     private String manageMarkerDescription(Marker marker) {
         if (selectedMarkers.contains(marker) && selectedMarkers.size() > 1)
-            return getContext().getResources().getString(R.string.ai_popup_remove);;
-        return getContext().getResources().getString(R.string.ai_popup_info);
+            return getContext().getString(R.string.ai_popup_remove);
+        return getContext().getString(R.string.ai_popup_info);
 
     }
 
@@ -449,10 +449,10 @@ public class MapFragment extends BaseFragment
             }
         }
 
-        Intent intent = new Intent(getContext(), AIComparsionActivity.class);
-        intent.putExtra(AIComparsionActivity.SINGLE_ELEMENT, false);
-        intent.putExtra(AIComparsionActivity.ABSTRACT_ITEMS, (Serializable) markerTags);
-        intent.putExtra(AIComparsionActivity.TYPE, markerTags.get(0).getCodiceComparto());
+        Intent intent = new Intent(getContext(), AIComparisonActivity.class);
+        intent.putExtra(AIComparisonActivity.SINGLE_ELEMENT, false);
+        intent.putExtra(AIComparisonActivity.ABSTRACT_ITEMS, (Serializable) markerTags);
+        intent.putExtra(AIComparisonActivity.TYPE, markerTags.get(0).getCodiceComparto());
 
         confrontoMultiploButton.setVisibility(View.INVISIBLE);
 
@@ -462,9 +462,9 @@ public class MapFragment extends BaseFragment
     }
 
     private void clearSelectedMarker() {
-        Set<Marker> s = new HashSet<>(selectedMarkers);
+        Set<Marker> set = new HashSet<>(selectedMarkers);
 
-        for (Marker m : s) {
+        for (Marker m : set) {
             m.hideInfoWindow();
             removeSelectedMarker(m);
         }

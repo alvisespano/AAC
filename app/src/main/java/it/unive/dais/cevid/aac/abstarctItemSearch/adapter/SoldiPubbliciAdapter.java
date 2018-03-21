@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItemSearch.adapter;
+package it.unive.dais.cevid.aac.abstarctItemSearch.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,7 +41,7 @@ public class SoldiPubbliciAdapter extends RecyclerView.Adapter<SoldiPubbliciAdap
         Double importo = Double.parseDouble(getCostFromYear(expenditureList.get(position)));
         holder.voceSpesa.setText(expenditureList.get(position).descrizione_codice);
         holder.importo.setText(String.format("%.2f€", importo));
-        holder.procapite.setText(String.valueOf(importo / capite) + "€");
+        holder.procapite.setText(String.format("%.2f€",Double.valueOf(importo) / capite));
     }
 
     @Override

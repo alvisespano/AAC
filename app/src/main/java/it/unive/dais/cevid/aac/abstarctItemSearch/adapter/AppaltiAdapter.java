@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.AbstarctItemSearch.adapter;
+package it.unive.dais.cevid.aac.abstarctItemSearch.adapter;
 
 import android.graphics.Color;
 import android.support.annotation.Nullable;

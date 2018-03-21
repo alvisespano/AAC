@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.MainActivityComponents.fragment;
+package it.unive.dais.cevid.aac.mainActivityComponents.fragment;
 
 
 import android.os.Bundle;
@@ -11,14 +11,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.MainActivityComponents.MainActivity;
+import it.unive.dais.cevid.aac.mainActivityComponents.MainActivity;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
 /**
