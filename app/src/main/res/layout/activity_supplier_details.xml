@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Suppliers.Activities.SupplierDetailsActivity"
+    tools:context=".suppliers.activities.SupplierDetailsActivity"
     android:id="@+id/tender_activity">
     <LinearLayout
         android:layout_width="match_parent"

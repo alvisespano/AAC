@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Suppliers.Activities.SupplierSearchActivity"
+    tools:context=".suppliers.activities.SupplierSearchActivity"
     android:id="@+id/supply_info_activity">
     <ProgressBar
         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"

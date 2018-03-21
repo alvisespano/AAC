@@ -8,16 +8,4 @@
         android:icon="@drawable/ic_search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         />
-    <item
-        android:id="@+id/menu_details_money"
-        android:title=""
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_money"
-        />
-    <item
-        android:id="@+id/menu_details_no_money"
-        android:title=""
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_no_money"
-        />
 </menu>

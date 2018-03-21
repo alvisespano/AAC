@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".AbstarctItemSearch.AIInfoActivity"
+    tools:context=".abstarctItemSearch.AIInfoActivity"
     android:id="@+id/ai_info">
     <LinearLayout
         android:layout_width="match_parent"

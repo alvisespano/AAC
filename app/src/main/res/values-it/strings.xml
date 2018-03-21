@@ -48,7 +48,7 @@
     <string name="ai_tender_total">Differenza tra budget e costo reale:\u0020</string>
     <string name="warning_msg">Anomalia segnalata</string>
 
-    <!--AIComparsionActivity-->
+    AIComparisonActivityvity-->
     <string name="search_expense">Ricerca libera nelle spese 2016 di soldipubblici.gov.it</string>
     <string name="search_tenders">Ricerca libera tra gli appalti stipulati nel 2016 dall\'ente</string>
     <string name="combine_button_alert">"Compile entrambi i campi con stringhe da 3 o più caratteri"</string>

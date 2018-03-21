@@ -48,7 +48,7 @@
     <string name="ai_tender_total">Difference between budget and actual cost:\u0020</string>
     <string name="warning_msg">Warning sent</string>
 
-    <!--AIComparsionActivity-->
+    AIComparisonActivityvity-->
     <string name="search_expense">Search for public expenditure in 2016</string>
     <string name="search_tenders">Search for public tenders contracted in 2016</string>
     <string name="combine_button_alert">"Compile both fields with 3 characters strings or more"</string>
