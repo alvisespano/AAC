@@ -102,7 +102,7 @@ public class AIExpenditureActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //adapter.onQueryTextChange(newText.toLowerCase());
+                adapter.onQueryTextChange(newText.toLowerCase());
 
                 return false;
             }

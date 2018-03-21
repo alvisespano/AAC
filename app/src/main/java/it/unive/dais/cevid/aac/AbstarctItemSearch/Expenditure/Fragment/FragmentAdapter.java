@@ -61,16 +61,23 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
         return yearFragment;
     }
 
-    /*@Override
+    @Override
     public Object instantiateItem(ViewGroup container, int position) {
         Fragment fragment = (Fragment) super.instantiateItem(container, position);
-        registeredFragments.add(position, fragment);
+        registeredFragments.add(fragment);
         return fragment;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        registeredFragments.remove(position);
+        registeredFragments.remove(object);
         super.destroyItem(container, position, object);
-    }*/
+    }
+
+
+    public void onQueryTextChange(String s) {
+        for (Fragment yearFragment : registeredFragments) {
+            ((YearFragment) yearFragment).onQueryTextChange(s);
+        }
+    }
 }

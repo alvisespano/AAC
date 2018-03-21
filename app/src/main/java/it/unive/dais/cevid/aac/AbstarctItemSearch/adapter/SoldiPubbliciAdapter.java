@@ -76,5 +76,4 @@ public class SoldiPubbliciAdapter extends RecyclerView.Adapter<SoldiPubbliciAdap
             default: return null;
         }
     }
-
 }

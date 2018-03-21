@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import it.unive.dais.cevid.aac.AbstarctItemSearch.adapter.SoldiPubbliciAdapter;
 import it.unive.dais.cevid.aac.AbstarctItemSearch.util.AILayoutSetter;
 import it.unive.dais.cevid.aac.AbstarctItemSearch.Expenditure.Activities.AIExpenditureActivity;
@@ -49,13 +52,14 @@ public class YearFragment extends Fragment {
     }
 
     public void onQueryTextChange (String query) {
+        List<SoldipubbliciParser.Data> expenditureList = new ArrayList<>(AIExpenditureActivity.getSpeseEnte());
 
         if (query.matches("[0-9]+"))
-            DataManipulation.filterByCode(AIExpenditureActivity.getSpeseEnte(), Integer.parseInt(query), Soldipubblici_getCode);
+            DataManipulation.filterByCode(expenditureList, Integer.parseInt(query), Soldipubblici_getCode);
         else
-            DataManipulation.filterByWords(AIExpenditureActivity.getSpeseEnte(), query.split(" "), Soldipubblici_getText, false);
+            DataManipulation.filterByWords(expenditureList, query.split(" "), Soldipubblici_getText, false);
 
-        //soldiPubbliciAdapter.setFilter(entitieExpenditureList);
+        soldiPubbliciAdapter.setFilter(expenditureList);
     }
 
     private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = x -> x.descrizione_codice;

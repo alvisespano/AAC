@@ -64,6 +64,7 @@ public class AIComparsionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ai_comparsion);
 
         mainView = (LinearLayout) findViewById(R.id.comparsion_activity);
+        mainView.clearFocus();
         //mainView.requestFocus();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -89,6 +90,7 @@ public class AIComparsionActivity extends AppCompatActivity {
                 hideKeyboard(v);
             }
         });*/
+
     }
 
     @Override
