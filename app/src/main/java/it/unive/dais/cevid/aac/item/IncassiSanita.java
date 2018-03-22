@@ -1,10 +1,15 @@
 package it.unive.dais.cevid.aac.item;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import it.unive.dais.cevid.aac.parser.HealthParser;
+import it.unive.dais.cevid.aac.parser.SanitaParser;
 
 /**
  * Created by Angelko on 18/12/17.

@@ -76,8 +76,6 @@ public class MapFragment extends BaseFragment
         GoogleMap.OnMarkerClickListener,
         BottomNavigationView.OnNavigationItemSelectedListener {
 
-    private List<IncassiSanita.DataRegione> incassiSanitaData = null;
-
     private static final String TAG = "MapFragment";
     /**
      * Questo oggetto è la mappa di Google Maps. Viene inizializzato asincronamente dal metodo {@code onMapsReady}.
@@ -224,22 +222,7 @@ public class MapFragment extends BaseFragment
                         startActivity(intent);
                     }
                     else if (markerTag instanceof HealthItem) {
-                        try {
-                            ProgressBarManager progman = null;
-                            InputStream incassiStream = getContext().getResources().openRawResource(R.raw.incassi_sanita);
-                            CsvRowParser pIncassi = new CsvRowParser(new InputStreamReader(incassiStream), true, ",", progman);
-                            List<CsvRowParser.Row> rows = pIncassi.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get();
-                            List<IncassiSanita.DataRegione> l = new ArrayList<>();
-                            for (final CsvRowParser.Row r : rows) {
-                                l.add(new IncassiSanita.DataRegione(r.get("Id"), r.get("Regione"), r.get("Titolo"), r.get("Codice"), r.get("Descrizione"), Float.parseFloat(r.get("Importo"))));
-                            }
-                            incassiSanitaData = l;
-                        }
-                     catch (InterruptedException | ExecutionException | ParserException e) {
-                        e.printStackTrace();
-                    }
-
-                        IncassiSanita incassiSanita = new IncassiSanita(incassiSanitaData);
+                        IncassiSanita incassiSanita = new IncassiSanita(parentActivity.getIncassiSanitaData());
                         Gson gson = new Gson();
                         List<IncassiSanita.DataRegione> regionData = incassiSanita.getDataByIdRegione(marker.getTitle());
                         Intent intent = new Intent(getContext(), PieChartActivity.class);

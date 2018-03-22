@@ -43,12 +43,14 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.fragment.BaseFragment;
 import it.unive.dais.cevid.aac.fragment.ListFragment;
 import it.unive.dais.cevid.aac.item.HealthItem;
+import it.unive.dais.cevid.aac.item.IncassiSanita;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.aac.item.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.fragment.MapFragment;
 import it.unive.dais.cevid.aac.parser.CustomSoldipubbliciParser;
 import it.unive.dais.cevid.aac.parser.HealthParser;
+import it.unive.dais.cevid.aac.parser.SanitaParser;
 import it.unive.dais.cevid.aac.parser.SupplierParser;
 import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
@@ -87,6 +89,8 @@ public class MainActivity extends AppCompatActivity
     private final Collection<SupplierItem> supplierItems = new ConcurrentLinkedQueue<>();
     @NonNull
     private final Collection<HealthItem> healthItems = new ConcurrentLinkedQueue<>();
+    @NonNull
+    private List<IncassiSanita.DataRegione> incassiSanitaData = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -290,7 +294,26 @@ public class MainActivity extends AppCompatActivity
     //setting up the Health and Regions, integration of ST
     private void setupHealthItems() {
 
-        HealthParser p = new HealthParser(progressBarManager,getBaseContext()) {
+        SanitaParser sanita = new SanitaParser(progressBarManager,getBaseContext())
+        {
+            @NonNull
+            @Override
+            public List<Data> onPostParse(@NonNull List<Data> r) {
+                List<IncassiSanita.DataRegione> l = new ArrayList<>();
+                for (Data x : r) {
+                    l.add(new IncassiSanita.DataRegione(x.id,x.nomeRegione,x.titolo,x.codice,x.descrizione,x.importo));
+                }
+                incassiSanitaData = l;
+                return r;
+            }
+            @Override
+            public void onPostExecute(@NonNull List<Data> r) {
+                if (getCurrentMode() == Mode.HEALTH) currentMapFragment.redraw(Mode.HEALTH);
+            }
+
+        };
+
+        HealthParser p = new HealthParser(null,getBaseContext()) {
 
             @NonNull
             @Override
@@ -308,6 +331,7 @@ public class MainActivity extends AppCompatActivity
                 if (getCurrentMode() == Mode.HEALTH) currentMapFragment.redraw(Mode.HEALTH);
             }
         };
+        sanita.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -478,7 +502,11 @@ public class MainActivity extends AppCompatActivity
         return supplierItems;
     }
 
+    @NonNull
     public Collection<HealthItem> getHealthItems() { return healthItems; }
+
+    @NonNull
+    public List<IncassiSanita.DataRegione> getIncassiSanitaData() { return incassiSanitaData;}
 
     @NonNull
     public Collection<MunicipalityItem> getMunicipalityItems() {

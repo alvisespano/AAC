@@ -12,6 +12,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,6 +25,7 @@ import it.unive.dais.cevid.aac.component.PieChartActivity;
 import it.unive.dais.cevid.aac.component.SupplierSearchActivity;
 import it.unive.dais.cevid.aac.component.UniversitySearchActivity;
 import it.unive.dais.cevid.aac.item.HealthItem;
+import it.unive.dais.cevid.aac.item.IncassiSanita;
 import it.unive.dais.cevid.aac.item.MunicipalityItem;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
@@ -107,8 +110,13 @@ public class ListFragment extends BaseFragment implements
                 startActivity(intent);
                 break;
             case HEALTH:
+                HealthItem healthItem = (HealthItem) item;
+                IncassiSanita incassiSanita = new IncassiSanita(parentActivity.getIncassiSanitaData());
+                Gson gson = new Gson();
+                List<IncassiSanita.DataRegione> regionData = incassiSanita.getDataByIdRegione(healthItem.getId());
                 intent = new Intent(getContext(), PieChartActivity.class);
-                //intent.putExtra(PieChartActivity.Health, item);
+                intent.putExtra("regionId", healthItem.getId());
+                intent.putExtra("regionData", gson.toJson(regionData));
                 startActivity(intent);
                 break;
             default:

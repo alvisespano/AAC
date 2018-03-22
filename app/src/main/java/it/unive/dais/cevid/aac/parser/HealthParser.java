@@ -60,7 +60,7 @@ public class HealthParser extends AbstractAsyncParser<HealthParser.Data, Percent
     protected List<Data> parseRegions() {
         List<Data> r = new ArrayList<Data>();
         try {
-        PercentProgressStepper prog = new PercentProgressStepper(1200); // aici sa adaugam si pasii pentru parsarea incassiSanita
+        PercentProgressStepper prog = new PercentProgressStepper(1200);
         ProgressBarManager progman=null;
         //take data from geo_regioni
         InputStream regionsStream = context.getResources().openRawResource(R.raw.geo_regioni);
@@ -90,7 +90,6 @@ public class HealthParser extends AbstractAsyncParser<HealthParser.Data, Percent
         public String id,
                 name, capoluogo;
         public double latitude, longitude;
-        //public List<HealthItem.Expenditure> expenditureTitleList;
     }
 
 }
