@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setContentFragment(R.id.content_frame, currentMapFragment);
-        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3),(ProgressBar) findViewById(R.id.progress_bar_main_4)});
+        progressBarManager = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
 
         bottomNavigation = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(this);
@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void testProgressBarManager() {
-        ProgressBarManager m = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3),  (ProgressBar) findViewById(R.id.progress_bar_main_4)});
+        ProgressBarManager m = new ProgressBarManager(this, new ProgressBar[]{(ProgressBar) findViewById(R.id.progress_bar_main), (ProgressBar) findViewById(R.id.progress_bar_main_2), (ProgressBar) findViewById(R.id.progress_bar_main_3)});
 
         runOnUiThread(() -> {
             Handle<ProgressBar> h1 = m.acquire();
