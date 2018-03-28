@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    tools:context=".abstarctItemSearch.companiesTenders.activities.AICompanyDetailsActivity">
+    tools:context=".abstarct_item_search.companies_tenders.activities.AICompanyDetailsActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

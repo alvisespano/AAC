@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".abstarctItemSearch.companiesTenders.activities.AITendersDetailsActivity">
+    tools:context=".abstarct_item_search.companies_tenders.activities.AITendersDetailsActivity">
 
 
     <LinearLayout
