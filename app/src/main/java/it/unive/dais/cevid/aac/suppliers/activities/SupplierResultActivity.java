@@ -20,7 +20,7 @@ import it.unive.dais.cevid.aac.R;
 import it.unive.dais.cevid.aac.suppliers.adapter.TenderAdapter;
 import it.unive.dais.cevid.aac.suppliers.parser.TenderParser;
 import it.unive.dais.cevid.aac.suppliers.parser.ParticipantParser;
-import it.unive.dais.cevid.aac.abstarctItemSearch.companiesTenders.utils.RecyclerItemClickListener;
+import it.unive.dais.cevid.aac.abstarct_item_search.companies_tenders.utils.RecyclerItemClickListener;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 
 public class SupplierResultActivity extends AppCompatActivity {
