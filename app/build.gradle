@@ -46,7 +46,7 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.11.1'
     testCompile 'junit:junit:4.12'
 
-    api project(path: ':datadroid_lib')
+    api project(path: ':lib')
 
     implementation 'com.android.support:support-annotations:27.0.2'
 }
