@@ -148,7 +148,7 @@ public class BarChartActivityScroll extends DemoBase implements OnChartValueSele
             TextView amount = (TextView) findViewById(R.id.amount);
             description.setText(mapDesc.get((int) e.getX()));
             double n = (float) e.getY();
-            amount.setText("Totale: "+ numberFormat.format(Math.exp(n)));
+            amount.setText("Importo: "+ numberFormat.format(Math.exp(n)));
         }
 
         RectF bounds = mOnValueSelectedRectF;

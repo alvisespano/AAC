@@ -47,6 +47,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
+import it.unive.dais.cevid.aac.component.ColoredMapActivity;
 import it.unive.dais.cevid.aac.component.ConfrontoActivity;
 import it.unive.dais.cevid.aac.component.MainActivity;
 import it.unive.dais.cevid.aac.component.MunicipalitySearchActivity;
@@ -158,6 +159,10 @@ public class MapFragment extends BaseFragment
         confrontoMultiploButton = (Button) mView.findViewById(R.id.confronto_button);
 
         confrontoMultiploButton.setOnClickListener(v -> confrontoMultiplo());
+
+        compareAllButton = (Button) mView.findViewById(R.id.compare_all_button);
+
+        compareAllButton.setOnClickListener(v -> compareAll());
 
         return mView;
     }
@@ -356,15 +361,19 @@ public class MapFragment extends BaseFragment
                 switch (mode) {
                     case MUNICIPALITY:
                         putMarkers(parentActivity.getMunicipalityItems(), BitmapDescriptorFactory.HUE_GREEN);
+                        compareAllButton.setVisibility(View.INVISIBLE);
                         break;
                     case UNIVERSITY:
                         putMarkers(parentActivity.getUniversityItems(), BitmapDescriptorFactory.HUE_RED);
+                        compareAllButton.setVisibility(View.INVISIBLE);
                         break;
                     case SUPPLIER:
                         putMarkers(parentActivity.getSupplierItems(), BitmapDescriptorFactory.HUE_YELLOW);
+                        compareAllButton.setVisibility(View.INVISIBLE);
                         break;
                     case HEALTH:
                         putMarkers(parentActivity.getHealthItems(), BitmapDescriptorFactory.HUE_MAGENTA);
+                        compareAllButton.setVisibility(View.VISIBLE);
                         break;
                 }
             } catch (Exception e) {
@@ -401,6 +410,9 @@ public class MapFragment extends BaseFragment
     private Set<Marker> selectedMarkers;
 
     Button confrontoMultiploButton;
+
+    //button for colored map activity
+    Button compareAllButton;
 
     private String manageMarkerDescription(Marker marker) {
         if (selectedMarkers.contains(marker) && selectedMarkers.size() > 1)
@@ -442,6 +454,12 @@ public class MapFragment extends BaseFragment
             intent.putExtra("Mode", "Municipality");
 
         intent.putExtra("List", (Serializable) markerTags);
+        startActivity(intent);
+    }
+
+    private void compareAll() {
+        Intent intent = new Intent(getContext(), ColoredMapActivity.class);
+
         startActivity(intent);
     }
 }

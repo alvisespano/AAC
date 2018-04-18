@@ -210,9 +210,6 @@ public class PieChartActivity extends DemoBase implements OnChartValueSelectedLi
 
         ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
         Set<Map.Entry<String, Float>> importi = IncassiSanita.getImportiFromDataRegione(incassiSanitaRegione).entrySet();
-        for(Map.Entry x : importi) {
-            Log.d("Angelko", String.valueOf(x));
-        }
         Iterator importiIter = importi.iterator();
         float total = 0;
 
