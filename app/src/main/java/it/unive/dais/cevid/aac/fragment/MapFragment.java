@@ -459,7 +459,6 @@ public class MapFragment extends BaseFragment
 
     private void compareAll() {
         Intent intent = new Intent(getContext(), ColoredMapActivity.class);
-
         startActivity(intent);
     }
 }

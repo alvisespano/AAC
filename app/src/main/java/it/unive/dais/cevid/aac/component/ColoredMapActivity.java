@@ -38,9 +38,7 @@ public class ColoredMapActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colored_map);
-        Log.d(TAG, "Maria"+mapFragment);
         setContentFragment(R.id.content_frame, mapFragment);
-        this.parseCoordinates();
     }
 
     private void setContentFragment(int container, @NonNull Fragment fragment) {
@@ -51,47 +49,6 @@ public class ColoredMapActivity extends AppCompatActivity{
 
     }
 
-    private String convertStreamToString(InputStream is) {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
 
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append('\n');
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return sb.toString();
-    }
-
-    public ArrayList parseCoordinates() {
-        ArrayList <LatLng> coordinates = null;
-
-        try {
-            Log.d(TAG, "Angelko ++");
-            InputStream in = getResources().openRawResource(R.raw.veneto);
-            String inputVeneto = convertStreamToString(in);
-            JSONObject reader = new JSONObject(inputVeneto);
-            JSONArray geometries  = reader.getJSONArray("geometries");
-            String g = geometries.get(0).toString();
-            JSONObject first = new JSONObject(g);
-            JSONArray coord  = first.getJSONArray("coordinates");
-            Log.d("Angelko ", String.valueOf(coord));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        return coordinates;
-    }
 }
 

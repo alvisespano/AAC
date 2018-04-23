@@ -1,6 +1,7 @@
 package it.unive.dais.cevid.aac.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -29,8 +30,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import it.unive.dais.cevid.aac.R;
+import it.unive.dais.cevid.aac.component.ColoredMapActivity;
 
 
 public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
@@ -56,23 +59,76 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
         return mView;
     }
 
+    private String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public JSONArray parseCoordinates() {
+        JSONArray coordinates = null;
+
+        try {
+            Log.d(TAG, "Angelko ++");
+            InputStream in = getResources().openRawResource(R.raw.veneto);
+            String inputVeneto = convertStreamToString(in);
+            JSONObject reader = new JSONObject(inputVeneto);
+            coordinates = reader.getJSONArray("Veneto");
+            Log.d("Angelko ", String.valueOf(coordinates));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return coordinates;
+    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mMap = googleMap;
 
+
         LatLng rome = new LatLng(41.89, 12.51);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(rome, 5));
 
+        JSONArray coordinates = this.parseCoordinates();
+
         // Instantiates a new Polygon object and adds points to define a rectangle
-        PolygonOptions rectOptions = new PolygonOptions()
-                .add(new LatLng(41.89, 12.51),
-                        new LatLng(37.45, 2.0),
-                        new LatLng(67.45, 12.2),
-                        new LatLng(87.35, -12.2),
-                        new LatLng(97.35, -12.0));
+        PolygonOptions rectOptions = new PolygonOptions();
 
+        for(int i=0;i<coordinates.length();i++)
+        {
+            try {
+                JSONArray point= (JSONArray) coordinates.get(i);
+                double lat= (double) point.get(0);
+                double lng= (double) point.get(1);
+                Log.d(TAG, "Maria lat "+lat);
+                Log.d(TAG, "Maria lng "+lng);
+                rectOptions.add(new LatLng(lng,lat));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
+        }
+
+        rectOptions.fillColor(Color.BLUE);
         // Get back the mutable Polygon
         mMap.addPolygon(rectOptions);
     }
