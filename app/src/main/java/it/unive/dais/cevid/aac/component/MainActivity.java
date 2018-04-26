@@ -2,6 +2,7 @@ package it.unive.dais.cevid.aac.component;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -26,6 +27,7 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,6 +61,7 @@ import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 import it.unive.dais.cevid.datadroid.lib.util.UnexpectedException;
+import it.unive.dais.cevid.aac.parser.RegionsCoordinatesParser;
 
 public class MainActivity extends AppCompatActivity
         implements GoogleApiClient.ConnectionCallbacks,
@@ -88,9 +91,12 @@ public class MainActivity extends AppCompatActivity
     @NonNull
     private final Collection<SupplierItem> supplierItems = new ConcurrentLinkedQueue<>();
     @NonNull
-    private final Collection<HealthItem> healthItems = new ConcurrentLinkedQueue<>();
+    private final static Collection<HealthItem> healthItems = new ConcurrentLinkedQueue<>();
     @NonNull
     private List<IncassiSanita.DataRegione> incassiSanitaData = null;
+
+    @NonNull
+    private static ArrayList<PolygonOptions> regionsCoordinates = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +112,7 @@ public class MainActivity extends AppCompatActivity
         setupSupplierItems();
         setupUniversityItems();
         setupHealthItems();
+        //setupColoredRegions();
 
     }
 
@@ -335,6 +342,13 @@ public class MainActivity extends AppCompatActivity
         p.getAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
+    public static void setupColoredRegions(Context ctx)
+    {
+        RegionsCoordinatesParser parser = new RegionsCoordinatesParser(ctx);
+        parser.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        regionsCoordinates = parser.getPolygons();
+    }
+
 
 
     @Override
@@ -503,7 +517,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @NonNull
-    public Collection<HealthItem> getHealthItems() { return healthItems; }
+    public static Collection<HealthItem> getHealthItems() { return healthItems; }
 
     @NonNull
     public List<IncassiSanita.DataRegione> getIncassiSanitaData() { return incassiSanitaData;}
@@ -513,6 +527,10 @@ public class MainActivity extends AppCompatActivity
         return municipalityItems;
     }
 
+    @NonNull
+    public static ArrayList<PolygonOptions> getRegionsCoordinates() {
+        return regionsCoordinates;
+    }
 
 
     // test stuff

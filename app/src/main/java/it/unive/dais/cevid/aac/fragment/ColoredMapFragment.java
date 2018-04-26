@@ -1,24 +1,21 @@
 package it.unive.dais.cevid.aac.fragment;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 
@@ -31,18 +28,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import it.unive.dais.cevid.aac.R;
-
+import it.unive.dais.cevid.aac.component.MainActivity;
+import it.unive.dais.cevid.aac.item.HealthItem;
+import it.unive.dais.cevid.aac.parser.RegionsCoordinatesParser;
 
 
 public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
     private static final String TAG = "ColoredMapFragment";
 
     protected GoogleMap mMap;
-
-    private ArrayList colorArray = new ArrayList();
+    private  JSONArray ids = new JSONArray();
+    List<HealthItem> healthItemsList = new ArrayList<HealthItem>(MainActivity.getHealthItems() );
+    Marker currentMarker = null;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,92 +86,84 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
         return sb.toString();
     }
 
-    public JSONArray parseCoordinates() {
-        JSONArray coordinates = null;
-
-        try {
-            Log.d(TAG, "Angelko ++");
-            InputStream in = getResources().openRawResource(R.raw.coord_regions);
-            String input = convertStreamToString(in);
-            JSONObject reader = new JSONObject(input);
-            coordinates = reader.getJSONArray("coordinates");
-            Log.d("Angelko ", String.valueOf(coordinates));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        return coordinates;
-    }
-
-    private PolygonOptions createPolygon(JSONArray coord, int color)
-    {
-        JSONArray coordinates = coord;
-        PolygonOptions rectOptions = new PolygonOptions();
-        int fillColor = 0x7F000000 + color;
-        int strokeColor = 0xFF000000 + color;
-
-        for(int i=0;i<coordinates.length();i++)
-        {
-            try {
-                JSONArray point= (JSONArray) coordinates.get(i);
-                double lat= (double) point.get(0);
-                double lng= (double) point.get(1);
-                Log.d(TAG, "Maria lat "+lat);
-                Log.d(TAG, "Maria lng "+lng);
-                rectOptions.add(new LatLng(lng,lat));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        rectOptions.fillColor(fillColor);
-        rectOptions.strokeColor(strokeColor);
-        rectOptions.strokeWidth(8);
-
-        return rectOptions;
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mMap = googleMap;
 
-        colorArray.add(0x00FF00);
-        colorArray.add(0xFF0000);
-        colorArray.add(0x0000FF);
-        colorArray.add(0xFFFF00);
-        colorArray.add(0x00FFFF);
-        colorArray.add(0xFF00FF);
+        Log.d("HealthItemList : " , healthItemsList.toString());
 
         LatLng rome = new LatLng(41.89, 12.51);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(rome, 5.3F));
 
-        JSONArray allRegionsCoord = this.parseCoordinates();
+        try {
+            InputStream in = getResources().openRawResource(R.raw.coord_regions);
+            String input = convertStreamToString(in);
+            JSONObject reader = new JSONObject(input);
+            ids = reader.getJSONArray("id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        for(int i=0;i<allRegionsCoord.length();i++)
+        ArrayList<PolygonOptions> regions;
+        regions = MainActivity.getRegionsCoordinates();
+        for(int i=0;i<regions.size();i++)
         {
-
+            String tag = null;
             try {
-                JSONArray region= (JSONArray) allRegionsCoord.get(i);
-                Random r = new Random();
-                int die = r.nextInt(6);
-                int col = (int) colorArray.get(die);
-
-                PolygonOptions rectOptions = this.createPolygon(region, col);
-
-                // Get back the mutable Polygon
-                mMap.addPolygon(rectOptions);
+                 tag = (String) ids.get(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            Polygon polygon = mMap.addPolygon(regions.get(i));
+            polygon.setTag(tag);
+            polygon.setClickable(true);
+            //Log.d("iterator! ", it.next().getId());
+
+            Log.d("Dimensiune: ", String.valueOf(healthItemsList.size()));
+            mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener(){
+                public void onPolygonClick(Polygon polygon){
+                    double lat = 0, lng = 0;
+                    String title = null;
+                    //do whatever with polygon!
+                    for (int k=0; k<healthItemsList.size(); k++) {
+                        HealthItem element = healthItemsList.get(k);
+                        //Log.d("id parsat!", element.getId());
+                        Log.d("Cele doua comparate: ", polygon.getTag().toString()+"<>"+element.getId());
+                        String t = polygon.getTag().toString();
+                        if(t.equals(element.getId()))
+                        {
+                            Log.d("Am ajuns pe true! ","da!");
+                            lng = element.getLongitude();
+                            lat = element.getLatitude();
+                            title = element.getName();
+                        }
+                    }
+                    double finalLat = lat;
+                    double finalLng = lng;
+                    String finalTitle = title;
+                    Log.d("Informatii din marker", finalTitle+" "+finalLat+" "+finalLng);
+                    if (currentMarker!=null) {
+                        currentMarker.remove();
+                        currentMarker=null;
+                    }
+                    if (currentMarker==null) {
+                        currentMarker = mMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(finalLat, finalLng))
+                                .title(finalTitle));
+                        currentMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_hospitals));
+                        currentMarker.showInfoWindow();
+                    }
+                    Log.d("Am dat click pe : ", String.valueOf(polygon.getTag()));
+                }
+
+            });
+
         }
 
-
-
-
-
     }
+
+
 
 }

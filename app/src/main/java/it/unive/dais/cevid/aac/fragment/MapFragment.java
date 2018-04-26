@@ -271,7 +271,7 @@ public class MapFragment extends BaseFragment
 
             marker.setSnippet(manageMarkerDescription(marker));
 
-            if (selectedMarkers.size() == 1) {
+            if (selectedMarkers.size() == 1 && parentActivity.getCurrentMode() != MainActivity.Mode.HEALTH) {
                 button_car.setVisibility(View.VISIBLE);
                 button_car.setOnClickListener(v -> {
                     Snackbar.make(v, R.string.msg_button_car, Snackbar.LENGTH_SHORT);
@@ -281,7 +281,7 @@ public class MapFragment extends BaseFragment
                 });
             }
 
-            if (selectedMarkers.size() > 1) {
+            if (selectedMarkers.size() > 1 && parentActivity.getCurrentMode() != MainActivity.Mode.HEALTH) {
                 confrontoMultiploButton.setVisibility(View.VISIBLE);
                 button_car.setVisibility(View.INVISIBLE);
             }
@@ -372,6 +372,8 @@ public class MapFragment extends BaseFragment
                         compareAllButton.setVisibility(View.INVISIBLE);
                         break;
                     case HEALTH:
+                        button_car.setVisibility(View.INVISIBLE);
+                        button_here.setVisibility(View.INVISIBLE);
                         putMarkers(parentActivity.getHealthItems(), BitmapDescriptorFactory.HUE_MAGENTA);
                         compareAllButton.setVisibility(View.VISIBLE);
                         break;
