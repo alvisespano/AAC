@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -61,6 +62,8 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
 
     //we will hold here all the data from incassi_sanita.csv
     IncassiSanita healthData = new IncassiSanita(MainActivity.getIncassiSanitaData());
+
+    private double lat, lng;
 
     float maximumTotal = 0;
 
@@ -171,10 +174,20 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
 
             //Log.d("iterator! ", it.next().getId());
 
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng clickCoords) {
+                    lat = clickCoords.latitude;
+                    lng = clickCoords.longitude;
+                    //Log.e("TAG", "Found @ " + clickCoords.latitude + " " + clickCoords.longitude);
+                }
+            });
+
             Log.d("Dimensiune: ", String.valueOf(healthItemsList.size()));
             mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener(){
                 public void onPolygonClick(Polygon polygon){
-                    double lat = 0, lng = 0;
+
+                    //double lat = 0, lng = 0;
                     String title = null;
                     String t = polygon.getTag().toString();
 
@@ -189,13 +202,13 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
                         if(t.equals(element.getId()))
                         {
                             Log.d("Am ajuns pe true! ","da!");
-                            lng = element.getLongitude();
-                            lat = element.getLatitude();
+                            //lng = element.getLongitude();
+                            //lat = element.getLatitude();
                             title = element.getName();
                         }
                     }
-                    double finalLat = lat;
-                    double finalLng = lng;
+                    //double finalLat = lat;
+                    //double finalLng = lng;
                     String finalTitle = title;
                     String infoMarker;
                         infoMarker = String.format("%s : %.2f", finalTitle, total);
@@ -206,7 +219,7 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
                     }
                     if (currentMarker==null) {
                         currentMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(finalLat, finalLng))
+                                .position(new LatLng(lat, lng))
                                 .title(infoMarker));
                         currentMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_hospitals));
                         currentMarker.showInfoWindow();
