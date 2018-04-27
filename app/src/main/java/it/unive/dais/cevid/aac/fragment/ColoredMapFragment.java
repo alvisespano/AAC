@@ -14,7 +14,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -31,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,6 +38,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -62,8 +63,6 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
 
     //we will hold here all the data from incassi_sanita.csv
     IncassiSanita healthData = new IncassiSanita(MainActivity.getIncassiSanitaData());
-
-    private double lat, lng;
 
     float maximumTotal = 0;
 
@@ -148,20 +147,29 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
         t4.setText(String.valueOf(bin.get(3)));
 
         int color = 0;
+        int strokeColor = 0;
         for(int i=0;i<regions.size();i++)
         {
             String tag = null;
             try {
                  tag = (String) ids.get(i);
                 float polygonAmount = healthData.getTotalPerRegion(tag);
-                if(polygonAmount<bin.get(0))
-                    color = Color.rgb(255,229,153);
-                else if(polygonAmount>= bin.get(0) &&polygonAmount<bin.get(1))
-                        color = Color.rgb(255,153,0);
-                    else if(polygonAmount>=bin.get(1)&&polygonAmount<bin.get(2))
-                            color = Color.rgb(255,0,0);
-                        else
-                            color = Color.rgb(204,0,0);
+                if(polygonAmount<bin.get(0)) {
+                    color = Color.argb(145,255, 229, 153);
+                    strokeColor = Color.rgb(255, 229, 153);
+                }
+                else if(polygonAmount>= bin.get(0) &&polygonAmount<bin.get(1)) {
+                    color = Color.argb(145,255,153,0);
+                    strokeColor = Color.rgb(255,153,0);
+                }
+                    else if(polygonAmount>=bin.get(1)&&polygonAmount<bin.get(2)) {
+                    color = Color.argb(145,255,0,0);
+                    strokeColor = Color.rgb(255,0,0);
+                }
+                        else {
+                    color = Color.argb(145,204,0,0);
+                    strokeColor = Color.rgb(204,0,0);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -170,24 +178,14 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
             polygon.setTag(tag);
             polygon.setClickable(true);
             polygon.setFillColor(color);
-            polygon.setStrokeColor(Color.LTGRAY);
+            polygon.setStrokeColor(strokeColor);
 
             //Log.d("iterator! ", it.next().getId());
-
-            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng clickCoords) {
-                    lat = clickCoords.latitude;
-                    lng = clickCoords.longitude;
-                    //Log.e("TAG", "Found @ " + clickCoords.latitude + " " + clickCoords.longitude);
-                }
-            });
 
             Log.d("Dimensiune: ", String.valueOf(healthItemsList.size()));
             mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener(){
                 public void onPolygonClick(Polygon polygon){
-
-                    //double lat = 0, lng = 0;
+                    double lat = 0, lng = 0;
                     String title = null;
                     String t = polygon.getTag().toString();
 
@@ -202,16 +200,17 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
                         if(t.equals(element.getId()))
                         {
                             Log.d("Am ajuns pe true! ","da!");
-                            //lng = element.getLongitude();
-                            //lat = element.getLatitude();
+                            lng = element.getLongitude();
+                            lat = element.getLatitude();
                             title = element.getName();
                         }
                     }
-                    //double finalLat = lat;
-                    //double finalLng = lng;
+                    double finalLat = lat;
+                    double finalLng = lng;
                     String finalTitle = title;
                     String infoMarker;
-                        infoMarker = String.format("%s : %.2f", finalTitle, total);
+                    NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.ITALY);
+                        infoMarker = finalTitle+" : "+numberFormat.format(total);
                     //Log.d()
                     if (currentMarker!=null) {
                         currentMarker.remove();
@@ -219,7 +218,7 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
                     }
                     if (currentMarker==null) {
                         currentMarker = mMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(lat, lng))
+                                .position(new LatLng(finalLat, finalLng))
                                 .title(infoMarker));
                         currentMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_hospitals));
                         currentMarker.showInfoWindow();
