@@ -1,5 +1,8 @@
 package it.unive.dais.cevid.aac.fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,42 +37,48 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.component.ColoredMapActivity;
 import it.unive.dais.cevid.aac.component.MainActivity;
 import it.unive.dais.cevid.aac.item.HealthItem;
 import it.unive.dais.cevid.aac.item.IncassiSanita;
 
 
-public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
+public class ColoredMapFragment extends Fragment
+        implements OnMapReadyCallback,
+        AdapterView.OnItemSelectedListener {
     private static final String TAG = "ColoredMapFragment";
+
+    Button listButton;
 
     protected GoogleMap mMap;
 
     private  JSONArray ids = new JSONArray();
 
-    List<HealthItem> healthItemsList = new ArrayList<HealthItem>(MainActivity.getHealthItems() );
+    private List<HealthItem> healthItemsList = new ArrayList<HealthItem>(MainActivity.getHealthItems() );
 
-    Marker currentMarker = null;
+    private Marker currentMarker = null;
 
     //we will hold here all the data from incassi_sanita.csv
-    IncassiSanita healthData = new IncassiSanita(MainActivity.getIncassiSanitaData());
+    private IncassiSanita healthData = new IncassiSanita(MainActivity.getIncassiSanitaData());
 
-    float maximumTotal = 0;
+    //selected item from the menu
+    private String selectedItem = "TOTALE";
+
+    //bins for the legend
+    private ArrayList<Float> bin = null;
+
+    //all the polygons
+    private ArrayList<Polygon> allPolygons = new ArrayList<>();
+
+    //string for dialog box
+    private String textDialog = new String();
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -81,6 +95,19 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
         mapView.getMapAsync(this);
 
         return mView;
+    }
+
+    private void listDialogCreate() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle(selectedItem);
+        alertDialog.setMessage(textDialog);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
 
     private String convertStreamToString(InputStream is) {
@@ -116,6 +143,37 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
         LatLng rome = new LatLng(41.89, 12.51);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(rome, 4.0F));
 
+        //button to show list
+        listButton = (Button) this.getView().findViewById(R.id.list_button);
+
+        listButton.setOnClickListener(v -> listDialogCreate());
+
+        // Spinner element
+        Spinner spinner = (Spinner) this.getView().findViewById(R.id.spinner);
+
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("TOTALE");
+        categories.add("ENTRATE DERIVANTI DALLA PRESTAZIONE DI SERVIZI");
+        categories.add("CONTRIBUTI E TRASFERIMENTI CORRENTI");
+        categories.add("ENTRATE DERIVANTI DA ALIENAZIONI DI BENI");
+        categories.add("CONTRIBUTI E TRASFERIMENTI IN C/CAPITALE");
+        categories.add("OPERAZIONI FINANZIARIE");
+        categories.add("INCASSI DA REGOLARIZZARE");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+
+
 
         try {
             InputStream in = getResources().openRawResource(R.raw.coord_regions);
@@ -129,47 +187,13 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
         ArrayList<PolygonOptions> regions;
         regions = MainActivity.getRegionsCoordinates();
 
+        setLegendScale();
 
-        ArrayList<Float> bin = null;
-        try {
-            bin = getSortedTotalAmounts();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        TextView t1 = (TextView) this.getView().findViewById(R.id.textView1);
-        TextView t2 = (TextView) this.getView().findViewById(R.id.textView2);
-        TextView t3 = (TextView) this.getView().findViewById(R.id.textView3);
-        TextView t4 = (TextView) this.getView().findViewById(R.id.textView4);
-        t1.setText(String.valueOf(bin.get(0)));
-        t2.setText(String.valueOf(bin.get(1)));
-        t3.setText(String.valueOf(bin.get(2)));
-        t4.setText(String.valueOf(bin.get(3)));
-
-        int color = 0;
-        int strokeColor = 0;
         for(int i=0;i<regions.size();i++)
         {
             String tag = null;
             try {
                  tag = (String) ids.get(i);
-                float polygonAmount = healthData.getTotalPerRegion(tag);
-                if(polygonAmount<bin.get(0)) {
-                    color = Color.argb(145,255, 229, 153);
-                    strokeColor = Color.rgb(255, 229, 153);
-                }
-                else if(polygonAmount>= bin.get(0) &&polygonAmount<bin.get(1)) {
-                    color = Color.argb(145,255,153,0);
-                    strokeColor = Color.rgb(255,153,0);
-                }
-                    else if(polygonAmount>=bin.get(1)&&polygonAmount<bin.get(2)) {
-                    color = Color.argb(145,255,0,0);
-                    strokeColor = Color.rgb(255,0,0);
-                }
-                        else {
-                    color = Color.argb(145,204,0,0);
-                    strokeColor = Color.rgb(204,0,0);
-                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -177,8 +201,7 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
             Polygon polygon = mMap.addPolygon(regions.get(i));
             polygon.setTag(tag);
             polygon.setClickable(true);
-            polygon.setFillColor(color);
-            polygon.setStrokeColor(strokeColor);
+            allPolygons.add(polygon);
 
             //Log.d("iterator! ", it.next().getId());
 
@@ -189,7 +212,12 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
                     String title = null;
                     String t = polygon.getTag().toString();
 
-                    float total = healthData.getTotalPerRegion(t);
+                    float total = 0;
+                    if(selectedItem.equals("TOTALE"))
+                        total = healthData.getTotalPerRegion(t);
+                    else
+                        total = healthData.getTotalPerRegionAndTitolo(t,selectedItem);
+
                     Log.d(t," : "+String.valueOf(healthData.getTotalPerRegionAndTitolo(t,"ENTRATE DERIVANTI DALLA PRESTAZIONE DI SERVIZI")));
 
 
@@ -235,14 +263,42 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
 
     }
 
-    private ArrayList<Float> getSortedTotalAmounts() throws JSONException {
+    private ArrayList<Float> getSortedAmount(String amountName) throws JSONException {
         ArrayList<Float> temp = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
         float [] arr = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        textDialog = "";
         for(int i=0;i<ids.length();i++)
         {
-            arr[i] = healthData.getTotalPerRegion((String) ids.get(i));
+            if(amountName.equals("TOTALE"))
+                arr[i] = healthData.getTotalPerRegion((String) ids.get(i));
+            else
+                arr[i] = healthData.getTotalPerRegionAndTitolo((String) ids.get(i),amountName);
         }
         Arrays.sort(arr);
+        for(int i=0;i<arr.length;i++)
+        {
+            for(int j=0;j<ids.length();j++) {
+                if(amountName.equals("TOTALE"))
+                {
+                    if(healthData.getTotalPerRegion((String) ids.get(j))==arr[i])
+                        names.add(healthItemsList.get(j).getName());
+                }
+                else {
+                    if (healthData.getTotalPerRegionAndTitolo((String) ids.get(j), amountName) == arr[i])
+                        names.add(healthItemsList.get(j).getName());
+                }
+            }
+        }
+
+
+
+        for(int i=arr.length-1;i>=0;i--)
+        {
+            String line = names.get(i)+" : "+arr[i];
+            textDialog += line;
+            textDialog +="\n";
+        }
         temp.add(arr[4]);
         temp.add(arr[9]);
         temp.add(arr[14]);
@@ -250,5 +306,92 @@ public class ColoredMapFragment extends Fragment implements OnMapReadyCallback{
         return temp;
     }
 
+    private String makeAmountForLegend(float amount)
+    {
+        String temp = null;
+        if(amount>=1000000)
+        {
+            amount /= 1000000000;
+            temp = "B";
+        }
+        else if(amount<1000000)
+        {
+            amount /= 1000;
+            temp = "K";
+        }
+        String t = String.format("%.1f",amount);
+        temp = t+temp;
+        return temp;
+    }
+
+    private void setLegendScale()
+    {
+        try {
+            bin = getSortedAmount(selectedItem);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        TextView t1 = (TextView) this.getView().findViewById(R.id.textView1);
+        TextView t2 = (TextView) this.getView().findViewById(R.id.textView2);
+        TextView t3 = (TextView) this.getView().findViewById(R.id.textView3);
+        TextView t4 = (TextView) this.getView().findViewById(R.id.textView4);
+        t1.setText(makeAmountForLegend(bin.get(0)));
+        t2.setText(makeAmountForLegend(bin.get(1)));
+        t3.setText(makeAmountForLegend(bin.get(2)));
+        t4.setText(makeAmountForLegend(bin.get(3)));
+    }
+
+    private void changePolygonsColor() {
+        int color = 0;
+        int strokeColor = 0;
+        for (int i = 0; i < allPolygons.size(); i++) {
+            String tag = null;
+            tag = (String) allPolygons.get(i).getTag();
+            float polygonAmount = 0;
+            if (selectedItem.equals("TOTALE"))
+                polygonAmount = healthData.getTotalPerRegion(tag);
+            else
+                polygonAmount = healthData.getTotalPerRegionAndTitolo(tag, selectedItem);
+                if (polygonAmount < bin.get(0)) {
+                    color = Color.argb(145, 255, 229, 153);
+                    strokeColor = Color.rgb(255, 229, 153);
+                    } else if (polygonAmount >= bin.get(0) && polygonAmount < bin.get(1)) {
+                        color = Color.argb(145, 255, 153, 0);
+                        strokeColor = Color.rgb(255, 153, 0);
+                        } else if (polygonAmount >= bin.get(1) && polygonAmount < bin.get(2)) {
+                                color = Color.argb(145, 255, 0, 0);
+                                strokeColor = Color.rgb(255, 0, 0);
+                                } else {
+                                    color = Color.argb(145, 204, 0, 0);
+                                    strokeColor = Color.rgb(204, 0, 0);
+                                }
+            allPolygons.get(i).setFillColor(color);
+            allPolygons.get(i).setStrokeColor(strokeColor);
+            allPolygons.get(i).setStrokeWidth(8);
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //remove marker from last selected item
+        if (currentMarker!=null) {
+            currentMarker.remove();
+            currentMarker=null;
+        }
+        // On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+        selectedItem = item;
+        setLegendScale();
+        changePolygonsColor();
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 
 }

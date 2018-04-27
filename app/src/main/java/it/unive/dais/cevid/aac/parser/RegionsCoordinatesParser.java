@@ -3,7 +3,6 @@ package it.unive.dais.cevid.aac.parser;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -17,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Random;
 
 import it.unive.dais.cevid.aac.R;
 
@@ -25,14 +23,10 @@ public class RegionsCoordinatesParser extends AsyncTask<String,Void,Boolean>{
 
     private static final String TAG = "RegCoordParser";
 
-    private ArrayList colorArray = new ArrayList();
 
     private Context context;
 
     private JSONArray coordinates = null;
-
-
-
 
     private ArrayList<PolygonOptions> polygons = new ArrayList<PolygonOptions>();
 
@@ -65,12 +59,10 @@ public class RegionsCoordinatesParser extends AsyncTask<String,Void,Boolean>{
     }
 
 
-    private PolygonOptions createPolygon(JSONArray coord, int color)
+    private PolygonOptions createPolygon(JSONArray coord)
     {
         JSONArray regionCoordinates = coord;
         PolygonOptions rectOptions = new PolygonOptions();
-        int fillColor = 0x7F000000 + color;
-        int strokeColor = 0xFF000000 + color;
 
         for(int i=0;i<regionCoordinates.length();i++)
         {
@@ -87,9 +79,6 @@ public class RegionsCoordinatesParser extends AsyncTask<String,Void,Boolean>{
 
         }
 
-        rectOptions.fillColor(fillColor);
-        rectOptions.strokeColor(strokeColor);
-        rectOptions.strokeWidth(8);
 
         //Log.d(TAG," Angelko coordonate din rectOptions : "+rectOptions.getPoints());
         return rectOptions;
@@ -102,12 +91,6 @@ public class RegionsCoordinatesParser extends AsyncTask<String,Void,Boolean>{
 
     @Override
     protected Boolean doInBackground(String... strings) {
-        colorArray.add(0x00FF00);
-        colorArray.add(0xFF0000);
-        colorArray.add(0x0000FF);
-        colorArray.add(0xFFFF00);
-        colorArray.add(0x00FFFF);
-        colorArray.add(0xFF00FF);
 
         try {
             //Log.d(TAG, "Angelko ++");
@@ -128,13 +111,10 @@ public class RegionsCoordinatesParser extends AsyncTask<String,Void,Boolean>{
 
             try {
                 JSONArray region= (JSONArray) coordinates.get(i);
-                Random r = new Random();
-                int die = r.nextInt(6);
-                int col = (int) colorArray.get(die);
                 //Log.d(TAG," Angelko region : "+region);
 
                 PolygonOptions newPolygon = new PolygonOptions();
-                newPolygon = this.createPolygon(region, col);
+                newPolygon = this.createPolygon(region);
                 newPolygon.clickable(true);
                 //Log.d(TAG," Angelko coordonate din newPolygon : "+newPolygon.getPoints());
                 // Get back the mutable Polygon
