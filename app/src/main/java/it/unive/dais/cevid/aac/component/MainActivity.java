@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity
     @NonNull
     private final static Collection<HealthItem> healthItems = new ConcurrentLinkedQueue<>();
     @NonNull
-    private List<IncassiSanita.DataRegione> incassiSanitaData = null;
+    private static List<IncassiSanita.DataRegione> incassiSanitaData = null;
 
     @NonNull
     private static ArrayList<PolygonOptions> regionsCoordinates = null;
@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity
     public static Collection<HealthItem> getHealthItems() { return healthItems; }
 
     @NonNull
-    public List<IncassiSanita.DataRegione> getIncassiSanitaData() { return incassiSanitaData;}
+    public static List<IncassiSanita.DataRegione> getIncassiSanitaData() { return incassiSanitaData;}
 
     @NonNull
     public Collection<MunicipalityItem> getMunicipalityItems() {

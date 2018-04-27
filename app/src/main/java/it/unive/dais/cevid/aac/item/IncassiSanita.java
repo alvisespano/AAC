@@ -1,6 +1,7 @@
 package it.unive.dais.cevid.aac.item;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -108,6 +109,33 @@ public class IncassiSanita {
         }
         return temp;
     }
+
+    //methods for colored map:
+    public float getTotalPerRegion(String IdRegione)
+    {
+        List<DataRegione> temp =  getDataByIdRegione(IdRegione);
+        float totalOfRegion = 0;
+        for(DataRegione dr : temp)
+        {
+            totalOfRegion += dr.getImporto();
+        }
+        return totalOfRegion;
+    }
+
+    //methods for colored map:
+    public float getTotalPerRegionAndTitolo(String IdRegione, String titolo)
+    {
+        float totalOfRegionAndTitolo = 0;
+        for(DataRegione dr : incassiSanitaData)
+        {
+            if(IdRegione.equals(dr.getId())&&titolo.equals(dr.getTitolo())) {
+                Log.d(IdRegione, " + " + String.valueOf(dr.getImporto()));
+                totalOfRegionAndTitolo += dr.getImporto();
+            }
+        }
+        return totalOfRegionAndTitolo;
+    }
+
 
 }
 
