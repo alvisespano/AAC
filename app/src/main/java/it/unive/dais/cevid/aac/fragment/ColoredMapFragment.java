@@ -1,7 +1,6 @@
 package it.unive.dais.cevid.aac.fragment;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -78,6 +77,9 @@ public class ColoredMapFragment extends Fragment
 
     //string for dialog box
     private String textDialog = new String();
+
+    //values for the dialog box
+    private ArrayList<Float> arrValues = new ArrayList<>();
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -173,8 +175,6 @@ public class ColoredMapFragment extends Fragment
         // attaching data adapter to spinner
         spinner.setAdapter(dataAdapter);
 
-
-
         try {
             InputStream in = getResources().openRawResource(R.raw.coord_regions);
             String input = convertStreamToString(in);
@@ -265,9 +265,7 @@ public class ColoredMapFragment extends Fragment
 
     private ArrayList<Float> getSortedAmount(String amountName) throws JSONException {
         ArrayList<Float> temp = new ArrayList<>();
-        ArrayList<String> names = new ArrayList<>();
         float [] arr = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        textDialog = "";
         for(int i=0;i<ids.length();i++)
         {
             if(amountName.equals("TOTALE"))
@@ -276,34 +274,62 @@ public class ColoredMapFragment extends Fragment
                 arr[i] = healthData.getTotalPerRegionAndTitolo((String) ids.get(i),amountName);
         }
         Arrays.sort(arr);
-        for(int i=0;i<arr.length;i++)
-        {
-            for(int j=0;j<ids.length();j++) {
-                if(amountName.equals("TOTALE"))
-                {
-                    if(healthData.getTotalPerRegion((String) ids.get(j))==arr[i])
-                        names.add(healthItemsList.get(j).getName());
-                }
-                else {
-                    if (healthData.getTotalPerRegionAndTitolo((String) ids.get(j), amountName) == arr[i])
-                        names.add(healthItemsList.get(j).getName());
-                }
-            }
-        }
-
-
-
-        for(int i=arr.length-1;i>=0;i--)
-        {
-            String line = names.get(i)+" : "+arr[i];
-            textDialog += line;
-            textDialog +="\n";
+        arrValues.clear();
+        for(int i=0;i<arr.length;i++) {
+            arrValues.add(arr[i]);
         }
         temp.add(arr[4]);
         temp.add(arr[9]);
         temp.add(arr[14]);
         temp.add(arr[19]);
         return temp;
+    }
+
+    private String makeTextForDialog() throws JSONException {
+        String a,b ;
+        ArrayList<String> names = new ArrayList<>();
+        textDialog = "";
+        for(int i=0;i<arrValues.size();i++)
+        {
+            b = String.valueOf(arrValues.get(i));
+            for(int j=0;j<ids.length();j++) {
+                if(selectedItem=="TOTALE")
+                {
+                    a = String.valueOf(healthData.getTotalPerRegion((String) ids.get(j)));
+                    if (a.equals(b))
+                    {
+                        for(HealthItem h : healthItemsList)
+                        {
+                            if(h.getId().equals(ids.get(j)))
+                            {
+                                names.add(h.getName());
+                            }
+                        }
+                    }
+                }
+                else {
+                    a = String.valueOf(healthData.getTotalPerRegionAndTitolo((String) ids.get(j), selectedItem));
+                    if (a.equals(b))
+                    {
+                        for(HealthItem h : healthItemsList)
+                        {
+                            if(h.getId().equals(ids.get(j)))
+                            {
+                                names.add(h.getName());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(int i=arrValues.size()-1;i>=0;i--)
+        {
+            String line = names.get(i)+" : "+arrValues.get(i);
+            textDialog += line;
+            textDialog +="\n";
+        }
+
+        return textDialog;
     }
 
     private String makeAmountForLegend(float amount)
@@ -331,7 +357,11 @@ public class ColoredMapFragment extends Fragment
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
+        try {
+            makeTextForDialog();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         TextView t1 = (TextView) this.getView().findViewById(R.id.textView1);
         TextView t2 = (TextView) this.getView().findViewById(R.id.textView2);
         TextView t3 = (TextView) this.getView().findViewById(R.id.textView3);
