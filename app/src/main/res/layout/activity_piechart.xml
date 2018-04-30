@@ -15,9 +15,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="49dp"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold|italic" />
+
+    <TextView
+        android:layout_width="243dp"
+        android:layout_height="24dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="14dp"
+        android:text="Source: www.datiopen.it, 2015" />
 
 </RelativeLayout>

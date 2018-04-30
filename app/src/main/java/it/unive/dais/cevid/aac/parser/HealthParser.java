@@ -3,40 +3,20 @@ package it.unive.dais.cevid.aac.parser;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
-
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import it.unive.dais.cevid.aac.R;
-import it.unive.dais.cevid.aac.item.IncassiSanita;
 import it.unive.dais.cevid.datadroid.lib.parser.AbstractAsyncParser;
-import it.unive.dais.cevid.datadroid.lib.parser.AsyncParser;
 import it.unive.dais.cevid.datadroid.lib.parser.CsvRowParser;
 import it.unive.dais.cevid.datadroid.lib.parser.ParserException;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
-import it.unive.dais.cevid.datadroid.lib.util.MapItem;
-
-import it.unive.dais.cevid.aac.item.HealthItem;
-
-
-
 
 /**
  * Created by Angelko on 3/2/2018.

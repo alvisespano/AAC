@@ -112,7 +112,10 @@ public class MapFragment extends BaseFragment
             if (gMap.getCameraPosition().zoom < SettingsActivity.getZoomThreshold(getContext())) {
                 button_here.setVisibility(View.INVISIBLE);
             } else {
-                button_here.setVisibility(View.VISIBLE);
+                if(parentActivity.getCurrentMode() == MainActivity.Mode.HEALTH)
+                    button_here.setVisibility(View.INVISIBLE);
+                else
+                    button_here.setVisibility(View.VISIBLE);
             }
         }
     }

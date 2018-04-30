@@ -1,21 +1,13 @@
 package it.unive.dais.cevid.aac.item;
 
-import android.app.Activity;
-import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
+
 import android.support.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import it.unive.dais.cevid.aac.parser.HealthParser;
-import it.unive.dais.cevid.aac.parser.SupplierParser;
 import it.unive.dais.cevid.datadroid.lib.util.MapItem;
 
 

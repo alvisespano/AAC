@@ -47,10 +47,13 @@
             android:layout_alignParentStart="true"
             android:layout_gravity="start|bottom"
             android:layout_marginBottom="19dp"
-            app:srcCompat="@drawable/scale" />
+            app:srcCompat="@drawable/legend" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
 
             <TextView
                 android:id="@+id/textView"
@@ -61,10 +64,10 @@
                 android:layout_alignRight="@id/legend"
                 android:layout_alignTop="@id/legend"
                 android:layout_gravity="start|bottom"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="1dp"
                 android:layout_marginLeft="20dp"
-                android:textStyle="bold"
-                android:text="0" />
+                android:text="0"
+                android:textStyle="bold" />
 
 
             <TextView
@@ -76,10 +79,11 @@
                 android:layout_alignRight="@id/legend"
                 android:layout_alignTop="@id/legend"
                 android:layout_gravity="start|bottom"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="1dp"
                 android:layout_marginLeft="60dp"
-                android:textStyle="bold"
-                android:text="0.0A" />
+                android:text="0.0A"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -89,10 +93,11 @@
                 android:layout_alignRight="@id/legend"
                 android:layout_alignTop="@id/legend"
                 android:layout_gravity="start|bottom"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="65dp"
-                android:textStyle="bold"
-                android:text="0.0A" />
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="60dp"
+                android:text="0.0A"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -102,9 +107,11 @@
                 android:layout_alignRight="@id/legend"
                 android:layout_alignTop="@id/legend"
                 android:layout_gravity="start|bottom"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="1dp"
                 android:layout_marginLeft="55dp"
-                android:text="00.0A" />
+                android:text="00.0A"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
@@ -114,10 +121,21 @@
                 android:layout_alignRight="@id/legend"
                 android:layout_alignTop="@id/legend"
                 android:layout_gravity="start|bottom"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="1dp"
                 android:layout_marginLeft="50dp"
-                android:text="00.0A" />
+                android:text="00.0A"
+                android:textStyle="bold" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/source"
+            android:layout_width="243dp"
+            android:layout_height="24dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="33dp"
+            android:text="Source: www.datiopen.it, 2015" />
     </RelativeLayout>
 
 

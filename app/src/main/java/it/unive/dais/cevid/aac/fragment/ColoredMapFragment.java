@@ -203,9 +203,6 @@ public class ColoredMapFragment extends Fragment
             polygon.setClickable(true);
             allPolygons.add(polygon);
 
-            //Log.d("iterator! ", it.next().getId());
-
-            Log.d("Dimensiune: ", String.valueOf(healthItemsList.size()));
             mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener(){
                 public void onPolygonClick(Polygon polygon){
                     double lat = 0, lng = 0;
@@ -218,20 +215,14 @@ public class ColoredMapFragment extends Fragment
                     else
                         total = healthData.getTotalPerRegionAndTitolo(t,selectedItem);
 
-                    Log.d(t," : "+String.valueOf(healthData.getTotalPerRegionAndTitolo(t,"ENTRATE DERIVANTI DALLA PRESTAZIONE DI SERVIZI")));
-
-
                     for (int k=0; k<healthItemsList.size(); k++) {
                         HealthItem element = healthItemsList.get(k);
-                        //Log.d("id parsat!", element.getId());
-                        //Log.d("Cele doua comparate: ", polygon.getTag().toString()+"<>"+element.getId());
                         if(t.equals(element.getId()))
-                        {
-                            Log.d("Am ajuns pe true! ","da!");
-                            lng = element.getLongitude();
-                            lat = element.getLatitude();
-                            title = element.getName();
-                        }
+                            {
+                                lng = element.getLongitude();
+                                lat = element.getLatitude();
+                                title = element.getName();
+                            }
                     }
                     double finalLat = lat;
                     double finalLng = lng;
@@ -239,7 +230,6 @@ public class ColoredMapFragment extends Fragment
                     String infoMarker;
                     NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.ITALY);
                         infoMarker = finalTitle+" : "+numberFormat.format(total);
-                    //Log.d()
                     if (currentMarker!=null) {
                         currentMarker.remove();
                         currentMarker=null;
@@ -251,16 +241,9 @@ public class ColoredMapFragment extends Fragment
                         currentMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.ic_hospitals));
                         currentMarker.showInfoWindow();
                     }
-
-                    Log.d("Am dat click pe : ", String.valueOf(polygon.getTag()));
-
-
                 }
-
             });
-
         }
-
     }
 
     private ArrayList<Float> getSortedAmount(String amountName) throws JSONException {
@@ -282,7 +265,7 @@ public class ColoredMapFragment extends Fragment
         temp.add(arr[9]);
         temp.add(arr[14]);
         temp.add(arr[19]);
-        return temp;
+        return temp; //this are for the bins so we can split the colors for each region
     }
 
     private String makeTextForDialog() throws JSONException {
@@ -335,16 +318,21 @@ public class ColoredMapFragment extends Fragment
     private String makeAmountForLegend(float amount)
     {
         String temp = null;
-        if(amount>=1000000)
+        if(amount>=100000000)
         {
             amount /= 1000000000;
             temp = "B";
         }
-        else if(amount<1000000)
-        {
-            amount /= 1000;
-            temp = "K";
-        }
+        else if(amount<100000000&&amount>=1000000)
+            {
+                amount /= 1000000;
+                temp = "M";
+            }
+            else if(amount<1000000)
+            {
+                amount /= 1000;
+                temp = "K";
+            }
         String t = String.format("%.1f",amount);
         temp = t+temp;
         return temp;
@@ -354,10 +342,6 @@ public class ColoredMapFragment extends Fragment
     {
         try {
             bin = getSortedAmount(selectedItem);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        try {
             makeTextForDialog();
         } catch (JSONException e) {
             e.printStackTrace();
@@ -421,7 +405,5 @@ public class ColoredMapFragment extends Fragment
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
-
 }

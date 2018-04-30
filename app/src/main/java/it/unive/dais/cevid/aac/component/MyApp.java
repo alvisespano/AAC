@@ -2,7 +2,6 @@ package it.unive.dais.cevid.aac.component;
 
 import android.app.Application;
 import android.util.Log;
-import it.unive.dais.cevid.aac.component.MainActivity;
 
 public class MyApp extends Application{
     public MyApp() {
