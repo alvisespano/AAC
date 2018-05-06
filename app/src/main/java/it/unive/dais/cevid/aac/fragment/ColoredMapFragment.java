@@ -2,8 +2,11 @@ package it.unive.dais.cevid.aac.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +40,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +48,9 @@ import java.util.List;
 import java.util.Locale;
 
 import it.unive.dais.cevid.aac.R;
+import it.unive.dais.cevid.aac.component.BarChartActivityScroll;
 import it.unive.dais.cevid.aac.component.MainActivity;
+import it.unive.dais.cevid.aac.component.PieChartActivity;
 import it.unive.dais.cevid.aac.item.HealthItem;
 import it.unive.dais.cevid.aac.item.IncassiSanita;
 
@@ -80,6 +87,10 @@ public class ColoredMapFragment extends Fragment
 
     //values for the dialog box
     private ArrayList<Float> arrValues = new ArrayList<>();
+
+    //id of the current marker
+    private String currentMarkerId = new String();
+
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -193,7 +204,7 @@ public class ColoredMapFragment extends Fragment
         {
             String tag = null;
             try {
-                 tag = (String) ids.get(i);
+                tag = (String) ids.get(i);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -218,18 +229,19 @@ public class ColoredMapFragment extends Fragment
                     for (int k=0; k<healthItemsList.size(); k++) {
                         HealthItem element = healthItemsList.get(k);
                         if(t.equals(element.getId()))
-                            {
-                                lng = element.getLongitude();
-                                lat = element.getLatitude();
-                                title = element.getName();
-                            }
+                        {
+                            lng = element.getLongitude();
+                            lat = element.getLatitude();
+                            title = element.getName();
+                            currentMarkerId = element.getId();
+                        }
                     }
                     double finalLat = lat;
                     double finalLng = lng;
                     String finalTitle = title;
                     String infoMarker;
                     NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.ITALY);
-                        infoMarker = finalTitle+" : "+numberFormat.format(total);
+                    infoMarker = finalTitle+" : "+numberFormat.format(total);
                     if (currentMarker!=null) {
                         currentMarker.remove();
                         currentMarker=null;
@@ -244,17 +256,46 @@ public class ColoredMapFragment extends Fragment
                 }
             });
         }
+
+        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                currentMarker.remove();
+                currentMarker=null;
+                Gson gson = new Gson();
+                if(selectedItem.equals("TOTALE"))
+                {
+                    List<IncassiSanita.DataRegione> regionData = healthData.getDataByIdRegione(currentMarkerId);
+                    Intent intent = new Intent(getContext(), PieChartActivity.class);
+                    intent.putExtra("regionId", currentMarkerId);
+                    Log.d(currentMarkerId, regionData.toString());
+                    intent.putExtra("regionData", gson.toJson(regionData));
+                    startActivity(intent);
+                }
+                else
+                {
+                    List<IncassiSanita.DataRegione> regionData = healthData.getDataByIdRegione(currentMarkerId);
+                    Intent intent = new Intent(getContext(), BarChartActivityScroll.class);
+                    intent.putExtra("regionId", currentMarkerId);
+                    intent.putExtra("titolo", selectedItem);
+                    intent.putExtra("regionData", gson.toJson(regionData));
+                    startActivity(intent);
+                }
+
+
+            }
+        });
     }
 
     private ArrayList<Float> getSortedAmount(String amountName) throws JSONException {
         ArrayList<Float> temp = new ArrayList<>();
         float [] arr = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-        for(int i=0;i<ids.length();i++)
-        {
-            if(amountName.equals("TOTALE"))
+        for (int i = 0; i < ids.length(); i++) {
+            if (amountName.equals("TOTALE"))
                 arr[i] = healthData.getTotalPerRegion((String) ids.get(i));
             else
-                arr[i] = healthData.getTotalPerRegionAndTitolo((String) ids.get(i),amountName);
+                arr[i] = healthData.getTotalPerRegionAndTitolo((String) ids.get(i), amountName);
         }
         Arrays.sort(arr);
         arrValues.clear();
@@ -324,15 +365,15 @@ public class ColoredMapFragment extends Fragment
             temp = "B";
         }
         else if(amount<100000000&&amount>=1000000)
-            {
-                amount /= 1000000;
-                temp = "M";
-            }
-            else if(amount<1000000)
-            {
-                amount /= 1000;
-                temp = "K";
-            }
+        {
+            amount /= 1000000;
+            temp = "M";
+        }
+        else if(amount<1000000)
+        {
+            amount /= 1000;
+            temp = "K";
+        }
         String t = String.format("%.1f",amount);
         temp = t+temp;
         return temp;
@@ -367,19 +408,19 @@ public class ColoredMapFragment extends Fragment
                 polygonAmount = healthData.getTotalPerRegion(tag);
             else
                 polygonAmount = healthData.getTotalPerRegionAndTitolo(tag, selectedItem);
-                if (polygonAmount < bin.get(0)) {
-                    color = Color.argb(145, 255, 229, 153);
-                    strokeColor = Color.rgb(255, 229, 153);
-                    } else if (polygonAmount >= bin.get(0) && polygonAmount < bin.get(1)) {
-                        color = Color.argb(145, 255, 153, 0);
-                        strokeColor = Color.rgb(255, 153, 0);
-                        } else if (polygonAmount >= bin.get(1) && polygonAmount < bin.get(2)) {
-                                color = Color.argb(145, 255, 0, 0);
-                                strokeColor = Color.rgb(255, 0, 0);
-                                } else {
-                                    color = Color.argb(145, 204, 0, 0);
-                                    strokeColor = Color.rgb(204, 0, 0);
-                                }
+            if (polygonAmount < bin.get(0)) {
+                color = Color.argb(145, 255, 229, 153);
+                strokeColor = Color.rgb(255, 229, 153);
+            } else if (polygonAmount >= bin.get(0) && polygonAmount < bin.get(1)) {
+                color = Color.argb(145, 255, 153, 0);
+                strokeColor = Color.rgb(255, 153, 0);
+            } else if (polygonAmount >= bin.get(1) && polygonAmount < bin.get(2)) {
+                color = Color.argb(145, 255, 0, 0);
+                strokeColor = Color.rgb(255, 0, 0);
+            } else {
+                color = Color.argb(145, 204, 0, 0);
+                strokeColor = Color.rgb(204, 0, 0);
+            }
             allPolygons.get(i).setFillColor(color);
             allPolygons.get(i).setStrokeColor(strokeColor);
             allPolygons.get(i).setStrokeWidth(8);
@@ -406,4 +447,5 @@ public class ColoredMapFragment extends Fragment
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
     }
+
 }
