@@ -43,12 +43,13 @@
 
     <!--AICompanyDetailsActivity-->
     <string name="ai_tender_cig">CIG:\u0020</string>
+    <string name="ai_tender_description">Descrizione: \u0020</string>
     <string name="ai_tender_cost">Importo:\u0020</string>
     <string name="ai_tender_paid">Liquidato:\u0020</string>
     <string name="ai_tender_total">Differenza tra budget e costo reale:\u0020</string>
     <string name="warning_msg">Anomalia segnalata</string>
 
-    AIComparisonActivityvity-->
+    <!--AIComparisonActivityvity-->
     <string name="search_expense">Ricerca libera nelle spese 2016 di soldipubblici.gov.it</string>
     <string name="search_tenders">Ricerca libera tra gli appalti stipulati nel 2016 dall\'ente</string>
     <string name="combine_button_alert">"Compile entrambi i campi con stringhe da 3 o più caratteri"</string>
@@ -64,6 +65,7 @@
 
     <!--AIInfoActivity-->
     <string name="ai_siope_code">Codice Siope Ente: </string>
+    <string name="ai_cf">CF: </string>
     <string name="ai_description">Descrizione: </string>
     <string name="ai_capite">Capite: </string>
     <string name="ai_coordinates">Coordinate: </string>

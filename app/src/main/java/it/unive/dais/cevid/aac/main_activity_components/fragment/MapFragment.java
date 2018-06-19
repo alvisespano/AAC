@@ -404,7 +404,7 @@ public class MapFragment extends BaseFragment
 
     private Set<Marker> selectedMarkers;
 
-    Button confrontoMultiploButton;
+    private Button confrontoMultiploButton;
 
     private String manageMarkerDescription(Marker marker) {
         if (selectedMarkers.contains(marker) && selectedMarkers.size() > 1)
@@ -452,7 +452,6 @@ public class MapFragment extends BaseFragment
         Intent intent = new Intent(getContext(), AIComparisonActivity.class);
         intent.putExtra(AIComparisonActivity.SINGLE_ELEMENT, false);
         intent.putExtra(AIComparisonActivity.ABSTRACT_ITEMS, (Serializable) markerTags);
-        intent.putExtra(AIComparisonActivity.TYPE, markerTags.get(0).getCodiceComparto());
 
         confrontoMultiploButton.setVisibility(View.INVISIBLE);
 

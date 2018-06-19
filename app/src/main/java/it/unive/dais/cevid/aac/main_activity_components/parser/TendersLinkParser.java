@@ -1,4 +1,4 @@
-package it.unive.dais.cevid.aac.suppliers.parser;
+package it.unive.dais.cevid.aac.main_activity_components.parser;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +19,6 @@ import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 public class TendersLinkParser extends AbstractAsyncCsvParser<TendersLinkParser.Data> {
     public TendersLinkParser(@NonNull Reader rd, boolean hasActualHeader, @NonNull String sep, @Nullable ProgressBarManager pbm) {
         super(rd, hasActualHeader, sep, pbm);
-    }
-
-    public TendersLinkParser(@NonNull File file, boolean hasActualHeader, @NonNull String sep, @Nullable ProgressBarManager pbm) throws FileNotFoundException {
-        super(file, hasActualHeader, sep, pbm);
     }
 
     @NonNull

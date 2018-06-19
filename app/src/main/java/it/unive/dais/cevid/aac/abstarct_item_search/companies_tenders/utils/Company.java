@@ -16,7 +16,7 @@ public class Company implements Serializable {
 
     public Company(String fiscal, String name) {
         this.fiscalCode = fiscal;
-        this.tenders = new ArrayList<Tender>();
+        this.tenders = new ArrayList<>();
         this.name = name;
     }
 
@@ -30,16 +30,14 @@ public class Company implements Serializable {
 
 
     public class Tender implements Serializable {
-        public final String importo,
-                liquidato,
-                cig,
-                sceltac;
+        public final String importo, liquidato, cig, sceltac, description;
 
         public Tender(AppaltiParser.Data data) {
             this.importo = data.importo;
             this.liquidato = data.importoSommeLiquidate;
             this.cig = data.cig;
             this.sceltac = data.sceltac;
+            this.description = data.oggetto;
         }
     }
 }

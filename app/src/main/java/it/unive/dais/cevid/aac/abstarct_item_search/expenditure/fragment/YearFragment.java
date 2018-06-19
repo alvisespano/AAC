@@ -55,7 +55,7 @@ public class YearFragment extends Fragment {
         List<SoldipubbliciParser.Data> expenditureList = new ArrayList<>(AIExpenditureActivity.getSpeseEnte());
 
         if (query.matches("[0-9]+"))
-            DataManipulation.filterByCode(expenditureList, Integer.parseInt(query), Soldipubblici_getCode);
+            DataManipulation.filterByWords(expenditureList, query.split(" "), Soldipubblici_getCode, false);
         else
             DataManipulation.filterByWords(expenditureList, query.split(" "), Soldipubblici_getText, false);
 
@@ -64,6 +64,6 @@ public class YearFragment extends Fragment {
 
     private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = x -> x.descrizione_codice;
 
-    private static final Function<SoldipubbliciParser.Data, Integer> Soldipubblici_getCode = x -> Integer.parseInt(x.codice_siope);
+    private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getCode = x -> x.codice_siope;
 
 }

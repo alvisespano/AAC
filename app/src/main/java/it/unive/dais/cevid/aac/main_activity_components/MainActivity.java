@@ -47,7 +47,7 @@ import it.unive.dais.cevid.aac.suppliers.util.SupplierItem;
 import it.unive.dais.cevid.aac.item.UniversityItem;
 import it.unive.dais.cevid.aac.main_activity_components.fragment.MapFragment;
 import it.unive.dais.cevid.aac.suppliers.parser.SupplierParser;
-import it.unive.dais.cevid.aac.suppliers.parser.TendersLinkParser;
+import it.unive.dais.cevid.aac.main_activity_components.parser.TendersLinkParser;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.Handle;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.ProgressBarManager;
 import it.unive.dais.cevid.datadroid.lib.parser.progress.PercentProgressStepper;
@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity
 
         enrolledParser1516 = launchEnrolledParser(R.raw.iscritti_15_16);
         enrolledParser1617 = launchEnrolledParser(R.raw.iscritti_16_17);
-
     }
 
     private EnrolledParser launchEnrolledParser(int resource) {
@@ -182,15 +181,15 @@ public class MainActivity extends AppCompatActivity
         //setUniversityCapite();
 
         //add Ca Foscari
-        universityItems.add(new UniversityItem("000704968000000", "Università Ca' Foscari",
+        universityItems.add(new UniversityItem("000704968000000", "Università Ca' Foscari", "80007720271",
                 "Università degli studi di Venezia", 45.437576, 12.3289554));
 
         //add Padova
-        universityItems.add(new UniversityItem("000058546000000", "Università di Padova",
+        universityItems.add(new UniversityItem("000058546000000", "Università di Padova", "80006480281",
                 "Università degli studi di Padova", 45.406766, 11.8774462));
 
         //add Trento
-        universityItems.add(new UniversityItem("000067046000000", "Università di Trento",
+        universityItems.add(new UniversityItem("000067046000000", "Università di Trento", "00340520220",
                 "Università degli studi di Trento", 46.0694828, 11.1188738));
 
     }
@@ -198,7 +197,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setUpMunicipalityItems() {
         //add Roma
-        municipalityItems.add(new MunicipalityItem("800000047", "Roma", "COMUNE DI ROMA", 2873494, 41.9102411, 12.3955688));
+        municipalityItems.add(new MunicipalityItem("800000047", "Roma", "02438750586","COMUNE DI ROMA", 2873494, 41.9102411, 12.3955688));
     }
 
 

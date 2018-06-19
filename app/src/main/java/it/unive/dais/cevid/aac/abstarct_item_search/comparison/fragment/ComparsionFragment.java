@@ -62,6 +62,7 @@ public class ComparsionFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putSerializable(AIComparisonResultActivity.LIST_SOLDIPUBBLICI, (Serializable) soldiPubbliciList);
         outState.putSerializable(AIComparisonResultActivity.LIST_APPALTI, (Serializable) appaltiList);
+        outState.putInt(CAPITE, capite);
     }
 
     public void onCreate(Bundle fragmentBundle) {
@@ -77,6 +78,8 @@ public class ComparsionFragment extends Fragment {
 
             soldiPubbliciList.addAll((List<SoldipubbliciParser.Data>) es);
             appaltiList.addAll((List<AppaltiParser.Data>) ts);
+
+            capite = bundle.getInt(CAPITE);
         }
     }
 

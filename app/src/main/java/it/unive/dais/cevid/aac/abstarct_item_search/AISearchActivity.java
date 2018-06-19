@@ -154,19 +154,6 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
         AITendersDetailsActivity.setAppalti(values); // troppi dati, usiamo un campo statico
     }
 
-    private void setExpenditureAIDetailsActivity() {
-        List<SoldipubbliciParser.Data> spese = new ArrayList<>();
-
-        try {
-            spese = soldiPubbliciParser.getAsyncTask().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-
-        AITendersDetailsActivity.setSpese(spese);
-        startActivity(new Intent(AISearchActivity.this, AIExpenditureActivity.class));
-    }
-
     private void populateStringCompanyMap(Map<String, Company> stringCompanyMap) {
         try {
             List<AppaltiParser.Data> appalti = appaltiParser.getAsyncTask().get();
@@ -211,10 +198,9 @@ public class AISearchActivity extends AppCompatActivity implements AdapterView.O
         populateStringCompanyMap(stringCompanyMap);
 
         setTendersAIDetailsActivity(stringCompanyMap);
-        setExpenditureAIDetailsActivity();
 
         Intent intent = new Intent(AISearchActivity.this, AITendersDetailsActivity.class);
-        intent.putExtra(AITendersDetailsActivity.ABSTRACTITEM, abstractItem);
+
         startActivity(intent);
     }
 

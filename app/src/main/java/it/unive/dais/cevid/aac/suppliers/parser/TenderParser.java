@@ -152,11 +152,5 @@ public class TenderParser extends AbstractAsyncParser<TenderParser.Data, Percent
                 n_operatori_agg,
                 data_agg,
                 id_download;
-
-        public String getMassimale() {
-            return quantita_massimale.isEmpty() ? importo_massimale : quantita_massimale;
-        }
     }
-
-
 }

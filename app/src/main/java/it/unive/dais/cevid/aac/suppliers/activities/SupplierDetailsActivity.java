@@ -27,7 +27,7 @@ public class SupplierDetailsActivity extends AppCompatActivity {
         setTextView(R.id.tender_title, tender.denominazione);
         setTextView(R.id.tender_title, tender.denominazione_lotto);
         setTextView(R.id.tender_plot, tender.id_lotto);
-        setTextView(R.id.tender_ceiling, tender.getMassimale() + getString(R.string.euro_symbol));
+        setTextView(R.id.tender_ceiling, tender.importo_massimale + getString(R.string.euro_symbol));
     }
 
     private void setTextView(int resource, String text){

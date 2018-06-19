@@ -35,7 +35,6 @@ public class AIComparisonActivity extends AppCompatActivity {
 
     public static final String ABSTRACT_ITEMS = "ABSTRACT_ITEMS";
     public static final String ABSTRACT_ITEM = "ABSTRACT_ITEM";
-    public static final String TYPE = "TYPE";
     private static final int SEARCH_INPUT_MIN_LENGTH = 3;
     public static final String SINGLE_ELEMENT = "SINGLE_ELEMENT";
 
@@ -225,7 +224,7 @@ public class AIComparisonActivity extends AppCompatActivity {
     }
 
     private <T> void setSingleListenerSingleElement(final SearchView v, final String label, final Function<T, String> getText,
-                                                    final Function<T, Integer> getCode, final Function<String, Void> setText) {
+                                                    final Function<T, String> getCode, final Function<String, Void> setText) {
         v.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String text) {
@@ -240,7 +239,6 @@ public class AIComparisonActivity extends AppCompatActivity {
 
                 if (l != null && !l.isEmpty()) {
                     intent.putExtra(label, (Serializable) l);
-                    intent.putExtra(AIComparisonResultActivity.ABSTRACT_ITEMS, (Serializable) abstractItems);
                     startActivity(intent);
                 }
                 else
@@ -300,10 +298,10 @@ public class AIComparisonActivity extends AppCompatActivity {
         });
     }
 
-    private <T> List<T> processQuery(List<T> l, String text, Function<T, String> getText, Function<T, Integer> getCode) {
+    private <T> List<T> processQuery(List<T> l, String text, Function<T, String> getText, Function<T, String> getCode) {
         if (!text.isEmpty()) {
             if (text.matches("[0-9]+"))
-                DataManipulation.filterByCode(l, Integer.parseInt(text), getCode);
+                DataManipulation.filterByWords(l, text.split(" "), getCode, false);
             else
                 DataManipulation.filterByWords(l, text.split(" "), getText, false);
             return l;
@@ -425,10 +423,10 @@ public class AIComparisonActivity extends AppCompatActivity {
 
     private static final Function<AppaltiParser.Data, String> Appalti_getText = x -> x.oggetto;
 
-    private static final Function<AppaltiParser.Data, Integer> Appalti_getCode = x -> Integer.parseInt(x.cig);
+    private static final Function<AppaltiParser.Data, String> Appalti_getCode = x -> x.cig;
 
     private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getText = x -> x.descrizione_codice;
 
-    private static final Function<SoldipubbliciParser.Data, Integer> Soldipubblici_getCode = x -> Integer.parseInt(x.codice_siope);
+    private static final Function<SoldipubbliciParser.Data, String> Soldipubblici_getCode = x -> x.codice_siope;
 
 }

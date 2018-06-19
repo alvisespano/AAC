@@ -117,14 +117,15 @@ public abstract  class BaseFragment extends Fragment {
         Intent intent = new Intent(getContext(), AISearchActivity.class);
         intent.putExtra(AISearchActivity.ABSTRACT_ITEM, markerTag);
 
-        if (MainActivity.getUniversityCapiteMap() == Collections.EMPTY_MAP) {
-            MainActivity.setUpTendersLink();
-            MainActivity.setUpUniversityCapite();
-        }
+        MainActivity.setUpTendersLink();
+
 
         ((AbstractItem) markerTag).setUrls(MainActivity.getCodiceEnteAppaltiURLMap().get(((AbstractItem) markerTag).getId()));
 
         if (markerTag instanceof UniversityItem) {
+            if (MainActivity.getUniversityCapiteMap() == Collections.EMPTY_MAP) {
+                MainActivity.setUpUniversityCapite();
+            }
             ((UniversityItem) markerTag).setCapite(MainActivity.getUniversityCapiteMap().get(((UniversityItem) markerTag).getId()));
         }
 

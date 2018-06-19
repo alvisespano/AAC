@@ -33,6 +33,7 @@ public class AITenderAdapter extends RecyclerView.Adapter<AITenderAdapter.Item> 
     public void onBindViewHolder(Item holder, int position) {
         Company.Tender tender = items.get(position);
         holder.cig.setText(tender.cig);
+        holder.description.setText(tender.description);
         holder.cost.setText(tender.importo);
         holder.paid.setText(tender.liquidato);
     }
@@ -43,12 +44,13 @@ public class AITenderAdapter extends RecyclerView.Adapter<AITenderAdapter.Item> 
     }
 
     public class Item extends RecyclerView.ViewHolder{
-        TextView cig,cost,paid;
+        TextView cig, description, cost, paid;
         public Item(View itemView){
             super(itemView);
-            this.cig = (TextView) itemView.findViewById(R.id.university_tender_cig);
-            this.cost = (TextView) itemView.findViewById(R.id.university_tender_cost);
-            this.paid = (TextView) itemView.findViewById(R.id.university_tender_paid);
+            this.cig = (TextView) itemView.findViewById(R.id.ai_tender_cig);
+            this.description = (TextView) itemView.findViewById(R.id.ai_tender_description);
+            this.cost = (TextView) itemView.findViewById(R.id.ai_tender_cost);
+            this.paid = (TextView) itemView.findViewById(R.id.ai_tender_paid);
         }
     }
 }

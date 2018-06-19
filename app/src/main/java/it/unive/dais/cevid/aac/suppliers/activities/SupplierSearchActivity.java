@@ -81,7 +81,7 @@ public class SupplierSearchActivity extends AppCompatActivity {
                 intent.putExtra(SupplierResultActivity.BUNDLE_PARTECIPATIONS, new ArrayList<>(data));
                 startActivity(intent);
             } else {
-                alert(String.format("Trovati %d bandi attivati nel 2016 per %s", data.size(), supplier.getTitle()));
+                alert(String.format("Trovati %d bandi attivi per %s", data.size(), supplier.getTitle()));
             }
         } catch (InterruptedException | ExecutionException e) {
             alert(String.format("Errore inatteso: %s. Riprovare.", e.getMessage()));

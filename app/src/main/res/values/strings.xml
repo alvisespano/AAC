@@ -43,6 +43,7 @@
 
     <!--AICompanyDetailsActivity-->
     <string name="ai_tender_cig">CIG:\u0020</string>
+    <string name="ai_tender_description">Description: \u0020</string>
     <string name="ai_tender_cost">Cost:\u0020</string>
     <string name="ai_tender_paid">Paid:\u0020</string>
     <string name="ai_tender_total">Difference between budget and actual cost:\u0020</string>
@@ -64,6 +65,7 @@
 
     <!--AIInfoActivity-->
     <string name="ai_siope_code">Entitie Siope Code: </string>
+    <string name="ai_cf">CF: </string>
     <string name="ai_description">Description: </string>
     <string name="ai_capite">Capite: </string>
     <string name="ai_coordinates">Coordinates: </string>
